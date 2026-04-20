@@ -31,7 +31,7 @@ watch(flash, (newFlash: any) => {
   // Auto remove après 4s
   setTimeout(() => {
     messages.value.shift()
-  }, 4000)
+  }, 5000)
 
 }, { immediate: true })
 </script>

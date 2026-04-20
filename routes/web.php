@@ -30,6 +30,12 @@ Route::get('/forgot-password', function () {
     return Inertia::render('Auth/ForgotPassword');
 })->name('showForgotpPassword');
 
+Route::get('/dashbaord', function(){
+    return Inertia::render('Dashboard/Index',[
+
+    ]);
+})->name('dashboard')->middleware('auth');
+
 // Routes pour l'administrateur
 Route::middleware(['role:admin'])->group(function () {
     // Routes pour l'adminstrateur ici
@@ -42,5 +48,5 @@ Route::middleware(['role:farmer'])->group(function () {
 
 // Route pour l'acheteur
 Route::middleware(['role:buyer'])->group(function () {
-    // Routes ici
+
 });

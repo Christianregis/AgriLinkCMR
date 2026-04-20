@@ -61,7 +61,7 @@ class AuthController extends Controller
             if (!$user->is_active) {
                 return back()->with('error', 'Compte desactive: Veuillez l\'activer en consultant vos mails');
             }
-            return Inertia::render('Dashboard/Index', []);
+            return redirect()->route('dashboard')->with('success', "Bienvenue $user->name");
         }
         return back()->with(
             'error',

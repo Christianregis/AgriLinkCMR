@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* Design System AgriLink */
+@theme {
+
+  /* Brand (Vert) */
+  --color-brand-dark: #1A3D2B;
+  --color-brand-primary: #2D6A4F;
+  --color-brand-hover: #40916C;
+  --color-brand-border: #74C69D;
+  --color-brand-light: #D8F3DC;
+  --color-brand-bg: #F0FDF4;
+
+  /*  Accent */
+  --color-accent-cta: #C77A1A;
+  --color-accent-star: #D97706;
+  --color-accent-light: #FEF3C7;
+
+  /* Neutral */
+  --color-neutral-title: #111827;
+  --color-neutral-body: #1F2937;
+  --color-neutral-muted: #4B5563;
+  --color-neutral-border: #D1D5DB;
+  --color-neutral-bg: #F3F4F6;
+
+  /*  Font */
+  --font-sans: "Inter", sans-serif;
+
+  /* Radius */
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+}

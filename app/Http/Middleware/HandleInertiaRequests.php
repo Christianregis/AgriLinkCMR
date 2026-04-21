@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => UserResource::make($request->user()),
+                'user' => $request->user() ? UserResource::make($request->user()) : null,
             ],
             'flash' => [
                 'success' => fn() => $request->session()->get('success'),

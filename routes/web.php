@@ -26,9 +26,12 @@ Route::get('/register', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+
 Route::get('/forgot-password', function () {
     return Inertia::render('Auth/ForgotPassword');
 })->name('showForgotpPassword');
+
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -37,6 +40,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard/Index', []);
     })->name('dashboard');
 });
+
 
 // Routes pour l'administrateur
 Route::middleware(['role:admin'])->group(function () {

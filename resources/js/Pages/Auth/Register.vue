@@ -1,6 +1,6 @@
 <template>
   <main class="min-h-screen px-4 py-12 antialiased bg-neutral-bg">
-  <FlashMessage />
+    <FlashMessage />
     <div class="max-w-2xl mx-auto">
       <div class="mb-10 text-center">
         <Link :href="home()" class="inline-flex items-center mb-6 space-x-2">
@@ -220,7 +220,7 @@
               <textarea
                 v-model="form.bio"
                 rows="3"
-                placeholder="Parlez-nous de votre ferme..."
+                placeholder="Ex: Ma ferme propose des produits frais et de qualites pour vos usages au quotidient..."
                 class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
               ></textarea>
               <p v-if="form.errors.bio" class="mt-1 text-sm text-red-500">
@@ -239,12 +239,12 @@
                   <div class="flex text-sm text-gray-600">
                     <input
                       type="file"
-                      name=""
-                      value=""
+                      accept="image/*"
+                      @change="handleFileChange"
                       class="font-semibold text-brand-primary"
                     />
                   </div>
-                  <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB</p>
+                  <p class="text-xs text-gray-500">PNG, JPG jusqu'à 2MB</p>
                 </div>
               </div>
               <p v-if="form.errors.profile_photo" class="mt-1 text-sm text-red-500">
@@ -294,7 +294,7 @@
 
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
-import {useForm} from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 import { connexion, home } from "@/routes";
@@ -314,7 +314,7 @@ interface Form {
   village: string;
   cultures: string;
   bio: string;
-  profile_photo?: string,
+  profile_photo: File | null;
   terms: boolean;
 }
 interface Region {
@@ -357,6 +357,21 @@ const form = useForm<Form>({
   // Common
   terms: false,
 });
+
+// Gestion de la photo
+const handleFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+
+  if (!target.files || !target.files[0]) {
+    return;
+  }
+
+  const file = target.files[0];
+
+  form.profile_photo = file;
+
+  // Preview
+};
 const errorConfirmationPassword = ref<string | null>(null);
 const errorTermsNotConfirmed = ref<string | null>(null);
 /**
@@ -372,6 +387,7 @@ const handleSubmit = () => {
       onSuccess: () => {
         form.reset();
       },
+      forceFormData: true,
     });
   }
   // Logic for submission (e.g., Inertia post) would go here

@@ -4,6 +4,7 @@ export type User = {
     phone: string;
     email: string;
     role: string
+    profile_photo?: string;
     created_at: string;
     updated_at: string;
 };

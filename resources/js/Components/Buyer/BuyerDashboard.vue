@@ -147,7 +147,7 @@
               </p>
             </div>
             <img
-              src="https://ui-avatars.com/api/?name=Jean+Marc&background=2D6A4F&color=fff"
+              :src="`https://ui-avatars.com/api/?name=`+user.data.name+`&background=2D6A4F&color=fff`"
               class="w-11 h-11 rounded-xl shadow-sm border border-gray-100"
             />
           </div>

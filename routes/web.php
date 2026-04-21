@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Resources\region\RegionResource;
 use App\Models\Region;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +51,11 @@ Route::middleware(['role:admin'])->group(function () {
 // Routes pour l'agriculteur
 Route::middleware(['role:farmer'])->group(function () {
     // Routes ici
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 });
 
 // Route pour l'acheteur
-Route::middleware(['role:buyer'])->group(function () {});
+Route::middleware(['role:buyer'])->group(function () {
+    // Routes ici
+
+});

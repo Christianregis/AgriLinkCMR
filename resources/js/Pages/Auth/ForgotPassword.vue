@@ -33,7 +33,7 @@
             type="submit"
             class="w-full py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg"
           >
-            Réinitialiser le mot de passe
+            Envoyer le mot de passe
           </button>
         </form>
       </div>

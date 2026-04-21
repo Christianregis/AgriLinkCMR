@@ -78,15 +78,15 @@
         >
           Mon Compte
         </div>
-        <a
-          href="#"
+        <Link
+          :href="profile()"
           class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group"
         >
           <i
             class="fas fa-user-circle w-5 text-center text-neutral-muted group-hover:text-brand-primary"
           ></i>
-          <span class="font-medium">Profil Ferme</span>
-        </a>
+          <span class="font-medium">Mon Profil</span>
+        </Link>
         <a
           href="#"
           class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group"
@@ -99,11 +99,12 @@
       </nav>
 
       <div class="p-6 border-t border-gray-50">
-        <button
+        <Link
+          :href="logout()"
           class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-semibold"
         >
           <i class="fas fa-sign-out-alt w-5 text-center"></i> <span>Déconnexion</span>
-        </button>
+        </Link>
       </div>
     </aside>
 
@@ -133,7 +134,7 @@
           </button>
           <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
             <div class="text-right hidden sm:block">
-              <p class="text-sm font-bold text-neutral-title">Ferme de Penja</p>
+              <p class="text-sm font-bold text-neutral-title">{{ user.data.name }}</p>
               <p
                 class="text-[10px] font-bold text-brand-primary uppercase tracking-wider"
               >
@@ -141,7 +142,11 @@
               </p>
             </div>
             <img
-              src="https://ui-avatars.com/api/?name=Ferme+Penja&background=2D6A4F&color=fff"
+              :src="
+                `https://ui-avatars.com/api/?name=` +
+                user.data.name +
+                `&background=2D6A4F&color=fff`
+              "
               class="w-11 h-11 rounded-xl shadow-sm border border-gray-100"
             />
           </div>
@@ -480,6 +485,8 @@
   </main>
 </template>
 <script lang="ts" setup>
+import { Link } from "@inertiajs/vue3";
+
 import {
   Chart,
   LineController,
@@ -491,8 +498,9 @@ import {
   Tooltip,
   Legend,
   Title,
-} from 'chart.js/auto';
+} from "chart.js/auto";
 import { onMounted, ref } from "vue";
+import { logout, profile } from "@/routes";
 import type { Auth } from "@/types";
 
 Chart.register(

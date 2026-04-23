@@ -19,11 +19,11 @@ class ProfileController extends Controller
             $buyer = BuyerProfile::where('user_id', $user->id)->first();
 
             return Inertia::render('Buyer/Profile/BuyerProfile', [
-                'user' => BuyerResource::make($buyer),
+                'buyer' => BuyerResource::make($buyer),
             ]);
         }
         if ($user->hasRole('farmer')) {
-            $farmer = FarmerProfile::with('user')->where('user_id', $user->id)->first();
+            $farmer = FarmerProfile::where('user_id', $user->id)->first();
 
             return Inertia::render('Farmer/Profile/FarmerProfile', [
                 'user' => FarmerResource::make($farmer),

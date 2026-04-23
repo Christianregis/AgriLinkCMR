@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role'=> $this->role,
-            'profile_photo' => "/storage/$this->profile_photo",
+            'profile_photo' => $this->profile_photo ? "/storage/$this->profile_photo" : null,
             'region_id'=>$this->region_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

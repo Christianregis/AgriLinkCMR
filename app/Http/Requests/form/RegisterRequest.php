@@ -35,7 +35,7 @@ class RegisterRequest extends FormRequest
             'profile_photo' => ['image', 'mimes:png,jpg,jpeg', 'max:2048', 'nullable'],
             'company_name' => ['string', 'max:255', 'nullable'],
             'certifications' => ['string', 'url', 'nullable'],
-            'buyer_type' => ['string', 'in:person,company', 'nullable']
+            'buyer_type' => ['string', 'in:person,company,institution,other', 'nullable']
         ];
     }
 }

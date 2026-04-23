@@ -24,7 +24,7 @@ class FarmerResource extends JsonResource
 
             'culture_types' => explode(',', $this->cultures),
 
-            'bio' => $this->bio,
+            'bio' => $this->user->bio,
 
             'profile_photo_url' => $this->user->profile_photo
                 ? asset('storage/' . $this->user->profile_photo)

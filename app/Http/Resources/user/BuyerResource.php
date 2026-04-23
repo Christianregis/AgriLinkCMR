@@ -15,11 +15,15 @@ class BuyerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id' => $this->user_id,
+            'id' => $this->user->id,
+            'name' => $this->user->name,
+            'phone' => $this->user->phone,
+            'email' => $this->user->email,
+            'profile_photo_url' => $this->user->profile_photo
+                ? asset('storage/'.$this->user->profile_photo)
+                : null,
             'company_name' => $this->company_name,
             'buyer_type' => $this->buyer_type,
-            'total_orders' => $this->total_orders,
-            'user' => UserResource::make($request->user())
         ];
     }
 }

@@ -14,32 +14,32 @@
             <div class="text-[10px] font-bold uppercase tracking-widest text-neutral-muted mb-4 px-4">
                 Menu Principal
             </div>
-            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl sidebar-active">
+            <Link :href="dashboard()" class="flex items-center space-x-3 px-4 py-3 rounded-xl sidebar-active">
                 <i class="fas fa-chart-line w-5 text-center"></i>
                 <span class="font-semibold">Vue d'ensemble</span>
-            </a>
-            <a href="#"
+            </Link>
+            <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-box w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Produits</span>
-            </a>
-            <a href="#"
+            </Link>
+            <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-receipt w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Commandes</span>
                 <span class="ml-auto bg-accent-cta text-white text-[10px] px-2 py-0.5 rounded-full">4</span>
-            </a>
-            <a href="#"
+            </Link>
+            <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-comment-dots w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Messages</span>
                 <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">2</span>
-            </a>
-            <a href="#"
+            </Link>
+            <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-star w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Avis Clients</span>
-            </a>
+            </Link>
 
             <div class="pt-8 text-[10px] font-bold uppercase tracking-widest text-neutral-muted mb-4 px-4">
                 Mon Compte
@@ -65,6 +65,7 @@
     </aside>
 </template>
 <script setup lang="ts">
-import { logout } from '@/routes';
+import { Link } from '@inertiajs/vue3';
+import { dashboard, logout } from '@/routes';
 import { farmerProfile } from '@/routes';
 </script>

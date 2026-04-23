@@ -66,7 +66,10 @@ Route::middleware(['role:farmer', 'auth'])->group(function () {
 
         $farmer = FarmerProfile::where('user_id', $user->id)->first();
 
-        return Inertia::render('Farmer/Profile/EditProfile');
+        return Inertia::render('Farmer/Profile/EditProfile', [
+            'user' => FarmerResource::make($farmer),
+            'regions' => RegionResource::collection(Region::all())
+        ]);
     })->name('farmerProfileEdit');
 });
 
@@ -81,7 +84,7 @@ Route::middleware(['role:buyer', 'auth'])->group(function () {
         $buyer = BuyerProfile::where('user_id', $user->id)->first();
 
         return Inertia::render('Buyer/Profile/EditProfile', [
-            'buyer' => BuyerResource::make($buyer),
+            'user' => BuyerResource::make($buyer),
         ]);
     })->name('buyerProfileEdit');
 

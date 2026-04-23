@@ -19,7 +19,7 @@ class FarmerResource extends JsonResource
             'name' => $this->user->name,
             'email' => $this->user->email,
             'phone' => $this->user->phone,
-            'region' => $this->region?->name,
+            'region' => $this->user->region?->name,
             'village' => $this->village,
 
             'culture_types' => explode(',', $this->cultures),

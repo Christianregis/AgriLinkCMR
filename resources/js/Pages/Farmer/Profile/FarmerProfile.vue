@@ -6,7 +6,7 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.name"/>
+            <FarmerNavbar :name="user.name" />
 
             <!-- PROFILE CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">
@@ -77,11 +77,12 @@
                         <div class="space-y-8">
                             <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
                                 <h3 class="text-lg font-bold text-[#111827] mb-6">Coordonnées</h3>
-                                <div class="space-y-4">
+                                <div class="space-y-4 mb-7">
                                     <div class="flex items-center gap-4">
                                         <div
                                             class="w-10 h-10 bg-[#F3F4F6] rounded-xl flex items-center justify-center text-[#4B5563]">
-                                            <i class="fas fa-envelope"></i></div>
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
                                         <div>
                                             <p class="text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
                                                 Email</p>
@@ -91,7 +92,8 @@
                                     <div class="flex items-center gap-4">
                                         <div
                                             class="w-10 h-10 bg-[#F3F4F6] rounded-xl flex items-center justify-center text-[#4B5563]">
-                                            <i class="fas fa-phone"></i></div>
+                                            <i class="fas fa-phone"></i>
+                                        </div>
                                         <div>
                                             <p class="text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
                                                 Téléphone</p>
@@ -99,10 +101,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button
-                                    class="w-full mt-8 bg-[#2D6A4F] text-white py-3.5 rounded-xl font-bold hover:bg-[#40916C] transition-all shadow-md">
+                                <Link :href="farmerProfileEdit()"
+                                    class="w-full mt-8 bg-[#2D6A4F] px-3 text-white py-3.5 rounded-xl font-bold hover:bg-[#40916C] transition-all shadow-md">
                                     Mettre à jour les infos
-                                </button>
+                                </Link>
                             </div>
 
                             <div class="bg-brand-bg p-8 rounded-3xl border border-brand-light">
@@ -122,9 +124,10 @@
 </template>
 
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
-
+import { farmerProfileEdit } from '@/routes';
 
 interface FarmerProfile {
     id: number;

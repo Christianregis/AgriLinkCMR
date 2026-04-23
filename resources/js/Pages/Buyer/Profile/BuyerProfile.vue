@@ -35,10 +35,10 @@
                                     user.company_name || 'Acheteur Particulier' }}
                             </p>
                             <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-4">
-                                <button
+                                <Link :href="buyerProfileEdit()"
                                     class="bg-[#2D6A4F] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#40916C] transition-all shadow-md">
                                     Modifier le profil
-                                </button>
+                                </Link>
                                 <button
                                     class="border-2 border-gray-100 text-[#4B5563] px-6 py-2.5 rounded-xl font-bold hover:bg-gray-50 transition-all">
                                     Changer le mot de passe
@@ -126,10 +126,10 @@
     </div>
 </template>
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
-
-
+import { buyerProfileEdit } from '@/routes';
 interface BuyerProfile {
     id: number;
     name: string;

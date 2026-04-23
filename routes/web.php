@@ -12,28 +12,35 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
+// Route non accesibles des la connexions
 Route::middleware('guest')->group(function () {});
 
+// Route pour se connecter (Affichage du formulaire)
 Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->name('connexion');
 
+// Route pour s'incrire (Formulaire)
 Route::get('/register', function () {
     return Inertia::render('Auth/Register', [
         'regions' => RegionResource::collection(Region::all()),
     ]);
 })->name('inscription');
 
+// Route pour se connecter
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
+// Route pour s'inscire
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
+// Route pour afficher le formulaire de mot de passe oublie
 Route::get('/forgot-password', function () {
     return Inertia::render('Auth/ForgotPassword');
 })->name('showForgotpPassword');
 
 
+// Route disponible des authentification
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -44,18 +51,19 @@ Route::middleware('auth')->group(function () {
 
 
 // Routes pour l'administrateur
-Route::middleware(['role:admin'])->group(function () {
+Route::middleware(['role:admin', 'auth'])->group(function () {
     // Routes pour l'adminstrateur ici
 });
 
 // Routes pour l'agriculteur
-Route::middleware(['role:farmer'])->group(function () {
+Route::middleware(['role:farmer', 'auth'])->group(function () {
     // Routes ici
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/farmer', [ProfileController::class, 'show'])->name('farmerProfile');
 });
 
 // Route pour l'acheteur
-Route::middleware(['role:buyer'])->group(function () {
+Route::middleware(['role:buyer', 'auth'])->group(function () {
     // Routes ici
+    Route::get('/profile/buyer', [ProfileController::class, 'show'])->name('buyerProfile');
 
 });

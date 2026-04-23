@@ -55,12 +55,12 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="form.errors.name || form.errors.email || form.errors.password">
+                <div v-if="form.errors.name || form.errors.email || form.errors.password || form.errors.phone">
                     <div class="flex items-center p-4 text-red-700 bg-red-100 border border-red-300 rounded-lg">
                         <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10A8 8 0 11..."></path>
                         </svg>
-                        <span>{{ form.errors.name || form.errors.email || form.errors.password }}</span>
+                        <span>{{ form.errors.name || form.errors.email || form.errors.password || form.errors.phone }}</span>
                     </div>
                 </div>
                 <form @submit.prevent="handleSubmit" class="p-8 pt-2 space-y-6">
@@ -223,9 +223,9 @@
                                     <i class="mb-2 text-3xl text-gray-400 fas fa-cloud-arrow-up"></i>
                                     <div class="flex text-sm text-gray-600">
                                         <input type="file" accept="image/*" @change="handleFileChange"
-                                            class="font-semibold text-brand-primary" />
+                                            class="font-semibold text-brand-primary"/>
                                     </div>
-                                    <p class="text-xs text-gray-500">PNG, JPG jusqu'à 2MB</p>
+                                    <p class="text-xs text-gray-500">PNG, JPG, JPEG jusqu'à 2MB</p>
                                 </div>
                             </div>
                             <p v-if="form.errors.profile_photo" class="mt-1 text-sm text-red-500">
@@ -238,8 +238,8 @@
                                 class="w-5 h-5 mt-1 border-gray-300 rounded text-brand-primary focus:ring-brand-primary" />
                             <label for="terms" class="ml-3 text-sm text-neutral-muted" aria-required>
                                 J'accepte les
-                                <a href="#" class="font-bold text-brand-primary hover:underline">conditions
-                                    d'utilisation</a>
+                                <Link href="#" class="font-bold text-brand-primary hover:underline">conditions
+                                    d'utilisation</Link>
                                 et la politique de confidentialité.
                             </label>
                             <p v-if="errorTermsNotConfirmed" class="mt-1 text-sm text-red-500">
@@ -259,7 +259,7 @@
                             Suivant
                         </button>
                         <button v-if="currentStep === 3" type="submit"
-                            class="ml-auto w-full py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg">
+                            class="ml-auto px-3 py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg">
                             Créer mon compte
                         </button>
                     </div>
@@ -280,7 +280,7 @@
 import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { connexion, home, register } from '@/routes';
-import FlashMessage from "../../Components/FlashMessage.vue"; // Assuming this path is correct
+import FlashMessage from "../../Components/FlashMessage.vue";
 
 // Type definitions
 type UserType = 'buyer' | 'farmer';

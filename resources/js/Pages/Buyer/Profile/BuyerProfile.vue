@@ -1,83 +1,11 @@
-<script setup lang="ts">
-
-interface BuyerProfile {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  buyer_type: 'individual' | 'restaurant' | 'wholesaler' | 'institution';
-  company_name?: string;
-  delivery_address?: string;
-  favorite_categories: string[];
-  profile_photo_url?: string;
-}
-
-const props = defineProps<{
-  user: BuyerProfile;
-}>();
-
-const getBuyerTypeLabel = (type: string) => {
-  const labels: Record<string, string> = {
-    individual: 'Particulier',
-    restaurant: 'Restaurateur',
-    wholesaler: 'Grossiste',
-    institution: 'Institution',
-  };
-  
-  return labels[type] || type;
-};
-</script>
-
 <template>
-  <div class="min-h-screen bg-[#F3F4F6] flex">
-    <!-- SIDEBAR (Identique au Dashboard Acheteur) -->
-    <aside class="hidden lg:flex flex-col w-72 bg-white border-r border-gray-100 sticky top-0 h-screen z-40">
-      <div class="p-8 border-b border-gray-50">
-        <div class="flex items-center space-x-2">
-          <div class="bg-[#2D6A4F] p-2 rounded-lg"><i class="fas fa-leaf text-white text-xl"></i></div>
-          <span class="text-2xl font-bold text-[#1A3D2B] tracking-tight">AgriLink<span class="text-[#2D6A4F]">.cm</span></span>
-        </div>
-      </div>
-      <nav class="flex-1 p-6 space-y-2">
-        <div class="text-[10px] font-bold uppercase tracking-widest text-[#4B5563] mb-4 px-4">Menu Acheteur</div>
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[#1F2937] hover:bg-[#F0FDF4] hover:text-[#2D6A4F] transition-all group">
-          <i class="fas fa-th-large w-5 text-center text-[#4B5563] group-hover:text-[#2D6A4F]"></i> <span class="font-medium">Tableau de bord</span>
-        </a>
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[#1F2937] hover:bg-[#F0FDF4] hover:text-[#2D6A4F] transition-all group">
-          <i class="fas fa-shopping-bag w-5 text-center text-[#4B5563] group-hover:text-[#2D6A4F]"></i> <span class="font-medium">Mes Commandes</span>
-        </a>
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-[#2D6A4F] text-white font-semibold shadow-lg shadow-[#2D6A4F]/20">
-          <i class="fas fa-user w-5 text-center"></i> <span>Mon Profil</span>
-        </a>
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[#1F2937] hover:bg-[#F0FDF4] hover:text-[#2D6A4F] transition-all group">
-          <i class="fas fa-heart w-5 text-center text-[#4B5563] group-hover:text-[#2D6A4F]"></i> <span class="font-medium">Favoris</span>
-        </a>
-      </nav>
-      <div class="p-6 border-t border-gray-50">
-        <button class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-semibold">
-          <i class="fas fa-sign-out-alt w-5 text-center"></i> <span>Déconnexion</span>
-        </button>
-      </div>
-    </aside>
+  <div class="min-h-screen bg-neutral-bg flex">
+    <BuyerSidebar />
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-      <!-- HEADER -->
-      <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-30">
-        <div class="flex items-center">
-          <button class="lg:hidden text-[#1F2937] mr-4"><i class="fas fa-bars text-xl"></i></button>
-          <h1 class="text-xl font-bold text-[#111827]">Mon Profil Acheteur</h1>
-        </div>
-        <div class="flex items-center space-x-6">
-          <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
-            <div class="text-right hidden sm:block">
-              <p class="text-sm font-bold text-[#111827]">{{ props.user.name }}</p>
-              <p class="text-[10px] font-bold text-[#2D6A4F] uppercase tracking-wider">{{ getBuyerTypeLabel(props.user.buyer_type) }}</p>
-            </div>
-            <img :src="props.user.profile_photo_url || `https://ui-avatars.com/api/?name=${props.user.name}&background=2D6A4F&color=fff`" class="w-11 h-11 rounded-xl shadow-sm border border-gray-100">
-          </div>
-        </div>
-      </header>
+      <!-- NAVBAR -->
+        <BuyerNavbar :name="user.name"/>
 
       <!-- PROFILE CONTENT -->
       <div class="flex-1 overflow-y-auto p-8">
@@ -187,6 +115,38 @@ const getBuyerTypeLabel = (type: string) => {
     </main>
   </div>
 </template>
+<script setup lang="ts">
+import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
+import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
+
+
+interface BuyerProfile {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  buyer_type: 'individual' | 'restaurant' | 'wholesaler' | 'institution';
+  company_name?: string;
+  delivery_address?: string;
+  favorite_categories: string[];
+  profile_photo_url?: string;
+}
+
+const props = defineProps<{
+  user: BuyerProfile;
+}>();
+
+const getBuyerTypeLabel = (type: string) => {
+  const labels: Record<string, string> = {
+    individual: 'Particulier',
+    restaurant: 'Restaurateur',
+    wholesaler: 'Grossiste',
+    institution: 'Institution',
+  };
+
+  return labels[type] || type;
+};
+</script>
 
 <style scoped>
 /* Les styles sont gérés par Tailwind CSS */

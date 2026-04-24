@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Resources\category\CategoryResource;
 use App\Http\Resources\region\RegionResource;
 use App\Http\Resources\user\BuyerResource;
 use App\Http\Resources\user\FarmerResource;
 use App\Models\BuyerProfile;
+use App\Models\Category;
 use App\Models\FarmerProfile;
 use App\Models\Region;
 use Illuminate\Support\Facades\Route;
@@ -43,7 +46,7 @@ Route::get('/forgot-password', function () {
     return Inertia::render('Auth/ForgotPassword');
 })->name('showForgotpPassword');
 
-// Route disponible des authentification
+// Route disponible des authentifications
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -58,11 +61,11 @@ Route::middleware(['role:admin', 'auth'])->group(function () {
 });
 
 // Routes pour l'agriculteur
-Route::middleware(['role:farmer', 'auth'])->group(function () {
+Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function () {
     // Routes ici
-    Route::get('/profile/farmer', [ProfileController::class, 'show'])->name('farmerProfile');
+    Route::get('/farmer', [ProfileController::class, 'show'])->name('farmerProfile');
 
-    Route::get('/profile/farmer/edit', function () {
+    Route::get('/farmer/edit', function () {
         $user = Auth::user();
 
         $farmer = FarmerProfile::with('user')->where('user_id', $user->id)->first();
@@ -73,15 +76,23 @@ Route::middleware(['role:farmer', 'auth'])->group(function () {
         ]);
     })->name('farmerProfileEdit');
 
-    Route::put('/profile/farmer/edit', [ProfileController::class, 'updateProfileFarmer'])->name('farmerProfileUpdate');
+    Route::put('/farmer/edit', [ProfileController::class, 'updateProfileFarmer'])->name('farmerProfileUpdate');
+
+    Route::get('/farmer/products', [ProductController::class,'show'])->name('farmerProductsShow');
+    Route::get('/profile/create', function(){
+        return Inertia::render('Farmer/Products/Create', [
+            'categories' => CategoryResource::collection(Category::all()),
+            'regions' => RegionResource::collection(Region::all())
+        ]);
+    })->name('farmerProductsCreate');
 });
 
 // Route pour l'acheteur
-Route::middleware(['role:buyer', 'auth'])->group(function () {
+Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () {
     // Routes ici
-    Route::get('/profile/buyer', [ProfileController::class, 'show'])->name('buyerProfile');
+    Route::get('/buyer', [ProfileController::class, 'show'])->name('buyerProfile');
 
-    Route::get('/profile/buyer/edit', function () {
+    Route::get('/buyer/edit', function () {
         $user = Auth::user();
 
         $buyer = BuyerProfile::with('user')->where('user_id', $user->id)->first();
@@ -91,5 +102,5 @@ Route::middleware(['role:buyer', 'auth'])->group(function () {
     })->name('buyerProfileEdit');
 
 
-    Route::put('/profile/buyer/edit', [ProfileController::class, 'updateProfileBuyer'])->name('buyerProfileUpdate');
+    Route::put('/buyer/edit', [ProfileController::class, 'updateProfileBuyer'])->name('buyerProfileUpdate');
 });

@@ -2,7 +2,10 @@
 
 namespace App\enum\product;
 
-enum ProductStatus
+enum ProductStatus : string
 {
-    //
+    case AVAILABLE = 'available';
+    case OUT_OF_STOCK = 'out_of_stock';
+    case COMING_SOON = 'coming_soon';
+
 }

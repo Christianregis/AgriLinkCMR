@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'title',
         'slug',
@@ -19,10 +19,10 @@ class Product extends Model
         'quantity',
         'unit',
         'price',
-        'min_order_qte',
         'price_negotiable',
         'harvest_date',
-        'expire_at',
+        'min_order_qty',
+        'expires_at',
         'status',
 
         'user_id',
@@ -55,7 +55,7 @@ class Product extends Model
         return $this->belongsTo(Region::class);
     }
 
-    public function orderItems() : HasMany
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }

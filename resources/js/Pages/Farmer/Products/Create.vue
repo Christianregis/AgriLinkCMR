@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
         <FarmerSidebar />
@@ -7,7 +8,13 @@
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
             <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
-
+            <div v-if="errorsData" class="bg-red-50 border border-red-200 p-4 rounded-xl">
+                <ul class="text-red-600 text-sm space-y-1">
+                    <li v-for="(error, key) in errorsData" :key="key">
+                        {{ error }}
+                    </li>
+                </ul>
+            </div>
             <!-- PRODUCT ADDITION CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <div class="max-w-4xl mx-auto">
@@ -66,7 +73,7 @@
                                     <input v-model="form.title" type="text" placeholder="Ex: Tomates fraîches bio"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title
-                                    }}</p>
+                                        }}</p>
                                 </div>
                                 <div>
                                     <label
@@ -120,7 +127,7 @@
                                         <input v-model="form.unit" type="text" placeholder="Ex: Kg, Sacs, Litres"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                         <p v-if="form.errors.unit" class="mt-1 text-sm text-red-500">{{ form.errors.unit
-                                        }}</p>
+                                            }}</p>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-sm font-semibold text-neutral-title">Prix par
@@ -162,10 +169,10 @@
                                 <div>
                                     <label class="block mb-2 text-sm font-semibold text-neutral-title">Date d'expiration
                                         (optionnel)</label>
-                                    <input v-model="form.expire_at" type="date"
+                                    <input v-model="form.expires_at" type="date"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
-                                    <p v-if="form.errors.expire_at" class="mt-1 text-sm text-red-500">{{
-                                        form.errors.expire_at }}</p>
+                                    <p v-if="form.errors.expires_at" class="mt-1 text-sm text-red-500">{{
+                                        form.errors.expires_at }}</p>
                                 </div>
                             </div>
 
@@ -186,7 +193,7 @@
                                         </div>
                                     </div>
                                     <p v-if="form.errors.images" class="mt-1 text-sm text-red-500">{{ form.errors.images
-                                    }}</p>
+                                        }}</p>
                                 </div>
                                 <div v-if="imagePreviews.length" class="mt-4 grid grid-cols-3 gap-4">
                                     <div v-for="(image, index) in imagePreviews" :key="index" class="relative">
@@ -227,6 +234,8 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import { farmerProductsStore } from '@/routes';
 
 
 interface Category {
@@ -248,8 +257,8 @@ interface ProductFormData {
     min_order_qty: number;
     price_negotiable: boolean;
     harvest_date: string;
-    expire_at: string | null;
-    status: string; // Default to 'pending' or 'active'
+    expires_at: string | null;
+    status: string;
     user_id: number; // Will be set by backend or from auth user
     category_id: number | null;
     region_id: number | null;
@@ -281,13 +290,13 @@ const form = useForm<ProductFormData>({
     title: "",
     description: "",
     quantity: 0,
-    unit: 'CFA',
+    unit: '',
     price: 0,
     min_order_qty: 1,
     price_negotiable: false,
     harvest_date: new Date().toISOString().slice(0, 10), // Default to today
-    expire_at: null,
-    status: 'pending', // Default status
+    expires_at: null,
+    status: 'avaliable', // Default status
     user_id: user.id,
     category_id: null,
     region_id: null,
@@ -348,6 +357,7 @@ const prevStep = () => {
     }
 };
 
+const errorsData = ref()
 const handleSubmit = () => {
     if (currentStep.value === 3) {
         // Final validation for step 3 if needed (e.g., minimum number of images)
@@ -358,33 +368,18 @@ const handleSubmit = () => {
         }
 
         // Submit the form using Inertia
-        form.post(route('products.store'), {
-            onSuccess: () => {
-                alert('Produit ajouté avec succès !');
+        form.post(farmerProductsStore.url(), {
+            onSuccess:()=>{
                 form.reset();
-                imagePreviews.value.splice(0, imagePreviews.value.length); // Clear image previews
-                currentStep.value = 1; // Reset to first step
+                currentStep.value = 1;
             },
             onError: (errors) => {
-                console.error('Erreur lors de l\'ajout du produit:', errors);
-                alert('Une erreur est survenue lors de l\'ajout du produit. Veuillez vérifier les champs.');
-                // You might want to navigate back to the step with errors or display them more prominently
+                errorsData.value = errors;
+                console.log(errorsData)
             },
             forceFormData: true, // Important for file uploads
         });
     }
-};
-
-// Helper to get Inertia route, assuming it's globally available or imported
-const route = (name: string, params?: any) => {
-    // This is a placeholder. In a real Inertia app, you'd use the actual route helper.
-    console.log(`Route: ${name}`, params);
-
-    if (name === 'products.store') {
-        return '/farmer/products';
-    } // Example route
-
-    return '#';
 };
 </script>
 

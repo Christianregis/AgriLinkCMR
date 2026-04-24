@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
         <FarmerSidebar />
@@ -7,7 +8,7 @@
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
             <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
-
+            
             <!-- PRODUCTS CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <div class="flex justify-between items-center mb-6">
@@ -116,6 +117,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
 import { farmerProductsCreate } from '@/routes';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 
 interface Category {

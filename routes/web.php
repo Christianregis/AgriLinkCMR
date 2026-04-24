@@ -85,6 +85,8 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
             'regions' => RegionResource::collection(Region::all())
         ]);
     })->name('farmerProductsCreate');
+
+    Route::post('/farmer/products', [ProductController::class, 'store'])->name('farmerProductsStore');
 });
 
 // Route pour l'acheteur

@@ -17,7 +17,7 @@ class ProductController extends Controller
     $data = $request->validated();
 
     // slug auto si non fourni
-    $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
+    $data['slug'] = Str::uuid();
 
     $data['user_id'] = Auth::user()->id;
 

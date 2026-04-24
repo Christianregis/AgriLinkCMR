@@ -85,6 +85,7 @@ class ProfileController extends Controller
                 ->store('profile_image', 'public');
         }
         $buyer->company_name = $data['company_name'];
+        $buyer->buyer_type = $data['buyer_type'];
 
 
         $buyer->save();

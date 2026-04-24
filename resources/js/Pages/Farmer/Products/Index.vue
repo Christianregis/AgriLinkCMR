@@ -8,7 +8,7 @@
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
             <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
-            
+
             <!-- PRODUCTS CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <div class="flex justify-between items-center mb-6">
@@ -66,10 +66,10 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-neutral-title">{{ product.quantity }} {{ product.unit
-                                        }}</div>
+                                            }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-title">{{ product.price
-                                    }} FCFA</td>
+                                        }} FCFA</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span :class="[
                                             'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
@@ -97,14 +97,22 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div v-if="products.links.length > 3" class="mt-6 flex justify-center">
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            <Link v-for="link in products.links" :key="link.label" :href="link.url || '#'" :class="[
-                                'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
-                                link.active ? 'z-10 bg-brand-primary border-brand-primary text-white' : 'bg-white border-gray-300 text-neutral-muted hover:bg-gray-50',
-                                link.url === null ? 'opacity-50 cursor-not-allowed' : ''
-                            ]" v-html="link.label" />
-                        </nav>
+                    <div class="mt-6 flex justify-center">
+                        <div class="flex items-center justify-between mt-6">
+                            <div class="flex justify-center gap-4 mt-6">
+                                <Link v-if="products.links.prev" :href="products.links.prev"
+                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition">
+                                    <i class="fas fa-arrow-left text-xs"></i>
+                                    Précédent
+                                </Link>
+
+                                <Link v-if="products.links.next" :href="products.links.next"
+                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition">
+                                    Suivant
+                                    <i class="fas fa-arrow-right text-xs"></i>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,8 +124,8 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
-import { farmerProductsCreate } from '@/routes';
 import FlashMessage from '@/Components/FlashMessage.vue';
+import { farmerProductsCreate } from '@/routes';
 
 
 interface Category {
@@ -132,7 +140,7 @@ interface Product {
     quantity: number;
     unit: string;
     price: number;
-    status: 'active' | 'pending' | 'inactive'; // Assuming these statuses
+    status: string; // Assuming these statuses
     primary_image_url?: string; // Assuming a primary image URL for display
     category: Category;
 }
@@ -152,10 +160,11 @@ interface ProductsData {
 const page = usePage();
 const user = page.props.auth.user.data;
 
-defineProps<{
+const props = defineProps<{
     products: ProductsData;
 }>();
 
+console.log(props.products.links.length)
 const deleteProduct = (productId: number) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
         // Implement actual deletion logic here, e.g., using Inertia.delete

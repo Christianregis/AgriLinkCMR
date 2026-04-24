@@ -6,7 +6,7 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.data.name" />
+            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"/>
             <!-- DASHBOARD CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <!-- TOP STATS -->

@@ -8,7 +8,7 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.name" />
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo_url"/>
 
             <!-- PROFILE CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">
@@ -24,7 +24,7 @@
                         </div>
                         <div class="px-8 pb-8 flex flex-col md:flex-row items-end -mt-12 gap-6">
                             <div class="relative group">
-                                <img :src="user.profile_photo || `https://ui-avatars.com/api/?name=${user.name}&background=2D6A4F&color=fff`"
+                                <img :src="user.profile_photo_url || `https://ui-avatars.com/api/?name=${user.name}&background=2D6A4F&color=fff`"
                                     class="w-32 h-32 rounded-3xl border-4 border-white shadow-xl object-cover bg-white">
                                 <button
                                     class="absolute inset-0 bg-black/40 rounded-3xl opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-all">
@@ -141,7 +141,8 @@ interface FarmerProfile {
     village: string;
     culture_types: string[];
     bio: string;
-    profile_photo?: string;
+    profile_photo_url?: string;
+
     average_rating: number;
     total_sales: number;
 }

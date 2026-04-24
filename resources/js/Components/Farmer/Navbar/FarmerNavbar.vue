@@ -22,10 +22,7 @@
                         Producteur Certifié
                     </p>
                 </div>
-                <img :src="`https://ui-avatars.com/api/?name=` +
-                    props.name +
-                    `&background=2D6A4F&color=fff`
-                    " class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
+                <img :src="props.profile_photo ? props.profile_photo : `https://ui-avatars.com/api/?name=` + props.name + `&background=2D6A4F&color=fff`" class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
             </div>
         </div>
     </header>
@@ -33,6 +30,7 @@
 <script setup lang="ts">
 interface User {
     name: string;
+    profile_photo? : string,
 }
 const props = defineProps<User>()
 </script>

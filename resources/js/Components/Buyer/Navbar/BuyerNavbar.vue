@@ -26,7 +26,7 @@
                         Acheteur Premium
                     </p>
                 </div>
-                <img :src="`https://ui-avatars.com/api/?name=` + props.name + `&background=2D6A4F&color=fff`"
+                <img :src="props.profile_photo ? props.profile_photo : `https://ui-avatars.com/api/?name=` + props.name + `&background=2D6A4F&color=fff`"
                     class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
             </div>
         </div>
@@ -36,6 +36,7 @@
 <script lang="ts" setup>
 interface User {
     name: string
+    profile_photo? : string,
 }
 const props = defineProps<User>();
 </script>

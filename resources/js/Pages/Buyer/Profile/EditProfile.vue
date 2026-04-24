@@ -5,7 +5,7 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-      <BuyerNavbar :name="user.name" />
+      <BuyerNavbar :name="user.name" :profile_photo="user.profile_photo_url" />
 
       <!-- PROFILE EDIT CONTENT -->
       <div class="flex-1 overflow-y-auto p-8">
@@ -37,15 +37,10 @@
               <div class="text-center md:text-left flex-1">
                 <div class="flex flex-col md:flex-row items-center gap-3 mb-2">
                   <h2 class="text-3xl font-bold text-neutral-title">{{ user.name }}</h2>
-                  <span
-                    class="px-3 py-1 bg-yellow-100 text-yellow-700 text-[10px] font-bold rounded-full uppercase tracking-wider"
-                  >
-                    {{ getAccountTypeLabel(user.account_type) }}
-                  </span>
                 </div>
                 <p class="text-neutral-muted flex items-center justify-center md:justify-start gap-2">
                   <i class="fas fa-building text-brand-primary" v-if="user.company_name"></i>
-                  {{ user.company_name || (user.account_type === 'buyer' ? 'Acheteur Particulier' : '') }}
+                  {{ user.company_name || 'Acheteur Particulier' }}
                 </p>
               </div>
             </div>
@@ -89,8 +84,7 @@
               </div>
             </div>
 
-            <!-- Account Type Specific Information -->
-            <div v-if="user.account_type === 'buyer'" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
               <h3 class="text-lg font-bold text-neutral-title mb-6 flex items-center gap-2">
                 <i class="fas fa-shopping-basket text-brand-primary"></i> Informations Acheteur
               </h3>
@@ -129,57 +123,6 @@
               </div>
             </div>
 
-            <div v-else-if="user.account_type === 'farmer'" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
-              <h3 class="text-lg font-bold text-neutral-title mb-6 flex items-center gap-2">
-                <i class="fas fa-tractor text-brand-primary"></i> Informations Agriculteur
-              </h3>
-              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label class="block mb-2 text-sm font-semibold text-neutral-title">Région d'exploitation</label>
-                  <select
-                    v-model="form.region_id"
-                    class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
-                  >
-                    <option value="">--Selectionnez une region--</option>
-                    <option v-for="region in regions" :value="region.id" :key="region.id">
-                      {{ region.name }}
-                    </option>
-                  </select>
-                  <p v-if="form.errors.region_id" class="mt-1 text-sm text-red-500">{{ form.errors.region_id }}</p>
-                </div>
-                <div>
-                  <label class="block mb-2 text-sm font-semibold text-neutral-title">Village / Localité</label>
-                  <input
-                    v-model="form.village"
-                    type="text"
-                    placeholder="ex: Penja"
-                    class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
-                  />
-                  <p v-if="form.errors.village" class="mt-1 text-sm text-red-500">{{ form.errors.village }}</p>
-                </div>
-              </div>
-              <div>
-                <label class="block mb-2 text-sm font-semibold text-neutral-title">Types de cultures / produits</label>
-                <input
-                  v-model="form.cultures"
-                  type="text"
-                  placeholder="Ananas, Manioc, Maïs..."
-                  class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
-                />
-                <p v-if="form.errors.cultures" class="mt-1 text-sm text-red-500">{{ form.errors.cultures }}</p>
-              </div>
-              <div>
-                <label class="block mb-2 text-sm font-semibold text-neutral-title">Biographie / Présentation</label>
-                <textarea
-                  v-model="form.bio"
-                  rows="3"
-                  placeholder="Ex: Ma ferme propose des produits frais et de qualites pour vos usages au quotidient..."
-                  class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
-                ></textarea>
-                <p v-if="form.errors.bio" class="mt-1 text-sm text-red-500">{{ form.errors.bio }}</p>
-              </div>
-            </div>
-
             <!-- Save Button -->
             <div class="flex justify-end">
               <button
@@ -200,10 +143,9 @@
 import { useForm } from '@inertiajs/vue3';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
+import { buyerProfileUpdate } from '@/routes';
 
 // Type definitions
-type AccountType = 'buyer' | 'farmer';
-
 interface RegionData {
   id: string;
   name: string;
@@ -216,7 +158,6 @@ interface UserProfile {
   name: string;
   email: string;
   phone: string;
-  account_type: AccountType;
   buyer_type?: 'person' | 'company' | 'institution' | 'other';
   company_name?: string;
   delivery_address?: string;
@@ -244,10 +185,6 @@ interface EditFormData {
   buyer_type?: 'person' | 'company' | 'institution' | 'other';
   company_name?: string;
   delivery_address?: string;
-  region_id?: string;
-  village?: string;
-  cultures?: string;
-  bio?: string;
   profile_photo: File | null;
   profile_photo_preview: string | null; // For displaying local image preview
 }
@@ -255,7 +192,6 @@ interface EditFormData {
 // Props
 const props = defineProps<EditProfileProps>();
 const user = props.user.data;
-const regions = props.regions?.data || [];
 
 // Form data using Inertia's useForm
 const form = useForm<EditFormData>({
@@ -266,18 +202,10 @@ const form = useForm<EditFormData>({
   buyer_type: user.buyer_type,
   company_name: user.company_name,
   delivery_address: user.delivery_address,
-  region_id: user.region_id,
-  village: user.village,
-  cultures: user.cultures,
-  bio: user.bio,
   profile_photo: null,
   profile_photo_preview: user.profile_photo_url || null,
 });
 
-// Methods
-const getAccountTypeLabel = (type: AccountType) => {
-  return type === 'buyer' ? 'Acheteur' : 'Agriculteur';
-};
 
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -290,9 +218,8 @@ const handleFileChange = (e: Event) => {
 };
 
 const handleSubmit = () => {
-  // Assuming a route for updating user profile exists, e.g., 'profile.update'
-  // You would replace 'route(\'profile.update\', user.id)' with your actual Inertia route helper
-  form.post(`/profile/${user.id}`, {
+
+  form.post(buyerProfileUpdate.url(), {
     onSuccess: () => {
       console.log('Profile updated successfully!');
       // Optionally, refresh the page or show a success message

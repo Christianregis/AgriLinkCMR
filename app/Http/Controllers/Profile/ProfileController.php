@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\buyer\BuyerProfileRequest;
 use App\Http\Requests\farmer\FarmerProfileRequest;
 use App\Http\Resources\user\BuyerResource;
 use App\Http\Resources\user\FarmerResource;
@@ -43,7 +44,7 @@ class ProfileController extends Controller
         $data = $request->validated();
 
         $farmer = FarmerProfile::with('user')
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::user()->id)
             ->firstOrFail();
 
         // Mise à jour user
@@ -67,5 +68,26 @@ class ProfileController extends Controller
         return redirect()
             ->route('farmerProfile')
             ->with('success', 'Informations mises à jour !');
+    }
+
+    /**
+     * Fonction pour mettre a jour les informations d'un acheteur
+     */
+
+    public function updateProfileBuyer(BuyerProfileRequest $request)
+    {
+        $data = $request->validated();
+        $buyer = BuyerProfile::with('user')->where('user_id', Auth::user()->id)->firstOrFail();
+
+        $buyer->user->name = $data['name'];
+        if ($request->hasFile('profile_photo')) {
+            $buyer->user->profile_photo = $request->file('profile_photo')
+                ->store('profile_image', 'public');
+        }
+        $buyer->company_name = $data['company_name'];
+
+
+        $buyer->save();
+        return redirect()->route('buyerProfile')->with('success', 'Informations mis a jour');
     }
 }

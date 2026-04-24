@@ -6,7 +6,7 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="user.name" />
+            <BuyerNavbar :name="user.name" :profile_photo="user.profile_photo_url" />
 
             <!-- PROFILE CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">

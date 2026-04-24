@@ -4,7 +4,7 @@
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-            <FarmerNavbar :name="user.name" />
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo_url"/>
 
             <!-- PROFILE EDIT CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">
@@ -103,9 +103,14 @@
                                             class="px-4 py-2 bg-green-100 text-brand-primary rounded-xl text-sm font-semibold border border-green-200">
                                             <i class="fas fa-check-circle mr-2 opacity-50"></i> {{ culture }}
                                         </span>
-                                        <input type="text" v-model="newCulture"
-                                            placeholder="+ Ajouter une culture"
+                                        <input type="text" v-model="newCulture" placeholder="+ Ajouter une culture"
                                             class="px-4 py-2 border-2 border-dashed border-gray-200 text-neutral-muted rounded-xl text-sm font-medium hover:border-brand-primary hover:text-brand-primary transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
+                                        <button type="button"
+                                            @click="addCulture"
+                                            class="px-4 py-2 bg-brand-primary text-white rounded-xl text-sm font-medium hover:bg-brand-primary/90 transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/20 flex items-center gap-2">
+                                            <span class="text-lg leading-none">+</span>
+                                            Ajouter
+                                        </button>
                                     </div>
                                     <p v-if="form.errors.cultures" class="mt-1 text-sm text-red-500">{{
                                         form.errors.cultures }}</p>

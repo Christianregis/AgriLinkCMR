@@ -65,7 +65,7 @@ Route::middleware(['role:farmer', 'auth'])->group(function () {
     Route::get('/profile/farmer/edit', function () {
         $user = Auth::user();
 
-        $farmer = FarmerProfile::where('user_id', $user->id)->first();
+        $farmer = FarmerProfile::with('user')->where('user_id', $user->id)->first();
 
         return Inertia::render('Farmer/Profile/EditProfile', [
             'user' => FarmerResource::make($farmer),
@@ -84,11 +84,12 @@ Route::middleware(['role:buyer', 'auth'])->group(function () {
     Route::get('/profile/buyer/edit', function () {
         $user = Auth::user();
 
-        $buyer = BuyerProfile::where('user_id', $user->id)->first();
-
+        $buyer = BuyerProfile::with('user')->where('user_id', $user->id)->first();
         return Inertia::render('Buyer/Profile/EditProfile', [
             'user' => BuyerResource::make($buyer),
         ]);
     })->name('buyerProfileEdit');
 
+
+    Route::put('/profile/buyer/edit', [ProfileController::class, 'updateProfileBuyer'])->name('buyerProfileUpdate');
 });

@@ -17,10 +17,6 @@
                     <!-- Banner & Quick Info -->
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                         <div class="h-32 bg-gradient-to-r from-[#1A3D2B] to-[#2D6A4F] relative">
-                            <button
-                                class="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl text-xs font-bold backdrop-blur-md transition-all">
-                                <i class="fas fa-camera mr-2"></i> Modifier la bannière
-                            </button>
                         </div>
                         <div class="px-8 pb-8 flex flex-col md:flex-row items-end -mt-12 gap-6">
                             <div class="relative group">
@@ -53,8 +49,8 @@
                             <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
                                 <div class="flex items-center justify-between mb-6">
                                     <h3 class="text-lg font-bold text-[#111827]">À propos de la ferme</h3>
-                                    <button class="text-[#2D6A4F] hover:bg-[#F0FDF4] p-2 rounded-lg transition-all"><i
-                                            class="fas fa-edit"></i></button>
+                                    <Link :href="farmerProfileEdit()" class="text-[#2D6A4F] hover:bg-[#F0FDF4] p-2 rounded-lg transition-all"><i
+                                            class="fas fa-edit"></i></Link>
                                 </div>
                                 <p class="text-[#1F2937] leading-relaxed italic text-sm">"{{ user.bio }}"</p>
                             </div>
@@ -67,10 +63,6 @@
                                         class="px-4 py-2 bg-[#F0FDF4] text-[#2D6A4F] rounded-xl text-sm font-semibold border border-[#D8F3DC]">
                                         <i class="fas fa-check-circle mr-2 opacity-50"></i> {{ culture }}
                                     </span>
-                                    <button
-                                        class="px-4 py-2 border-2 border-dashed border-gray-200 text-[#4B5563] rounded-xl text-sm font-medium hover:border-[#2D6A4F] hover:text-[#2D6A4F] transition-all">
-                                        + Ajouter une culture
-                                    </button>
                                 </div>
                             </div>
                         </div>

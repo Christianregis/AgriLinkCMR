@@ -1,4 +1,6 @@
 <template>
+        <FlashMessage />
+
     <div class="min-h-screen bg-[#F3F4F6] flex">
         <!-- SIDEBAR -->
         <FarmerSidebar />
@@ -127,6 +129,7 @@
 import { Link } from '@inertiajs/vue3';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { farmerProfileEdit } from '@/routes';
 
 interface FarmerProfile {

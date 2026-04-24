@@ -11,18 +11,11 @@
                 <div class="max-w-5xl mx-auto space-y-8">
                     <h1 class="text-3xl font-bold text-neutral-title mb-6">Modifier mon profil Agriculteur</h1>
 
-                    <form @submit.prevent="handleSubmit" class="space-y-8">
+                    <form @submit.prevent="handleSubmit" @keyup.stop="" class="space-y-8">
                         <!-- Banner & Profile Photo Section -->
                         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                             <div class="h-32 bg-linear-to-r from-brand-dark to-brand-primary relative">
-                                <label for="banner-upload"
-                                    class="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl text-xs font-bold backdrop-blur-md transition-all cursor-pointer">
-                                    <i class="fas fa-camera mr-2"></i> Modifier la bannière
-                                    <input id="banner-upload" type="file" accept="image/*" @change="handleBannerChange"
-                                        class="hidden" />
-                                </label>
-                                <img v-if="form.banner_photo_preview" :src="form.banner_photo_preview"
-                                    alt="Banner Preview" class="absolute inset-0 w-full h-full object-cover" />
+
                             </div>
                             <div class="px-8 pb-8 flex flex-col md:flex-row items-end -mt-12 gap-6">
                                 <div class="relative group">
@@ -106,16 +99,16 @@
                                         <i class="fas fa-carrot text-brand-primary"></i> Spécialités & Cultures
                                     </h3>
                                     <div class="flex flex-wrap gap-3">
-                                        <span v-for="culture in form.culture_types" :key="culture"
+                                        <span v-for="culture in form.cultures" :key="culture"
                                             class="px-4 py-2 bg-green-100 text-brand-primary rounded-xl text-sm font-semibold border border-green-200">
                                             <i class="fas fa-check-circle mr-2 opacity-50"></i> {{ culture }}
                                         </span>
-                                        <input type="text" v-model="newCulture" @keyup.enter="addCulture"
+                                        <input type="text" v-model="newCulture"
                                             placeholder="+ Ajouter une culture"
                                             class="px-4 py-2 border-2 border-dashed border-gray-200 text-neutral-muted rounded-xl text-sm font-medium hover:border-brand-primary hover:text-brand-primary transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     </div>
-                                    <p v-if="form.errors.culture_types" class="mt-1 text-sm text-red-500">{{
-                                        form.errors.culture_types }}</p>
+                                    <p v-if="form.errors.cultures" class="mt-1 text-sm text-red-500">{{
+                                        form.errors.cultures }}</p>
                                 </div>
                             </div>
 
@@ -187,6 +180,7 @@ import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
+import { farmerProfileUpdate } from '@/routes';
 
 // Type definitions
 interface RegionData {
@@ -227,12 +221,11 @@ interface EditFarmerFormData {
     email: string;
     region_id: string;
     village: string;
-    culture_types: string[];
+    cultures: string[];
     bio: string;
     profile_photo: File | null;
     profile_photo_preview: string | null; // For displaying local image preview
-    banner_photo: File | null;
-    banner_photo_preview: string | null; // For displaying local image preview
+    // For displaying local image preview
 }
 
 // Props
@@ -251,12 +244,11 @@ const form = useForm<EditFarmerFormData>({
     email: user.email,
     region_id: user.region_id,
     village: user.village,
-    culture_types: user.culture_types || [],
+    cultures: user.culture_types || [],
     bio: user.bio,
     profile_photo: null,
     profile_photo_preview: user.profile_photo_url || null,
-    banner_photo: null,
-    banner_photo_preview: user.banner_photo_url || null,
+
 });
 
 // Methods
@@ -270,35 +262,21 @@ const handleProfilePhotoChange = (e: Event) => {
     }
 };
 
-const handleBannerChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-
-    if (target.files && target.files[0]) {
-        const file = target.files[0];
-        form.banner_photo = file;
-        form.banner_photo_preview = URL.createObjectURL(file); // Create a URL for local preview
-    }
-};
 
 const addCulture = () => {
-    if (newCulture.value.trim() !== '' && !form.culture_types.includes(newCulture.value.trim())) {
-        form.culture_types.push(newCulture.value.trim());
+    if (newCulture.value.trim() !== '' && !form.cultures.includes(newCulture.value.trim())) {
+        form.cultures.push(newCulture.value.trim());
         newCulture.value = '';
     }
 };
 
 const handleSubmit = () => {
     // You would replace '/farmer/profile/${user.id}' with your actual Inertia route helper
-    form.post(`/farmer/profile/${user.id}`, {
+    form.post(farmerProfileUpdate.url(), {
         onSuccess: () => {
             console.log('Farmer profile updated successfully!');
-            // Optionally, refresh the page or show a success message
         },
-        onError: (errors) => {
-            console.error('Error updating farmer profile:', errors);
-            // Handle errors, e.g., display them next to fields
-        },
-        forceFormData: true, // Important for file uploads
+        forceFormData: true, // Important
     });
 };
 </script>

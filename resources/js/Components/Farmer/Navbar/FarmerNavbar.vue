@@ -5,7 +5,7 @@
                 <i class="fas fa-bars text-xl"></i>
             </button>
             <h1 class="text-xl font-bold text-neutral-title">
-                Tableau de Bord Agriculteur
+                Agriculteur
             </h1>
         </div>
 

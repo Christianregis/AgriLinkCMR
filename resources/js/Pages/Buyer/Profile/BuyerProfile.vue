@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <BuyerSidebar />
 
@@ -129,6 +130,7 @@
 import { Link } from '@inertiajs/vue3';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { buyerProfileEdit } from '@/routes';
 interface BuyerProfile {
     id: number;

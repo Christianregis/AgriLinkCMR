@@ -10,6 +10,7 @@ use App\Models\FarmerProfile;
 use App\Models\Region;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 // Route publiques
 Route::get('/', function () {
@@ -71,6 +72,8 @@ Route::middleware(['role:farmer', 'auth'])->group(function () {
             'regions' => RegionResource::collection(Region::all())
         ]);
     })->name('farmerProfileEdit');
+
+    Route::put('/profile/farmer/edit', [ProfileController::class, 'updateProfileFarmer'])->name('farmerProfileUpdate');
 });
 
 // Route pour l'acheteur

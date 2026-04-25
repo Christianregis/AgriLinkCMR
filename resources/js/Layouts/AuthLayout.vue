@@ -16,21 +16,18 @@
         <!-- Desktop Menu -->
         <div class="items-center hidden space-x-8 md:flex">
           <Link :href="home()" class="font-semibold text-brand-primary">Accueil</Link>
-          <a
+          <Link
+            :href="catalog()"
+            class="transition-colors text-neutral-muted hover:text-brand-primary"
+            >Catalogue</Link>
+          <Link
             href="#"
             class="transition-colors text-neutral-muted hover:text-brand-primary"
-            >Catalogue</a
-          >
-          <a
+            >Agriculteurs</Link>
+          <Link
             href="#"
             class="transition-colors text-neutral-muted hover:text-brand-primary"
-            >Agriculteurs</a
-          >
-          <a
-            href="#"
-            class="transition-colors text-neutral-muted hover:text-brand-primary"
-            >À propos</a
-          >
+            >À propos</Link>
         </div>
 
         <!-- Auth Buttons -->
@@ -59,7 +56,7 @@
 </template>
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
-import { connexion } from "@/routes";
+import { catalog, connexion } from "@/routes";
 import { inscription } from "@/routes";
 import { home } from "@/routes";
 </script>

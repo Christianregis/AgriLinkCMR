@@ -4,9 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Resources\category\CategoryResource;
+use App\Http\Resources\Product\CatalogProductResource;
 use App\Http\Resources\region\RegionResource;
 use App\Http\Resources\user\BuyerResource;
 use App\Http\Resources\user\FarmerResource;
+use App\Models\Product;
 use App\Models\BuyerProfile;
 use App\Models\Category;
 use App\Models\FarmerProfile;
@@ -20,7 +22,7 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
-// Route non accesibles des la connexions
+// Route non accesibles des la connexion
 Route::middleware('guest')->group(function () {});
 
 // Route pour se connecter (Affichage du formulaire)
@@ -45,6 +47,17 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/forgot-password', function () {
     return Inertia::render('Auth/ForgotPassword');
 })->name('showForgotpPassword');
+
+// Route pour visualiser le catalogue de produits
+Route::get('/catalog', function () {
+    $products = Product::with(['user', 'category', 'region'])->orderBy('category_id')->paginate(10);
+
+    return Inertia::render('Products/Index', [
+        'products' => CatalogProductResource::collection($products),
+        'categories' => CategoryResource::collection(Category::all()),
+        'regions' => RegionResource::collection(Region::all())
+    ]);
+})->name('catalog');
 
 // Route disponible des authentifications
 Route::middleware('auth')->group(function () {

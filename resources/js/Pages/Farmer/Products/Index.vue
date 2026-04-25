@@ -45,54 +45,13 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="product in products.data" :key="product.id">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full object-cover"
-                                                    :src="product.primary_image_url || `https://via.placeholder.com/150?text=${product.title.charAt(0)}`"
-                                                    alt="" />
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-neutral-title">{{ product.title }}
-                                                </div>
-                                                <div class="text-sm text-neutral-muted">{{
-                                                    product.description.substring(0, 50) }}...</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-title">{{ product.category.name }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-neutral-title">{{ product.quantity }} {{ product.unit
-                                            }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-title">{{ product.price
-                                        }} FCFA</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span :class="[
-                                            'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
-                                            product.status === 'active' ? 'bg-green-100 text-green-800' :
-                                                product.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-red-100 text-red-800'
-                                        ]">
-                                            {{ product.status }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <Link :href="route('products.edit', product.id)"
-                                            class="text-brand-primary hover:text-brand-hover mr-3">Éditer</Link>
-                                        <button @click="deleteProduct(product.id)"
-                                            class="text-red-600 hover:text-red-900">Supprimer</button>
-                                    </td>
-                                </tr>
+                                <ProductsList :data="products.data"/>
                             </tbody>
                         </table>
                     </div>
                     <div v-else class="text-center py-8 text-neutral-muted">
                         Aucun produit enregistré pour le moment.
-                        <Link :href="route('products.create')" class="block mt-4 text-brand-primary hover:underline">
+                        <Link :href="farmerProductsCreate()" class="block mt-4 text-brand-primary hover:underline">
                             Ajouter votre premier produit</Link>
                     </div>
 
@@ -123,9 +82,11 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
+import ProductsList from '@/Components/Farmer/Product/ProductsList.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import { farmerProductsCreate } from '@/routes';
+
 
 
 interface Category {
@@ -146,48 +107,22 @@ interface Product {
 }
 
 interface PaginationLink {
-    url: string | null;
-    label: string;
-    active: boolean;
+    next: string,
+    prev: string,
 }
 
 interface ProductsData {
     data: Product[];
-    links: PaginationLink[];
+    links: PaginationLink;
     // Add other pagination properties if needed, e.g., current_page, last_page, etc.
 }
 
 const page = usePage();
 const user = page.props.auth.user.data;
 
-const props = defineProps<{
+defineProps<{
     products: ProductsData;
 }>();
-
-console.log(props.products.links.length)
-const deleteProduct = (productId: number) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-        // Implement actual deletion logic here, e.g., using Inertia.delete
-        console.log(`Deleting product with ID: ${productId}`);
-        // Example: Inertia.delete(route('products.destroy', productId));
-    }
-};
-
-// Helper to get Inertia route, assuming it's globally available or imported
-const route = (name: string, params?: any) => {
-    // This is a placeholder. In a real Inertia app, you'd use the actual route helper.
-    console.log(`Route: ${name}`, params);
-
-    if (name === 'products.create') {
-        return '/farmer/products/create';
-    }
-
-    if (name === 'products.edit' && params) {
-        return `/farmer/products/${params}/edit`
-    }
-
-    return '#';
-};
 </script>
 
 <style scoped>

@@ -8,6 +8,7 @@
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
             <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
+            <!-- Affichage des messages d'erreurs si erreurs apres soumission -->
             <div v-if="errorsData" class="bg-red-50 border border-red-200 p-4 rounded-xl">
                 <ul class="text-red-600 text-sm space-y-1">
                     <li v-for="(error, key) in errorsData" :key="key">
@@ -65,7 +66,7 @@
                         </div>
 
                         <form @submit.prevent="handleSubmit" class="p-8 pt-2 space-y-6">
-                            <!-- Step 1: General Information -->
+                            <!-- Step 1: Informations generales -->
                             <div v-if="currentStep === 1" class="space-y-6">
                                 <div>
                                     <label class="block mb-2 text-sm font-semibold text-neutral-title">Titre du
@@ -367,7 +368,6 @@ const handleSubmit = () => {
             return;
         }
 
-        // Submit the form using Inertia
         form.post(farmerProductsStore.url(), {
             onSuccess:()=>{
                 form.reset();
@@ -377,12 +377,11 @@ const handleSubmit = () => {
                 errorsData.value = errors;
                 console.log(errorsData)
             },
-            forceFormData: true, // Important for file uploads
+            forceFormData: true, // Important
         });
     }
 };
 </script>
 
 <style scoped>
-/* Tailwind CSS handles most styling, but custom styles can go here */
 </style>

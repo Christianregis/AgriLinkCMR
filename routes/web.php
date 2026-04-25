@@ -78,8 +78,8 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
 
     Route::put('/farmer/edit', [ProfileController::class, 'updateProfileFarmer'])->name('farmerProfileUpdate');
 
-    Route::get('/farmer/products', [ProductController::class,'show'])->name('farmerProductsShow');
-    Route::get('/profile/create', function(){
+    Route::get('/farmer/products', [ProductController::class, 'show'])->name('farmerProductsShow');
+    Route::get('/farmer/create', function () {
         return Inertia::render('Farmer/Products/Create', [
             'categories' => CategoryResource::collection(Category::all()),
             'regions' => RegionResource::collection(Region::all())

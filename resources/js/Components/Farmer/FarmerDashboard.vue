@@ -6,63 +6,19 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"/>
+            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" />
             <!-- DASHBOARD CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <!-- TOP STATS -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-                        <div
-                            class="w-14 h-14 bg-brand-bg text-brand-primary rounded-2xl flex items-center justify-center text-2xl">
-                            <i class="fas fa-seedling"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-neutral-muted uppercase tracking-wider">
-                                Produits Actifs
-                            </p>
-                            <h3 class="text-2xl font-bold text-neutral-title">24</h3>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-                        <div
-                            class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl">
-                            <i class="fas fa-shopping-basket"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-neutral-muted uppercase tracking-wider">
-                                Commandes en cours
-                            </p>
-                            <h3 class="text-2xl font-bold text-neutral-title">08</h3>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-                        <div
-                            class="w-14 h-14 bg-accent-light text-accent-cta rounded-2xl flex items-center justify-center text-2xl">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-neutral-muted uppercase tracking-wider">
-                                C.A. du Mois
-                            </p>
-                            <h3 class="text-2xl font-bold text-neutral-title">
-                                185k <small class="text-xs">FCFA</small>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-                        <div
-                            class="w-14 h-14 bg-orange-50 text-accent-star rounded-2xl flex items-center justify-center text-2xl">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-neutral-muted uppercase tracking-wider">
-                                Note Moyenne
-                            </p>
-                            <h3 class="text-2xl font-bold text-neutral-title">
-                                4.8 <small class="text-xs text-neutral-muted">/ 5</small>
-                            </h3>
-                        </div>
-                    </div>
+                    <ProductStatCard :label="`Produits Actifs`" :value="24" :icon="`fas fa-seedling`"
+                        :bg_brand="`bg-brand-bg`" :text_brand="`text-brand-primary`" />
+                    <ProductStatCard :label="`Commande en cours`" :value="`08`" :icon="`fas fa-shopping-basket`"
+                        :bg_brand="`bg-blue-50`" :text_brand="`text-blue-600`" />
+                    <ProductStatCard :label="`C.A du mois`" :value="`185K FCFA`" :icon="`fas fa-wallet`"
+                        :bg_brand="`bg-accent-light`" :text_brand="`text-accent-cta`" />
+                    <ProductStatCard :label="`Note Moyenne`" :value="`4.8 / 5`" :icon="`fas fa-star`"
+                        :text_brand="`text-accent-star`" :bg_brand="`bg-orange-50`" />
                 </div>
 
                 <!-- CHARTS & NOTIFICATIONS -->
@@ -305,7 +261,9 @@ import {
 import { onMounted, ref } from "vue";
 import type { Auth } from "@/types";
 import FarmerNavbar from "./Navbar/FarmerNavbar.vue";
+import ProductStatCard from "./Product/ProductStatCard.vue";
 import FarmerSidebar from "./Sidebar/FarmerSidebar.vue";
+
 
 Chart.register(
     LineController,

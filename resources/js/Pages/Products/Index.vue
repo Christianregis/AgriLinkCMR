@@ -6,7 +6,7 @@
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- SIDEBAR FILTERS -->
-                <FilterSidebar :categories="props.categories" :regions="props.regions"/>
+                <FilterSidebar :categories="props.categories" :regions="props.regions" />
 
                 <!-- PRODUCT LIST -->
                 <div class="flex-1">
@@ -40,7 +40,7 @@
                         :class="{ 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6': displayMode === 'grid', 'space-y-6': displayMode === 'list' }">
                         <div v-for="product in products.data" :key="product.id"
                             :class="['bg-white rounded-2xl overflow-hidden border border-gray-100 card-hover group', { 'flex flex-col md:flex-row': displayMode === 'list' }]">
-                            <ProductCard :product="product" :display-mode="displayMode"/>
+                            <ProductCard :product="product" :display-mode="displayMode" />
                         </div>
                     </div>
                     <div v-else class="text-center py-12 text-neutral-muted text-lg">
@@ -73,7 +73,7 @@
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { ref} from 'vue';
 import FilterSidebar from '@/Components/FilterSidebar.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import AuthLayout from '@/Layouts/AuthLayout.vue';
@@ -131,25 +131,9 @@ interface ProductCatalogBuyerProps {
 const props = defineProps<ProductCatalogBuyerProps>();
 
 // Filtres reactifs
-const selectedCategories = ref<number[]>([]);
-const selectedRegion = ref<number | string>('');
-const maxPrice = ref<number>(50000);
-const minRating = ref<number>(0);
-const sortBy = ref<string>('latest');
 const displayMode = ref<'grid' | 'list'>('grid'); // 'grid' or 'list'
+const sortBy = ref<string>('latest');
 
-
-// Watch for savoir quel element a changer pour potentielement recharger la page
-watch([selectedCategories, selectedRegion, maxPrice, minRating, sortBy], () => {
-    console.log('Filters changed, re-fetching products...');
-    // Example: Inertia.get(route('buyer.products.index'), {
-    //   categories: selectedCategories.value,
-    //   region: selectedRegion.value,
-    //   max_price: maxPrice.value,
-    //   min_rating: minRating.value,
-    //   sort_by: sortBy.value
-    // }, { preserveState: true });
-});
 
 </script>
 

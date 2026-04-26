@@ -79,7 +79,9 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { watch } from 'vue';
 import { inscription } from '@/routes';
+
 // Types
 interface Category {
     id: number;
@@ -120,4 +122,16 @@ const props = defineProps<Props>()
 
 const allCategories = props.categories.data;
 const allRegions = props.regions.data;
+
+// Watch for savoir quel element a changer pour potentielement recharger la page
+watch([selectedCategories, selectedRegion, maxPrice, minRating, sortBy], () => {
+    console.log('Filters changed, re-fetching products...');
+    // Example: Inertia.get(route('buyer.products.index'), {
+    //   categories: selectedCategories.value,
+    //   region: selectedRegion.value,
+    //   max_price: maxPrice.value,
+    //   min_rating: minRating.value,
+    //   sort_by: sortBy.value
+    // }, { preserveState: true });
+});
 </script>

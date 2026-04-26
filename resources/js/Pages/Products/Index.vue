@@ -218,7 +218,7 @@ const sortBy = ref<string>('latest');
 const displayMode = ref<'grid' | 'list'>('grid'); // 'grid' or 'list'
 
 
-// Function to reset filters
+// Fonction pour reinitialiser les filtres
 const resetFilters = () => {
     selectedCategories.value = [];
     selectedRegion.value = '';
@@ -229,10 +229,9 @@ const resetFilters = () => {
     console.log('Filters reset');
 };
 
-// Watch for filter changes to potentially re-fetch products
+// Watch for savoir quel element a changer pour potentielement recharger la page
 watch([selectedCategories, selectedRegion, maxPrice, minRating, sortBy], () => {
     console.log('Filters changed, re-fetching products...');
-    // In a real Inertia app, you'd make an Inertia.get request here
     // Example: Inertia.get(route('buyer.products.index'), {
     //   categories: selectedCategories.value,
     //   region: selectedRegion.value,
@@ -252,19 +251,16 @@ input[type="range"]::-webkit-slider-thumb {
     width: 18px;
     border-radius: 50%;
     background: var(--color-brand-primary, #2D6A4F);
-    /* Fallback for custom property */
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
-/* Glassmorphism effect for navbar */
 .glass-nav {
     backdrop-filter: blur(12px);
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* Card hover effect */
 .card-hover:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);

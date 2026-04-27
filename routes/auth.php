@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Public\AuthController;
 use App\Models\Region;
 use App\Http\Resources\region\RegionResource;
 

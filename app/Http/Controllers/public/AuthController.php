@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Public;
 
 use App\enum\UserRole;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\form\LoginRequest;
 use App\Http\Requests\form\RegisterRequest;
 use App\Models\BuyerProfile;
@@ -10,7 +11,6 @@ use App\Models\FarmerProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller

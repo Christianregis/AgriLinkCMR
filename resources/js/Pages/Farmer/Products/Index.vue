@@ -45,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <ProductsList :data="products.data"/>
+                                <ProductsList :data="products.data" />
                             </tbody>
                         </table>
                     </div>
@@ -59,16 +59,10 @@
                     <div class="mt-6 flex justify-center">
                         <div class="flex items-center justify-between mt-6">
                             <div class="flex justify-center gap-4 mt-6">
-                                <Link v-if="products.links.prev" :href="products.links.prev"
-                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition">
-                                    <i class="fas fa-arrow-left text-xs"></i>
-                                    Précédent
-                                </Link>
-
-                                <Link v-if="products.links.next" :href="products.links.next"
-                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition">
-                                    Suivant
-                                    <i class="fas fa-arrow-right text-xs"></i>
+                                <Link v-for="(link, key) in products.meta.links" :key="link.label"
+                                    :href="link.url ?? '#'"
+                                    :class="[link.active == true ? 'inline-flex items-center gap-2 px-5 py-2 rounded-md bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition' : 'inline-flex items-center gap-2 px-5 py-2 rounded-b-md border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition']">
+                                    <p>{{ key }}</p>
                                 </Link>
                             </div>
                         </div>
@@ -107,13 +101,16 @@ interface Product {
 }
 
 interface PaginationLink {
-    next: string,
-    prev: string,
+    label?: string,
+    url?: string,
+    active: boolean,
 }
 
 interface ProductsData {
     data: Product[];
-    links: PaginationLink;
+    meta: {
+        links: PaginationLink[];
+    }
     // Add other pagination properties if needed, e.g., current_page, last_page, etc.
 }
 

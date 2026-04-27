@@ -21,14 +21,14 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         if ($user->hasRole('buyer')) {
-            $buyer = BuyerProfile::where('user_id', $user->id)->first();
+            $buyer = BuyerProfile::where('user_id', $user->id)->firstOrFail();
 
             return Inertia::render('Buyer/Profile/BuyerProfile', [
                 'buyer' => BuyerResource::make($buyer),
             ]);
         }
         if ($user->hasRole('farmer')) {
-            $farmer = FarmerProfile::where('user_id', $user->id)->first();
+            $farmer = FarmerProfile::where('user_id', $user->id)->firstOrFail();
 
             return Inertia::render('Farmer/Profile/FarmerProfile', [
                 'user' => FarmerResource::make($farmer),

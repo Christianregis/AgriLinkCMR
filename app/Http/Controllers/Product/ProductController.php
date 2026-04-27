@@ -14,36 +14,41 @@ class ProductController extends Controller
 {
     public function store(StoreProductRequest $request)
     {
-    $data = $request->validated();
+        $data = $request->validated();
 
-    // slug auto si non fourni
-    $data['slug'] = Str::uuid();
+        // slug auto si non fourni
+        $data['slug'] = Str::uuid();
 
-    $data['user_id'] = Auth::user()->id;
+        $data['user_id'] = Auth::user()->id;
 
-    $product = Product::create($data);
+        $product = Product::create($data);
 
-    // gestion images
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $index => $image) {
-            $path = $image->store('products', 'public');
+        // gestion images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('products', 'public');
 
-            $product->productImages()->create([
-                'path' => $path,
-                'is_primary' => $index === 0,
-                'order' => $index
-            ]);
+                $product->productImages()->create([
+                    'path' => $path,
+                    'is_primary' => $index === 0,
+                    'order' => $index
+                ]);
+            }
         }
-    }
 
-    return redirect()->back()->with('success', 'Produit ajouté avec succès');
+        return redirect()->back()->with('success', 'Produit ajouté avec succès');
     }
 
     public function show()
     {
-        $products = Product::with(['user','category', 'region'])->where('user_id', Auth::user()->id)->paginate(10);
+        $products = Product::with(['user', 'category', 'region'])->where('user_id', Auth::user()->id)->paginate(10);
         return Inertia::render('Farmer/Products/Index', [
             'products' => FarmerProductResource::collection($products),
         ]);
+    }
+
+    public function filterProducts()
+    {
+
     }
 }

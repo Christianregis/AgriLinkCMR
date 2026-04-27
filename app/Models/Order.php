@@ -6,9 +6,12 @@ use App\enum\order\OrderEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'order_number',
         'buyer_id',
@@ -31,7 +34,7 @@ class Order extends Model
 
     public function buyer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'farmer_id');
+        return $this->belongsTo(User::class, 'buyer_id');
     }
 
     public function orderItems(): HasMany

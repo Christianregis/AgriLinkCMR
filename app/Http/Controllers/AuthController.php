@@ -55,18 +55,18 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            if (!$user->is_active) {
-                return back()->with('error', 'Compte desactive: Veuillez l\'activer en consultant vos mails');
-            }
-            return redirect()->route('dashboard')->with('success', "Bienvenue $user->name");
+        $user = User::where('email', $credentials['email'])->first();
+        if (!$user || !$user->is_active) {
+            return back()->with('error', 'Compte desactive: Veuillez l\'activer en consultant vos mails');
         }
-        return back()->with(
-            'error',
-            'Identifiants incorrects'
-        );
+        if (!Auth::attempt($credentials)) {
+            return back()->with(
+                'error',
+                'Identifiants incorrects'
+            );
+        }
+        $request->session()->regenerate();
+        return redirect()->route('dashboard')->with('success', "Bienvenue $user->name");
     }
 
     public function logout(Request $request)

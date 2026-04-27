@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Resources\category\CategoryResource;
 use App\Http\Resources\Product\CatalogProductResource;
 use App\Http\Resources\region\RegionResource;
@@ -28,7 +27,4 @@ Route::get('/catalog', function () {
 
 
 // Routes pour l'administrateur
-Route::middleware(['role:admin', 'auth'])->group(function () {
-    // Routes pour l'adminstrateur ici
-});
-
+Route::middleware(['role:admin', 'auth'])->group(function () {});

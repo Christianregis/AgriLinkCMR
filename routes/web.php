@@ -50,7 +50,7 @@ Route::get('/forgot-password', function () {
 
 // Route pour visualiser le catalogue de produits
 Route::get('/catalog', function () {
-    $products = Product::with(['user', 'category', 'region'])->orderBy('category_id')->paginate(1);
+    $products = Product::with(['user', 'category', 'region'])->orderBy('category_id')->paginate(10);
 
     return Inertia::render('Products/Index', [
         'products' => CatalogProductResource::collection($products),

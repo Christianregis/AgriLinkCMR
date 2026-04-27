@@ -62,8 +62,11 @@
                                     Suivant
                                     <i class="fas fa-arrow-right text-xs"></i>
                                 </Link> -->
-                                <Link v-for="(link, key) in products.meta.links" :key="link.label" :href="link.url ?? '#'" :class="[link.active == true ? 'inline-flex items-center gap-2 px-5 py-2 rounded-md bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition' : 'inline-flex items-center gap-2 px-5 py-2 rounded-b-md border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition' ]">
-                                    <p>{{ key }}</p>
+                                <Link v-for="(link, key) in products.meta.links" :key="link.label"
+                                    :href="link.url ?? '#'"
+                                    :class="[link.active == true ? 'inline-flex items-center gap-2 px-5 py-2 rounded-md bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition' : 'inline-flex items-center gap-2 px-5 py-2 rounded-b-md border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition']">
+                                    <p>{{ key == 0 ? 'Precedent' : key == products.meta.links.length - 1 ? 'Suivant' : key
+                                        }}</p>
                                 </Link>
                             </div>
                         </div>
@@ -76,7 +79,7 @@
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { ref} from 'vue';
+import { ref } from 'vue';
 import FilterSidebar from '@/Components/FilterSidebar.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import AuthLayout from '@/Layouts/AuthLayout.vue';
@@ -119,7 +122,7 @@ interface PaginationLink {
 
 interface ProductsData {
     data: Product[];
-    meta:{
+    meta: {
         links: PaginationLink[];
     }
 }

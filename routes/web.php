@@ -11,4 +11,3 @@ Route::get('/', function () {
 
 // Route pour visualiser le catalogue de produits
 Route::get('/catalog', [PublicController::class,'showCatalog'])->name('catalog');
-

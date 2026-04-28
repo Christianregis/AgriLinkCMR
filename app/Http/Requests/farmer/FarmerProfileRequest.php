@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\farmer;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FarmerProfileRequest extends FormRequest

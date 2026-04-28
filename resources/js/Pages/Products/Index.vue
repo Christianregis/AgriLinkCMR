@@ -6,7 +6,7 @@
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- SIDEBAR FILTERS -->
-                <FilterSidebar :categories="props.categories" :regions="props.regions" />
+                <FilterSidebar :categories="props.categories" :regions="props.regions" @filter="handleFilter" />
 
                 <!-- PRODUCT LIST -->
                 <div class="flex-1">
@@ -22,7 +22,6 @@
                                 <option value="latest">Plus récents</option>
                                 <option value="price_asc">Prix croissant</option>
                                 <option value="price_desc">Prix décroissant</option>
-                                <option value="rating">Mieux notés</option>
                             </select>
                             <div class="flex border-l border-gray-200 pl-4 gap-2">
                                 <button @click="displayMode = 'grid'"
@@ -67,7 +66,7 @@
                                     :class="[link.active == true ? 'inline-flex items-center gap-2 px-5 py-2 rounded-md bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition' : 'inline-flex items-center gap-2 px-5 py-2 rounded-b-md border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition']">
                                     <p>{{ key == 0 ? 'Precedent' : key == products.meta.links.length - 1 ? 'Suivant' :
                                         key
-                                        }}</p>
+                                    }}</p>
                                 </Link>
                             </div>
                         </div>
@@ -79,11 +78,12 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FilterSidebar from '@/Components/FilterSidebar.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import AuthLayout from '@/Layouts/AuthLayout.vue';
+import { catalog } from '@/routes';
 
 // Types
 interface Category {
@@ -138,13 +138,27 @@ interface ProductCatalogBuyerProps {
     };
 }
 
+interface FilterForm {
+    selectedCategories: number[],
+    selectedRegion: number | string,
+    maxPrice: number,
+    minRating: number,
+    sortBy: string,
+}
+
 const props = defineProps<ProductCatalogBuyerProps>();
 
 // Filtres reactifs
 const displayMode = ref<'grid' | 'list'>('grid'); // 'grid' or 'list'
 const sortBy = ref<string>('latest');
 
+const handleFilter = (filters: FilterForm) => {
+    const form = useForm(filters);
 
+    form.get(catalog.url(), {
+        preserveState: true,
+    });
+}
 </script>
 
 <style scoped>

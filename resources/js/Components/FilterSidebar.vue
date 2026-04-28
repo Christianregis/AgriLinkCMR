@@ -61,6 +61,13 @@
                     </button>
                 </div>
             </div>
+            <!-- Bouton de filtre -->
+            <div class="flex justify-center gap-4 mt-6 text-center">
+                <button @click="handleFilter"
+                    class="bg-brand-primary text-white font-medium hover:bg-brand-primary/90 transition rounded-md w-full mx-2 p-3">
+                    Appliquer les filtres
+                </button>
+            </div>
         </div>
 
         <!-- Promo Card -->
@@ -79,7 +86,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import { watch } from 'vue';
 import { inscription } from '@/routes';
 
 // Types
@@ -106,16 +112,31 @@ const selectedCategories = ref<number[]>([]);
 const selectedRegion = ref<number | string>('');
 const maxPrice = ref<number>(50000);
 const minRating = ref<number>(0);
-const sortBy = ref<string>('latest');
+const sortBy = ref<string>('latest')
+
+const emit = defineEmits<{
+    (e: 'filter', payload: {
+        selectedCategories: number[],
+        selectedRegion: number | string,
+        maxPrice: number,
+        minRating: number,
+        sortBy: string
+    }): void
+}>()
 
 const resetFilters = () => {
     selectedCategories.value = [];
     selectedRegion.value = '';
     maxPrice.value = 50000;
     minRating.value = 0;
-    sortBy.value = 'latest';
-    // Zone pour reinitialiser les donnees
-    console.log('Filters reset');
+
+    emit('filter', {
+        selectedCategories: [],
+        selectedRegion: '',
+        maxPrice: 50000,
+        minRating: 0,
+        sortBy: 'latest'
+    });
 };
 
 const props = defineProps<Props>()
@@ -123,15 +144,15 @@ const props = defineProps<Props>()
 const allCategories = props.categories.data;
 const allRegions = props.regions.data;
 
-// Watch for savoir quel element a changer pour potentielement recharger la page
-watch([selectedCategories, selectedRegion, maxPrice, minRating, sortBy], () => {
-    console.log('Filters changed, re-fetching products...');
-    // Example: Inertia.get(route('buyer.products.index'), {
-    //   categories: selectedCategories.value,
-    //   region: selectedRegion.value,
-    //   max_price: maxPrice.value,
-    //   min_rating: minRating.value,
-    //   sort_by: sortBy.value
-    // }, { preserveState: true });
-});
+const handleFilter = () => {
+    emit('filter', {
+        selectedCategories: selectedCategories.value,
+        selectedRegion: selectedRegion.value,
+        maxPrice: maxPrice.value,
+        minRating: minRating.value,
+        sortBy: sortBy.value
+    });
+    console.log("Emission....")
+};
+
 </script>

@@ -12,6 +12,7 @@ use App\Http\Resources\region\RegionResource;
 use App\Models\Category;
 use App\Http\Resources\category\CategoryResource;
 use Illuminate\Http\Request;
+
 class PublicController extends Controller
 {
     public function showCatalog(Request $request)
@@ -31,11 +32,13 @@ class PublicController extends Controller
             $query->where('price', '<=', $request->maxPrice);
         }
 
-        // if ($request->filled('minRating')) {
-        //     $query->whereHas('user', function ($q) use ($request) {
-        //         $q->havingRaw('AVG(rating) >= ?', [$request->minRating]);
-        //     });
-        // }
+        if ($request->filled('minRating')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->whereHas('farmerProfile', function ($p0) use ($request) {
+                    $p0->where('average_rating', '>=', $request->minRating);
+                });
+            });
+        }
 
         switch ($request->input('sortBy')) {
             case 'price_asc':
@@ -67,5 +70,4 @@ class PublicController extends Controller
             'regions' => RegionResource::collection(Region::all()),
         ]);
     }
-
 }

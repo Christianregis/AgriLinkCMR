@@ -154,7 +154,7 @@ const sortBy = ref<string>('latest');
 
 const handleFilter = (filters: FilterForm) => {
     const form = useForm(filters);
-
+    form.sortBy = sortBy.value;
     form.get(catalog.url(), {
         preserveState: true,
     });

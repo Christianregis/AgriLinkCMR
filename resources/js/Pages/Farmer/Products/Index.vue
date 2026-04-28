@@ -57,17 +57,7 @@
 
                     <!-- Pagination -->
                     <div class="mt-6 flex justify-center">
-                        <div class="flex items-center justify-between mt-6">
-                            <div class="flex justify-center gap-4 mt-6">
-                                <Link v-for="(link, key) in products.meta.links" :key="key"
-                                    :href="link.url ?? '#'"
-                                    :class="[link.active == true ? 'inline-flex items-center gap-2 px-5 py-2 rounded-md bg-brand-primary text-white text-sm font-medium hover:bg-brand-primary/90 transition' : 'inline-flex items-center gap-2 px-5 py-2 rounded-b-md border border-gray-200 text-sm font-medium text-neutral-muted hover:bg-gray-100 hover:text-neutral-title transition']">
-                                    <p>{{ key == 0 ? 'Precedent' : key == products.meta.links.length - 1 ? 'Suivant' :
-                                        key
-                                        }}</p>
-                                </Link>
-                            </div>
-                        </div>
+                        <Pagination :meta="products.meta"/>
                     </div>
                 </div>
             </div>
@@ -81,6 +71,7 @@ import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import ProductsList from '@/Components/Farmer/Product/ProductsList.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { farmerProductsCreate } from '@/routes';
 
 

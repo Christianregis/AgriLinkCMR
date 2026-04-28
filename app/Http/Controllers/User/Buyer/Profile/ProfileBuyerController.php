@@ -11,6 +11,17 @@ use App\Http\Requests\buyer\BuyerProfileRequest;
 
 class ProfileBuyerController extends Controller
 {
+
+    public function edit()
+    {
+        $user = Auth::user();
+
+        $buyer = BuyerProfile::with('user')->where('user_id', $user->id)->first();
+        return Inertia::render('Buyer/Profile/EditProfile', [
+            'user' => BuyerResource::make($buyer),
+        ]);
+    }
+
     /**
      * Fonction pour affciher le profil selon le role (Buyer ou Farmer)
      */

@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use App\Http\Resources\user\FarmerResource;
 use App\Models\FarmerProfile;
 use App\Http\Requests\farmer\FarmerProfileRequest;
+use App\Http\Resources\region\RegionResource;
+use App\Models\Region;
 
 
 class ProfileFarmerController extends Controller
@@ -20,6 +22,18 @@ class ProfileFarmerController extends Controller
 
         return Inertia::render('Farmer/Profile/FarmerProfile', [
             'user' => FarmerResource::make($farmer),
+        ]);
+    }
+
+    public function edit()
+    {
+        $user = Auth::user();
+
+        $farmer = FarmerProfile::with('user')->where('user_id', $user->id)->first();
+
+        return Inertia::render('Farmer/Profile/EditProfile', [
+            'user' => FarmerResource::make($farmer),
+            'regions' => RegionResource::collection(Region::all())
         ]);
     }
     /**

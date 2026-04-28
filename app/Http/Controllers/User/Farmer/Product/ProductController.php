@@ -9,9 +9,21 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use Inertia\Inertia;
 use App\Http\Resources\Product\FarmerProductResource;
+use App\Http\Resources\category\CategoryResource;
+use App\Http\Resources\region\RegionResource;
+use App\Models\Region;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
+    public function create()
+    {
+        return Inertia::render('Farmer/Products/Create', [
+            'categories' => CategoryResource::collection(Category::all()),
+            'regions' => RegionResource::collection(Region::all())
+        ]);
+    }
+
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();

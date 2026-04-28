@@ -16,6 +16,10 @@ class FarmerProfile extends Model
         'total_sales'
     ];
 
+    protected $casts = [
+        'cultures' => 'array',
+    ];
+
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);

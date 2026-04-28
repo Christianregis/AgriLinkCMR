@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->unique()->constrained("users")->onDelete("cascade");
             $table->string("village")->nullable();
-            $table->text("cultures")->nullable();
+            $table->json("cultures")->nullable();
             $table->text("certifications")->nullable();
             $table->double("average_rating", 8, 2)->default(0.00);
             $table->decimal("total_sales", 10, 2)->default(0.00);

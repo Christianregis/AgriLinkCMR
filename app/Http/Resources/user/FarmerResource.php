@@ -22,7 +22,7 @@ class FarmerResource extends JsonResource
             'region' => $this->user->region?->name,
             'village' => $this->village,
 
-            'culture_types' => explode(',', $this->cultures),
+            'culture_types' => $this->cultures ?? [],
 
             'bio' => $this->user->bio,
 

@@ -61,8 +61,7 @@ class ProfileFarmerController extends Controller
 
         // Mise à jour farmer
         $farmer->village = $data['village'];
-        $farmer->cultures = implode(',', $data['cultures'] ?? []);
-
+        $farmer->cultures = $data['cultures'];
         $farmer->save();
 
         return redirect()

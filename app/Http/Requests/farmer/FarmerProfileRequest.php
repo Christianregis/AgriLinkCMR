@@ -28,7 +28,7 @@ class FarmerProfileRequest extends FormRequest
             'region_id' => ['exists:regions,id', 'nullable'],
             'village' => ['string', 'max:255', 'nullable'],
             'bio' => ['string', 'max:255', 'nullable'],
-            'cultures' => ['array'],
+            'cultures' => ['array', 'nullable'],
             'profile_photo' => ['image', 'mimes:png,jpg,jpeg', 'max:2048', 'nullable'],
         ];
     }

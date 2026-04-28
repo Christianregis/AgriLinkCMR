@@ -152,7 +152,6 @@ const handleFilter = () => {
         minRating: minRating.value,
         sortBy: sortBy.value
     });
-    console.log("Emission....")
 };
 
 </script>

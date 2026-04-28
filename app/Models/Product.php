@@ -59,4 +59,58 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    // Scopes pour le trie
+    public function scopeWithRelations($query)
+    {
+        return $query->with(['user', 'category', 'region']);
+    }
+
+    public function scopeFilterCategories($query, $categories)
+    {
+        if (!empty($categories)) {
+            $query->whereIn('category_id', $categories);
+        }
+    }
+
+    public function scopeFilterRegion($query, $region)
+    {
+        if ($region) {
+            $query->where('region_id', $region);
+        }
+    }
+
+    public function scopeFilterMaxPrice($query, $price)
+    {
+        if ($price) {
+            $query->where('price', '<=', $price);
+        }
+    }
+
+    public function scopeFilterMinRating($query, $rating)
+    {
+        if ($rating) {
+            $query->whereHas('user.farmerProfile', function ($q) use ($rating) {
+                $q->where('average_rating', '>=', $rating);
+            });
+        }
+    }
+
+    public function scopeSortBy($query, $sort)
+    {
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+
+            case 'latest':
+            default:
+                $query->latest();
+                break;
+        }
+    }
 }

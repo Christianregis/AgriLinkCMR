@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text("delivery_address");
             $table->decimal("total_amount", 10, 2);
             $table->text("notes")->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -6,8 +6,11 @@ use App\enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\form\LoginRequest;
 use App\Http\Requests\form\RegisterRequest;
+use App\Http\Resources\Product\ProductLowResource;
 use App\Models\BuyerProfile;
 use App\Models\FarmerProfile;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +81,23 @@ class AuthController extends Controller
             return Inertia::render('Dashboard/Index', []);
         }
         if ($user->hasRole('farmer')) {
-            return Inertia::render('Dashboard/Index', []);
+            $countProductsAvaliable = Product::query()
+                ->findByUser($user->id)
+                ->avaliable()
+                ->count('*');
+
+            $sumAmountOrders = Order::withFarmer($user->id)
+                ->withStatusSuccess()
+                ->sum('total_amount');
+            $productsLow = Product::query()
+            ->quantityLow()
+            ->get();
+
+            return Inertia::render('Dashboard/Index', [
+                'sumAmountOrders' => $sumAmountOrders,
+                'countProductsAvaliable' => $countProductsAvaliable,
+                'productsLow' => ProductLowResource::collection($productsLow),
+            ]);
         }
         abort(403);
     }

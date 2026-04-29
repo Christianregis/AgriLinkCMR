@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'order_number',
         'buyer_id',
@@ -45,5 +45,16 @@ class Order extends Model
     public function orderStatusLogs(): HasMany
     {
         return $this->hasMany(OrderStatusLogs::class);
+    }
+
+    // Scopes
+    public function scopeWithFarmer($query, $farmer_id)
+    {
+        $query->where('farmer_id', $farmer_id);
+    }
+
+    public function scopeWithStatusSuccess($query)
+    {
+        $query->where('status', OrderEnum::SUCCESS);
     }
 }

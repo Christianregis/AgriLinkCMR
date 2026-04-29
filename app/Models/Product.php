@@ -118,4 +118,13 @@ class Product extends Model
     {
         $query->where('status', ProductStatus::AVAILABLE);
     }
+    public function scopeFindByUser($query, $user_id)
+    {
+        $query->where('user_id', $user_id);
+    }
+
+    public function scopeQuantityLow($query)
+    {
+        $query->where('quantity', '<=', 4);
+    }
 }

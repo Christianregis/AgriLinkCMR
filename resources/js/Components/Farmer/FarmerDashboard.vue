@@ -11,11 +11,11 @@
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <!-- TOP STATS -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <ProductStatCard :label="`Produits Actifs`" :value="24" :icon="`fas fa-seedling`"
-                        :bg_brand="`bg-brand-bg`" :text_brand="`text-brand-primary`" />
+                    <ProductStatCard :label="`Produits Actifs`" :value="countProductsAvaliable"
+                        :icon="`fas fa-seedling`" :bg_brand="`bg-brand-bg`" :text_brand="`text-brand-primary`" />
                     <ProductStatCard :label="`Commande en cours`" :value="`08`" :icon="`fas fa-shopping-basket`"
                         :bg_brand="`bg-blue-50`" :text_brand="`text-blue-600`" />
-                    <ProductStatCard :label="`C.A du mois`" :value="`185K FCFA`" :icon="`fas fa-wallet`"
+                    <ProductStatCard :label="`C.A du mois`" :value="sumAmountOrders + ` FCFA`" :icon="`fas fa-wallet`"
                         :bg_brand="`bg-accent-light`" :text_brand="`text-accent-cta`" />
                     <ProductStatCard :label="`Note Moyenne`" :value="`4.8 / 5`" :icon="`fas fa-star`"
                         :text_brand="`text-accent-star`" :bg_brand="`bg-orange-50`" />
@@ -52,39 +52,28 @@
                                 Faible
                             </h3>
                             <div class="space-y-4">
-                                <div
-                                    class="flex items-center justify-between p-3 bg-red-50 rounded-xl border border-red-100">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-red-500 font-bold shadow-sm text-xs">
-                                            Tom.
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-bold text-neutral-title">Tomates Cerises</p>
-                                            <p class="text-[10px] text-red-600 font-bold">Reste : 2 kg</p>
-                                        </div>
-                                    </div>
-                                    <button class="text-brand-primary hover:underline text-xs font-bold">
-                                        Réappro.
-                                    </button>
+                                <div v-if="productsLow.data.length == 0" class="bg-green-50 rounded-xl border border-green-100 p-3 flex items-center justify-between text-green-500">
+                                    Aucun Produit Faible
                                 </div>
-                                <div
-                                    class="flex items-center justify-between p-3 bg-orange-50 rounded-xl border border-orange-100">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-orange-500 font-bold shadow-sm text-xs">
-                                            Anan.
+                                <div v-else>
+                                    <div v-for="product in productsLow.data" :key="product.id"
+                                        class="flex items-center justify-between p-3 bg-red-50 rounded-xl border border-red-100">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-red-500 font-bold shadow-sm text-xs">
+                                                {{ product.title.substring(0, 3).toUpperCase() }}.
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-bold text-neutral-title">{{ product.title }}</p>
+                                                <p class="text-[10px] text-red-600 font-bold">Reste : {{
+                                                    product.quantity }}
+                                                    {{ product.unit }}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="text-sm font-bold text-neutral-title">Ananas Victoria</p>
-                                            <p class="text-[10px] text-orange-600 font-bold">
-                                                Reste : 5 unités
-                                            </p>
-                                        </div>
+                                        <button class="text-brand-primary hover:underline text-xs font-bold">
+                                            Réappro.
+                                        </button>
                                     </div>
-                                    <button class="text-brand-primary hover:underline text-xs font-bold">
-                                        Réappro.
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -277,6 +266,23 @@ Chart.register(
     Title
 );
 
+// Types de donnees pour les Statistiques du Dashboard
+interface StatisticDashboard {
+    countProductsAvaliable: number;
+    sumAmountOrders: number;
+    productsLow: ProductsLow,
+}
+
+interface ProductsLow {
+    data: {
+        id: string,
+        title: string,
+        quantity: number,
+        unit: string,
+    }[]
+}
+
+
 const chartRef = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
@@ -324,5 +330,9 @@ onMounted(() => {
         });
     }
 });
-defineProps<Auth>();
+
+// Fusioner les deux types dans la meme interfaece Props
+interface Props extends Auth, StatisticDashboard { }
+
+const props = defineProps<Props>();
 </script>

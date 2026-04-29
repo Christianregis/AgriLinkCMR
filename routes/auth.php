@@ -35,7 +35,5 @@ Route::get('/forgot-password', function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/dashbaord', function () {
-        return Inertia::render('Dashboard/Index', []);
-    })->name('dashboard');
+    Route::get('/dashbaord', [AuthController::class, 'dashboard'])->name('dashboard');
 });

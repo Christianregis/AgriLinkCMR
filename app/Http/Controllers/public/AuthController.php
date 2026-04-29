@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AuthController extends Controller
 {
@@ -67,6 +68,19 @@ class AuthController extends Controller
         }
         $request->session()->regenerate();
         return redirect()->route('dashboard')->with('success', "Bienvenue $user->name");
+    }
+
+
+    public function dashboard()
+    {
+        $user = Auth::user();
+        if ($user->hasRole('buyer')) {
+            return Inertia::render('Dashboard/Index', []);
+        }
+        if ($user->hasRole('farmer')) {
+            return Inertia::render('Dashboard/Index', []);
+        }
+        abort(403);
     }
 
     public function logout(Request $request)

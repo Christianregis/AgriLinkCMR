@@ -113,4 +113,9 @@ class Product extends Model
                 break;
         }
     }
+
+    public function scopeAvaliable($query)
+    {
+        $query->where('status', ProductStatus::AVAILABLE);
+    }
 }

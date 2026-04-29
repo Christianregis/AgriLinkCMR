@@ -267,7 +267,7 @@ Chart.register(
 );
 
 // Types de donnees pour les Statistiques du Dashboard
-interface StatisticDashboard {
+interface StatisticDashboardFarmer {
     countProductsAvaliable: number;
     sumAmountOrders: number;
     productsLow: ProductsLow,
@@ -332,7 +332,7 @@ onMounted(() => {
 });
 
 // Fusioner les deux types dans la meme interfaece Props
-interface Props extends Auth, StatisticDashboard { }
+interface Props extends Auth, StatisticDashboardFarmer { }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>

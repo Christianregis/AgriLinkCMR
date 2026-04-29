@@ -48,7 +48,8 @@ class AuthController extends Controller
             FarmerProfile::create([
                 'user_id' => $user->id,
                 'village' => $request->input('village'),
-                'cultures' => $request->input('cultures'),
+                // Pour convertir les chaines de caracteres en Tableau
+                'cultures' => explode(',', $request->input('cultures')),
                 'certification' => $request->input('certifications'),
             ]);
             $user->assignRole('farmer');

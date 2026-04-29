@@ -10,6 +10,7 @@ use App\Models\Product;
 use Inertia\Inertia;
 use App\Http\Resources\Product\FarmerProductResource;
 use App\Http\Resources\category\CategoryResource;
+use App\Http\Resources\Product\ProductInformationsResource;
 use App\Http\Resources\region\RegionResource;
 use App\Models\Region;
 use App\Models\Category;
@@ -56,6 +57,17 @@ class ProductController extends Controller
         $products = Product::with(['user', 'category', 'region'])->where('user_id', Auth::user()->id)->paginate(10);
         return Inertia::render('Farmer/Products/Index', [
             'products' => FarmerProductResource::collection($products),
+        ]);
+    }
+
+
+    public function edit($id)
+    {
+        $product = Product::with(['productImages','category','region'])->where('id', '=', $id)->firstOrFail();
+        return Inertia::render('Farmer/Products/Update', [
+            'product' => ProductInformationsResource::make($product),
+            'categories' => CategoryResource::collection(Category::all()),
+            'regions' => RegionResource::collection(Region::all())
         ]);
     }
 }

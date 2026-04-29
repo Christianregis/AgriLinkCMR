@@ -15,7 +15,7 @@ import FarmerDashboard from "@/Components/Farmer/FarmerDashboard.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
 
 
-interface StatisticDashboard {
+interface StatisticDashboardFarmer {
     countProductsAvaliable: number;
     sumAmountOrders: number;
     productsLow: ProductsLow,
@@ -30,7 +30,7 @@ interface ProductsLow {
     }[]
 }
 
-defineProps<StatisticDashboard>();
+defineProps<StatisticDashboardFarmer>();
 const page = usePage();
 const user = page.props.auth.user.data;
 </script>

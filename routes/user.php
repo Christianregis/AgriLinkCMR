@@ -19,7 +19,9 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
     Route::get('/farmer/create', [ProductController::class, 'create'])->name('farmerProductsCreate');
 
     Route::post('/farmer/products', [ProductController::class, 'store'])->name('farmerProductsStore');
+
     Route::get('/farmer/products/edit/{id}', [ProductController::class, 'edit'])->name('farmerProductsEdit');
+    Route::put('/farmer/products/edit/{id}', [ProductController::class, 'update'])->name('farmerProductsUpdate');
 });
 
 

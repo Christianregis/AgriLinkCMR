@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
         <FarmerSidebar />
@@ -32,7 +33,7 @@
                                     <input v-model="form.title" type="text" placeholder="Ex: Tomates fraîches bio"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title
-                                        }}</p>
+                                    }}</p>
                                 </div>
                                 <div>
                                     <label
@@ -50,8 +51,7 @@
                                         <select v-model="form.category_id"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary">
                                             <option value="">-- Sélectionner une catégorie --</option>
-                                            <option v-for="cat in categories.data" :key="cat.id"
-                                                :value="cat.id">
+                                            <option v-for="cat in categories.data" :key="cat.id" :value="cat.id">
                                                 {{ cat.name }}
                                             </option>
                                         </select>
@@ -86,7 +86,7 @@
                                         <input v-model="form.unit" type="text" placeholder="Ex: Kg, Sacs, Litres"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                         <p v-if="form.errors.unit" class="mt-1 text-sm text-red-500">{{ form.errors.unit
-                                            }}</p>
+                                        }}</p>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-sm font-semibold text-neutral-title">Prix par
@@ -146,7 +146,7 @@
                                         <option value="coming_soon">Bientôt disponible</option>
                                     </select>
                                     <p v-if="form.errors.status" class="mt-1 text-sm text-red-500">{{ form.errors.status
-                                        }}</p>
+                                    }}</p>
                                 </div>
                             </div>
 
@@ -222,6 +222,8 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
+import { farmerProductsUpdate } from '@/routes';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 interface Category {
     id: number;
@@ -242,7 +244,7 @@ interface ProductImage {
 
 interface Product {
     data: {
-        id: number;
+        id: string;
         title: string;
         description: string;
         quantity: number;
@@ -261,7 +263,8 @@ interface Product {
 }
 
 interface EditProductFormData {
-    _method: 'put'; // For Inertia PUT request
+    _method: string,
+
     title: string;
     description: string;
     quantity: number;
@@ -356,31 +359,15 @@ const handleSubmit = () => {
     }
 
     // Assuming a route for updating product exists, e.g., 'products.update'
-    form.post(route('products.update', props.product.data.id), {
+    form.post(farmerProductsUpdate.url(props.product.data.id), {
         onSuccess: () => {
             console.log('Product updated successfully!');
-            alert('Produit mis à jour avec succès !');
-            // Optionally, redirect or refresh the page
         },
         onError: (errors: any) => {
             console.error('Error updating product:', errors);
-            alert('Une erreur est survenue lors de la mise à jour du produit. Veuillez vérifier les champs.');
         },
         forceFormData: true, // Important for file uploads
     });
-};
-
-// Helper to get Inertia route, assuming it's globally available or imported
-const route = (name: string, params?: any) => {
-    // This is a placeholder. In a real Inertia app, you'd use the actual route helper.
-    console.log(`Route: ${name}`, params);
-
-    if (name === 'products.update' && params) {
-        return `/farmer/products/${params}`;
-
-    }
-
-    return '#';
 };
 </script>
 

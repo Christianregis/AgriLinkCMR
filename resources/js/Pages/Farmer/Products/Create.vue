@@ -297,7 +297,7 @@ const form = useForm<ProductFormData>({
     price_negotiable: false,
     harvest_date: new Date().toISOString().slice(0, 10), // Default to today
     expires_at: null,
-    status: 'avaliable', // Default status
+    status: 'available', // Default status
     user_id: user.id,
     category_id: null,
     region_id: null,

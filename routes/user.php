@@ -22,6 +22,8 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
 
     Route::get('/farmer/products/edit/{id}', [ProductController::class, 'edit'])->name('farmerProductsEdit');
     Route::put('/farmer/products/edit/{id}', [ProductController::class, 'update'])->name('farmerProductsUpdate');
+
+    Route::delete('/farmer/products/delete/{product_id}', [ProductController::class, 'delete'])->name('farmerProductsDelete');
 });
 
 

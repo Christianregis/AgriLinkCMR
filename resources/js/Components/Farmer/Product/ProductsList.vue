@@ -37,14 +37,14 @@
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
             <Link :href="farmerProductsEdit.url(product.id)" class="text-brand-primary hover:text-brand-hover mr-3">
             Éditer</Link>
-            <button class="text-red-600 hover:text-red-900">Supprimer</button>
+            <Link :href="farmerProductsDelete.url(product.id)" :method="'delete'" class="text-red-600 hover:text-red-900">Supprimer</Link>
         </td>
     </tr>
 </template>
 
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3';
-import { farmerProductsEdit } from '@/routes';
+import { farmerProductsDelete, farmerProductsEdit } from '@/routes';
 interface Category {
     id: number;
     name: string;

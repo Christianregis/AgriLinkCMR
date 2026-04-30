@@ -95,7 +95,7 @@ class ProductController extends Controller
         // 1. Handle deleted images
         if (isset($data['deleted_image_ids']) && is_array($data['deleted_image_ids'])) {
             foreach ($data['deleted_image_ids'] as $imageId) {
-                $image = ProductImage::find($imageId);
+                $image = ProductImage::find($imageId,'*');
                 if ($image && $image->product_id === $product->id) {
                     Storage::disk('public')->delete($image->path);
                     $image->delete();
@@ -117,5 +117,13 @@ class ProductController extends Controller
         }
 
         return redirect()->back()->with('success', 'Produit mis à jour avec succès !');
+    }
+
+    public function delete(mixed $product_id)
+    {
+        $product = Product::with('productImages')->where('id', $product_id)->firstOrFail();
+        $product->deleteOrFail();
+
+        return back()->with('success', 'Produit supprimee !');
     }
 }

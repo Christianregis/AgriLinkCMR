@@ -37,7 +37,7 @@ class StoreProductRequest extends FormRequest
             'harvest_date' => ['nullable', 'date'],
             'expires_at' => ['nullable', 'date', 'after_or_equal:harvest_date'],
 
-            'status' => ['required', 'string', 'in:avaliable,out_of_stock,coming_soon'],
+            'status' => ['required', 'string', 'in:available,out_of_stock,coming_soon'],
 
             'category_id' => ['required', 'exists:categories,id'],
             'region_id' => ['required', 'exists:regions,id'],

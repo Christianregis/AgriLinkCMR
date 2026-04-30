@@ -20,7 +20,7 @@
                             -10% sur votre prochaine commande avec le code
                             <span class="font-bold text-white">AGRI2026</span>.
                         </p>
-                        <Link href="catalogue.html"
+                        <Link :href="catalog.url()"
                             class="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-hover px-6 py-3 rounded-xl font-bold transition-all">
                             Faire mes courses <i class="fas fa-arrow-right text-sm"></i>
                     </Link>
@@ -244,6 +244,7 @@
 </template>
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
+import { catalog } from "@/routes";
 import type { Auth } from "@/types";
 import BuyerNavbar from "./Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "./Sidebar/BuyerSidebar.vue";

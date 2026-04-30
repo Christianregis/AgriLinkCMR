@@ -18,7 +18,7 @@
                 <i class="fas fa-th-large w-5 text-center"></i>
                 <span class="font-semibold">Tableau de bord</span>
             </Link>
-            <Link href="#"
+            <Link :href="catalog()"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-search w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Explorer le Marché</span>
@@ -66,6 +66,6 @@
 
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3';
-import { dashboard, logout } from '@/routes';
+import { catalog, dashboard, logout } from '@/routes';
 import { buyerProfile } from '@/routes';
 </script>

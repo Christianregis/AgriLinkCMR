@@ -17,7 +17,8 @@
                 class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
                 <i class="fas fa-shopping-cart text-lg"></i>
                 <span
-                    class="absolute -top-1 -right-1 bg-accent-cta text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">3</span>
+                    class="absolute -top-1 -right-1 bg-accent-cta text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">{{
+                    store.totalItems }}</span>
             </button>
             <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
                 <div class="text-right hidden sm:block">
@@ -37,13 +38,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import CartSidebar from '@/Components/CartSidebar.vue';
+import { useCartStore } from '@/Pages/store/cartStore';
 
 interface User {
     name: string
     profile_photo?: string,
 }
 const props = defineProps<User>();
-
+const store = useCartStore();
 const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
 
 const openSidebar = () => {

@@ -28,7 +28,7 @@
             :class="['flex items-center', { 'justify-between': displayMode === 'grid', 'justify-between mt-auto': displayMode === 'list' }]">
             <p class="text-xl font-bold text-brand-primary">{{ product.price }} <span class="text-sm">FCFA / {{
                 product.unit }}</span></p>
-            <Link href="#"
+            <Link :href="productInfo.url(product.id)"
                 class="bg-brand-primary text-white px-2 py-1 rounded-lg text-sm font-bold hover:bg-brand-hover transition-all">
             <i class="fas fa-eye text-white text-xs"></i>
             </Link>
@@ -37,6 +37,7 @@
 </template>
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
+import { productInfo } from '@/routes';
 interface Product {
     id: number,
     primary_image_url?: string,

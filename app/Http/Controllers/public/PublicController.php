@@ -10,6 +10,7 @@ use App\Models\Region;
 use App\Http\Resources\region\RegionResource;
 use App\Models\Category;
 use App\Http\Resources\category\CategoryResource;
+use App\Http\Resources\Product\ProductInformationsResource;
 use Illuminate\Http\Request;
 
 class PublicController extends Controller
@@ -37,6 +38,14 @@ class PublicController extends Controller
             ]),
             'categories' => CategoryResource::collection(Category::all()),
             'regions' => RegionResource::collection(Region::all()),
+        ]);
+    }
+
+    public function showProductInfo(mixed $product_id)
+    {
+        $product = Product::with(['category', 'user', 'region', 'productImages'])->where('id', $product_id)->firstOrFail();
+        return Inertia::render('Products/Show', [
+            'product' => ProductInformationsResource::make($product),
         ]);
     }
 }

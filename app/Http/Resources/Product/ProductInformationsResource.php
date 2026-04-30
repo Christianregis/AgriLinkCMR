@@ -33,15 +33,23 @@ class ProductInformationsResource extends JsonResource
             'expires_at' => $this->expires_at,
 
             'status' => $this->status,
-            // 'category' => $this->whenLoaded('category', fn() => [
-            //     'id' => $this->category->id,
-            //     'name' => $this->category->name,
-            // ]),
+            'category' => $this->whenLoaded('category', fn() => [
+                'id' => $this->category->id,
+                'name' => $this->category->name,
+            ]),
 
-            // 'region' => $this->whenLoaded('region', fn() => [
-            //     'id' => $this->region->id,
-            //     'name' => $this->region->name,
-            // ]),
+            'region' => $this->whenLoaded('region', fn() => [
+                'id' => $this->region->id,
+                'name' => $this->region->name,
+            ]),
+
+            'farmer_profile' => $this->whenLoaded('user', fn() => [
+                'id' =>$this->user->id,
+                'reviews_count' => $this->views_count,
+                'average_rating' => $this->user->farmerProfile->average_rating,
+            ]),
+
+
             'category_id' => $this->whenLoaded(
                 'category',
                 fn() => $this->category->id,

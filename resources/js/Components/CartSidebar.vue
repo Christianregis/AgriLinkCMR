@@ -100,21 +100,22 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useCartStore } from '@/cartStore'; // Adjust path as needed
-
+import { useCartStore } from '@/Pages/store/cartStore'; // Adjust path as needed
 const cartStore = useCartStore();
 
 const isOpen = ref(false);
 
 const openCart = () => {
   isOpen.value = true;
+  console.log("This is open")
 };
 
 const closeCart = () => {
   isOpen.value = false;
 };
 
-// Expose openCart and closeCart to parent components if needed
+
+// Permet d'exposer (Acceder aux ) les methodes openCart et closeCart au (depuis le) composant parent
 defineExpose({
   openCart,
   closeCart,

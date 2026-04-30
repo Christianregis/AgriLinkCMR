@@ -13,7 +13,7 @@
                 <input type="text" placeholder="Rechercher une commande..."
                     class="bg-transparent border-none focus:ring-0 text-sm text-neutral-body w-48" />
             </div>
-            <button
+            <button @click="openSidebar"
                 class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
                 <i class="fas fa-shopping-cart text-lg"></i>
                 <span
@@ -31,12 +31,22 @@
             </div>
         </div>
     </header>
+    <CartSidebar ref="cartSidebarRef" />
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+import CartSidebar from '@/Components/CartSidebar.vue';
+
 interface User {
     name: string
-    profile_photo? : string,
+    profile_photo?: string,
 }
 const props = defineProps<User>();
+
+const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
+
+const openSidebar = () => {
+    cartSidebarRef.value?.openCart()
+}
 </script>

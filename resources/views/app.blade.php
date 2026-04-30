@@ -16,5 +16,6 @@
     </head>
     <body class="font-sans antialiased">
         <x-inertia::app />
+        @inertia()
     </body>
 </html>

@@ -79,7 +79,7 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         if ($user->hasRole('buyer')) {
-            return Inertia::render('Dashboard/Index', []);
+            return Inertia::render('Dashboard/IndexBuyer', []);
         }
         if ($user->hasRole('farmer')) {
             $countProductsAvaliable = Product::query()
@@ -94,7 +94,7 @@ class AuthController extends Controller
             ->quantityLow()
             ->get();
 
-            return Inertia::render('Dashboard/Index', [
+            return Inertia::render('Dashboard/IndexFarmer', [
                 'sumAmountOrders' => $sumAmountOrders,
                 'countProductsAvaliable' => $countProductsAvaliable,
                 'productsLow' => ProductLowResource::collection($productsLow),

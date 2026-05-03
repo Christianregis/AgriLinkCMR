@@ -46,6 +46,8 @@ class ProductInformationsResource extends JsonResource
             'farmer_profile' => $this->whenLoaded('user', fn() => [
                 'id' =>$this->user->id,
                 'reviews_count' => $this->views_count,
+                'name' => $this->user->name,
+                'profile_photo' => $this->user->profile_photo ? asset('storage/'.$this->user->profile_photo) : null,
                 'average_rating' => $this->user->farmerProfile->average_rating,
             ]),
 
@@ -64,7 +66,9 @@ class ProductInformationsResource extends JsonResource
             'product_images' => $this->whenLoaded('productImages', function () {
                 return $this->productImages->map(fn($image) => [
                     'id' => $image->id,
-                    'url' => asset('storage/' . $image->path),
+                    'path' => asset('storage/' . $image->path),
+                    'is_primary' => $image->is_primary,
+                    'order' => $image->order,
                 ]);
             }),
         ];

@@ -57,7 +57,7 @@ class ProductController extends Controller
 
     public function show()
     {
-        $products = Product::with(['user', 'category', 'region'])->where('user_id', Auth::user()->id)->paginate(10);
+        $products = Product::with(['user', 'category', 'region', 'user'])->where('user_id', Auth::user()->id)->paginate(10);
         return Inertia::render('Farmer/Products/Index', [
             'products' => FarmerProductResource::collection($products),
         ]);

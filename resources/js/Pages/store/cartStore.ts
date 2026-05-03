@@ -37,14 +37,14 @@ export const useCartStore = defineStore('cart', () => {
         existingItem.quantity = newQuantity;
       } else {
         alert(`Impossible d'ajouter plus de ${product.title}. Stock disponible: ${product.stock}`);
-        existingItem.quantity = product.stock; // Set to max available stock
+        existingItem.quantity = product.stock;
       }
     } else {
       if (quantity <= product.stock) {
         cartItems.value.push({ product, quantity });
       } else {
         alert(`Impossible d'ajouter ${quantity} de ${product.title}. Stock disponible: ${product.stock}`);
-        cartItems.value.push({ product, quantity: product.stock }); // Add with max available stock
+        cartItems.value.push({ product, quantity: product.stock });
       }
     }
 
@@ -52,7 +52,7 @@ export const useCartStore = defineStore('cart', () => {
   };
 
   const removeItem = (productId: number) => {
-    cartItems.value = cartItems.value.filter(item => item.product.id !== productId);
+    cartItems.value = cartItems.value.filter(item => item.product.id != productId);
     saveCart();
   };
 

@@ -1,35 +1,6 @@
 <template>
     <div class="min-h-screen bg-neutral-bg">
-        <!-- NAVBAR -->
-        <nav class="glass-nav sticky top-0 z-50 border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-20">
-                    <a href="/" class="flex items-center space-x-2">
-                        <div class="bg-brand-primary p-2 rounded-lg"><i class="fas fa-leaf text-white text-xl"></i>
-                        </div>
-                        <span class="text-2xl font-bold text-brand-dark tracking-tight">AgriLink<span
-                                class="text-brand-primary">.cm</span></span>
-                    </a>
-                    <div class="hidden md:flex items-center space-x-8">
-                        <a href="/" class="text-neutral-muted hover:text-brand-primary transition-colors">Accueil</a>
-                        <a href="/catalogue" class="text-brand-primary font-semibold">Catalogue</a>
-                        <a href="/farmers"
-                            class="text-neutral-muted hover:text-brand-primary transition-colors">Agriculteurs</a>
-                    </div>
-                    <div class="flex items-center space-x-6">
-                        <button @click="cartSidebarRef?.openCart()"
-                            class="relative text-neutral-body hover:text-brand-primary transition-colors">
-                            <i class="fas fa-shopping-cart text-xl"></i>
-                            <span v-if="cartStore.totalItems > 0"
-                                class="absolute -top-2 -right-2 bg-accent-cta text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">{{
-                                    cartStore.totalItems }}</span>
-                        </button>
-                        <a href="/login"
-                            class="hidden md:block text-neutral-body font-medium hover:text-brand-primary">Connexion</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <AuthLayout />
 
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div
@@ -57,7 +28,7 @@
                                 :class="[i <= product.data.farmer_profile.average_rating ? 'fas' : 'far', 'fa-star']"></i>
                         </div>
                         <span class="text-neutral-muted text-sm">({{ product.data.farmer_profile.reviews_count || 0
-                        }}
+                            }}
                             avis)</span>
                         <span class="text-sm font-medium text-brand-primary bg-brand-bg px-3 py-1 rounded-full">{{
                             product.data.category.name }}</span>
@@ -86,12 +57,12 @@
                         <div class="flex items-center space-x-2">
                             <i class="fas fa-calendar-alt text-brand-primary"></i>
                             <span>Récolté le: <span class="font-semibold">{{ formatDate(product.data.harvest_date)
-                            }}</span></span>
+                                    }}</span></span>
                         </div>
                         <div v-if="product.data.expires_at" class="flex items-center space-x-2">
                             <i class="fas fa-hourglass-end text-brand-primary"></i>
                             <span>Expire le: <span class="font-semibold">{{ formatDate(product.data.expires_at)
-                            }}</span></span>
+                                    }}</span></span>
                         </div>
                         <div class="flex items-center space-x-2">
                             <i class="fas fa-map-marker-alt text-brand-primary"></i>
@@ -100,7 +71,7 @@
                         <div class="flex items-center space-x-2">
                             <i class="fas fa-circle-info text-brand-primary"></i>
                             <span>Statut: <span class="font-semibold">{{ productStatusText(product.data.status)
-                            }}</span></span>
+                                    }}</span></span>
                         </div>
                     </div>
 
@@ -129,15 +100,15 @@
                         </button>
                     </div>
 
-                    <!-- Seller Information -->
+                    <!-- Farmer Information -->
                     <div class="pt-6 border-t border-gray-100">
                         <h2 class="text-xl font-bold text-neutral-title mb-4">Informations sur le vendeur</h2>
                         <div class="flex items-center space-x-4">
-                            <!-- <img :src="product.data.user.profile_photo_url || 'https://via.placeholder.com/80x80?text=Agriculteur'"
+                            <img :src="product.data.farmer_profile.profile_photo || 'https://via.placeholder.com/80x80?text=Agriculteur'"
                                 alt="Seller Profile Photo"
-                                class="w-16 h-16 rounded-full object-cover border-2 border-brand-primary" /> -->
+                                class="w-16 h-16 rounded-full object-cover border-2 border-brand-primary" />
                             <div>
-                                <!-- <h3 class="font-semibold text-neutral-title">{{ product.data.user.name }}</h3> -->
+                                <h3 class="font-semibold text-neutral-title">{{ product.data.farmer_profile.name }}</h3>
                                 <div class="flex items-center text-sm text-neutral-muted">
                                     <div class="flex text-accent-star mr-2">
                                         <i v-for="i in 5" :key="i"
@@ -145,7 +116,7 @@
                                     </div>
                                     <span>({{ product.data.farmer_profile.reviews_count || 0 }} avis)</span>
                                 </div>
-                                <Link :href="route('farmer.profile', product.data.farmer_profile.id)"
+                                <Link href="#"
                                     class="text-sm text-brand-primary hover:underline mt-1 block">Voir le profil</Link>
                             </div>
                         </div>
@@ -163,12 +134,14 @@
 import { Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import CartSidebar from '@/Components/CartSidebar.vue'; // Adjust path as needed
+import AuthLayout from '@/Layouts/AuthLayout.vue';
 import { useCartStore } from '../store/cartStore';
 
 // Type definitions based on your provided PHP model and existing components
 interface UserProfile {
     id: number,
-    profile_photo_url?: string;
+    name: string,
+    profile_photo?: string;
     average_rating: number;
     reviews_count: number;
 }
@@ -206,7 +179,7 @@ interface Product {
     category_id: number;
     region_id: number;
     product_images: ProductImage[];
-    farmer_profile: UserProfile; // Include user/seller info
+    farmer_profile: UserProfile; // Informations vendeur
     category: Category;
     region: Region;
 }
@@ -279,17 +252,6 @@ const addToCart = () => {
     cartSidebarRef.value?.openCart(); // Open cart sidebar after adding item
 };
 
-// Helper to get Inertia route, assuming it's globally available or imported
-const route = (name: string, params?: any) => {
-    // This is a placeholder. In a real Inertia app, you'd use the actual route helper.
-    console.log(`Route: ${name}`, params);
-
-    if (name === 'farmer.profile' && params) {
-        return `/farmers/${params}`;
-    }
-
-    return '#';
-};
 </script>
 
 <style scoped>

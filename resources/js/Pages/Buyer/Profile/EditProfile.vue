@@ -56,6 +56,7 @@
                   <input
                     v-model="form.name"
                     type="text"
+                    disabled="true"
                     placeholder="Jean Dupont"
                     class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                   />
@@ -65,6 +66,7 @@
                   <label class="block mb-2 text-sm font-semibold text-neutral-title">Téléphone</label>
                   <input
                     v-model="form.phone"
+                    disabled="true"
                     type="tel"
                     placeholder="+237 6xx xxx xxx"
                     class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
@@ -77,6 +79,7 @@
                 <input
                   v-model="form.email"
                   type="email"
+                  disabled="true"
                   placeholder="votre@email.com"
                   class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                 />

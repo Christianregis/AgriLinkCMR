@@ -17,7 +17,7 @@
                         class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-8">
                         <div class="relative group">
                             <img :src="user.profile_photo_url || `https://ui-avatars.com/api/?name=${user.name}&background=2D6A4F&color=fff`"
-                                class="w-32 h-32 rounded-3xl border-4 border-[#F0FDF4] shadow-md object-cover">
+                                class="w-32 h-32 rounded-3xl border-4 border-brand-bg shadow-md object-cover">
                             <button
                                 class="absolute -bottom-2 -right-2 w-10 h-10 bg-[#2D6A4F] text-white rounded-xl shadow-lg flex items-center justify-center hover:bg-[#40916C] transition-all">
                                 <i class="fas fa-camera text-sm"></i>

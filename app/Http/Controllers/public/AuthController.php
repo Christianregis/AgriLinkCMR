@@ -30,7 +30,6 @@ class AuthController extends Controller
             'region_id' => $request->input('region_id'),
             'bio' => $request->input('bio'),
             'profile_photo' => $request->hasFile('profile_photo') ? $request->file('profile_photo')->store('profile_image', 'public') : null,
-            'is_active' => false,
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('account_type')
         ]);

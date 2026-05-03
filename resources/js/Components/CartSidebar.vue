@@ -103,11 +103,10 @@ import { ref } from 'vue';
 import { useCartStore } from '@/Pages/store/cartStore'; // Adjust path as needed
 const cartStore = useCartStore();
 
-const isOpen = ref(false);
+const isOpen = ref<boolean>(false);
 
 const openCart = () => {
   isOpen.value = true;
-  console.log("This is open")
 };
 
 const closeCart = () => {
@@ -123,5 +122,4 @@ defineExpose({
 </script>
 
 <style scoped>
-/* No specific scoped styles needed, Tailwind handles most */
 </style>

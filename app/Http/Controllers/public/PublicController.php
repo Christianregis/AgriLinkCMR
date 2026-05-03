@@ -11,6 +11,8 @@ use App\Http\Resources\region\RegionResource;
 use App\Models\Category;
 use App\Http\Resources\category\CategoryResource;
 use App\Http\Resources\Product\ProductInformationsResource;
+use App\Http\Resources\user\FarmerResource;
+use App\Models\FarmerProfile;
 use Illuminate\Http\Request;
 
 class PublicController extends Controller
@@ -46,6 +48,16 @@ class PublicController extends Controller
         $product = Product::with(['category', 'user', 'region', 'productImages'])->where('id', $product_id)->firstOrFail();
         return Inertia::render('Products/Show', [
             'product' => ProductInformationsResource::make($product),
+        ]);
+    }
+
+    public function showFarmerInfo(mixed $product_id)
+    {
+        $product = Product::where('id', $product_id)->firstOrFail();
+
+        $farmer = FarmerProfile::where('id', $product->user->farmerProfile->id)->firstOrFail();
+        return Inertia::render('Products/FarmerInfo', [
+            'farmer' => FarmerResource::make($farmer),
         ]);
     }
 }

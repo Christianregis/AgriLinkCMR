@@ -116,7 +116,7 @@
                                     </div>
                                     <span>({{ product.data.farmer_profile.reviews_count || 0 }} avis)</span>
                                 </div>
-                                <Link href="#"
+                                <Link :href="showFarmerInfo(product.data.id)"
                                     class="text-sm text-brand-primary hover:underline mt-1 block">Voir le profil</Link>
                             </div>
                         </div>
@@ -135,6 +135,7 @@ import { Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import CartSidebar from '@/Components/CartSidebar.vue'; // Adjust path as needed
 import AuthLayout from '@/Layouts/AuthLayout.vue';
+import { showFarmerInfo } from '@/routes';
 import { useCartStore } from '../store/cartStore';
 
 // Type definitions based on your provided PHP model and existing components

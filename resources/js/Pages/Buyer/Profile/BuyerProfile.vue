@@ -40,10 +40,6 @@
                                     class="bg-[#2D6A4F] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#40916C] transition-all shadow-md">
                                     Modifier le profil
                                 </Link>
-                                <button
-                                    class="border-2 border-gray-100 text-[#4B5563] px-6 py-2.5 rounded-xl font-bold hover:bg-gray-50 transition-all">
-                                    Changer le mot de passe
-                                </button>
                             </div>
                         </div>
                     </div>

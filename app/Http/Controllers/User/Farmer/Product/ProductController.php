@@ -64,7 +64,7 @@ class ProductController extends Controller
     }
 
 
-    public function edit(string $id)
+    public function edit(mixed $id)
     {
         $product = Product::with(['productImages','category','region'])->where('id', '=', $id)->firstOrFail();
         return Inertia::render('Farmer/Products/Update', [
@@ -74,7 +74,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(UpdateProductRequest $request, string $id)
+    public function update(UpdateProductRequest $request, mixed $id)
     {
         $product = Product::with(['category','user','region'])->where('id','=',$id)->firstOrFail();
         // Ensure the authenticated user owns the product

@@ -160,7 +160,7 @@
                                     class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                                     <div v-for="(image, index) in existingImages" :key="image.id"
                                         class="relative group">
-                                        <img :src="image.url"
+                                        <img :src="image.path"
                                             class="w-full h-32 object-cover rounded-lg border border-gray-200" />
                                         <button @click="removeExistingImage(image.id, index)" type="button"
                                             class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
@@ -222,8 +222,8 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
-import { farmerProductsUpdate } from '@/routes';
 import FlashMessage from '@/Components/FlashMessage.vue';
+import { farmerProductsUpdate } from '@/routes';
 
 interface Category {
     id: number;
@@ -237,7 +237,7 @@ interface Region {
 
 interface ProductImage {
     id: number;
-    url: string; // URL of the image
+    path: string; // URL of the image
     // is_primary: boolean;
     // order: number;
 }

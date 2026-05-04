@@ -15,7 +15,7 @@ class ProductLowResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->slug,
+            'id' => $this->id,
             'title' => $this->title,
             'unit' => $this->unit,
             'quantity' => $this->quantity,

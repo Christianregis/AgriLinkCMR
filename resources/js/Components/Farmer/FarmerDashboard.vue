@@ -70,9 +70,9 @@
                                                     {{ product.unit }}</p>
                                             </div>
                                         </div>
-                                        <button class="text-brand-primary hover:underline text-xs font-bold">
+                                        <Link class="text-brand-primary hover:underline text-xs font-bold" :href="farmerProductsEdit(product.id)">
                                             Réappro.
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -235,6 +235,7 @@
     </main>
 </template>
 <script lang="ts" setup>
+import { Link } from "@inertiajs/vue3";
 import {
     Chart,
     LineController,
@@ -248,6 +249,7 @@ import {
     Title,
 } from "chart.js/auto";
 import { onMounted, ref } from "vue";
+import { farmerProductsEdit } from "@/routes";
 import type { Auth } from "@/types";
 import FarmerNavbar from "./Navbar/FarmerNavbar.vue";
 import ProductStatCard from "./Product/ProductStatCard.vue";
@@ -275,7 +277,7 @@ interface StatisticDashboardFarmer {
 
 interface ProductsLow {
     data: {
-        id: string,
+        id: number,
         title: string,
         quantity: number,
         unit: string,

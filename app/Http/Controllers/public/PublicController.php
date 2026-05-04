@@ -17,6 +17,13 @@ use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
+    public function home()
+    {
+        $products = Product::with(['productImages','category','region'])->limit(5)->latest()->get();
+        return Inertia::render('Home',[
+            'products' =>CatalogProductResource::collection($products)
+        ]);
+    }
     public function showCatalog(Request $request)
     {
 

@@ -115,71 +115,21 @@
                 </Link>
             </div>
 
-            <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                <!-- Product Card Loop -->
-                <ProductCard v-for="product in products.data" :key="product.id" :product="product"
-                    :display-mode="'grid'" />
+            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2">
+                <!-- Product Card -->
+                <ProductCard v-for="product in products.data" :key="product.id" :product="product" :display-mode="'grid'"/>
             </div>
         </section>
 
-        <!-- CTA SECTION -->
-        <section class="px-4 py-20 bg-brand-bg">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="mb-4 text-3xl font-bold text-neutral-title">Prêt à vendre vos produits ?</h2>
-                <p class="mb-8 text-lg text-neutral-muted">
-                    Rejoignez des milliers d'agriculteurs et touchez des clients dans tout le Cameroun.
-                </p>
-                <Link :href="register()"
-                    class="inline-block px-10 py-4 font-bold text-white transition-all rounded-xl bg-brand-primary hover:bg-brand-hover">
-                    Devenir Vendeur
-                </Link>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="px-4 py-16 bg-brand-dark">
-            <div class="grid max-w-6xl grid-cols-1 gap-12 mx-auto lg:grid-cols-4">
-                <div class="lg:col-span-2">
-                    <div class="flex items-center mb-4 space-x-2">
-                        <div class="p-2 rounded-lg bg-brand-primary">
-                            <i class="text-xl text-white fas fa-leaf"></i>
-                        </div>
-                        <span class="text-2xl font-bold tracking-tight text-white">AgriLink<span
-                                class="text-brand-primary">.cm</span></span>
-                    </div>
-                    <p class="text-brand-light/70">
-                        La première plateforme qui connecte directement les agriculteurs et les acheteurs au Cameroun.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="mb-4 font-bold text-white">Liens Rapides</h3>
-                    <ul class="space-y-2 text-brand-light/70">
-                        <li><a href="#" class="hover:text-white">À Propos</a></li>
-                        <li><a href="#" class="hover:text-white">Catalogue</a></li>
-                        <li><a href="#" class="hover:text-white">Comment ça marche ?</a></li>
-                        <li><a href="#" class="hover:text-white">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="mb-4 font-bold text-white">Suivez-nous</h3>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-brand-light/70 hover:text-white"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-brand-light/70 hover:text-white"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-brand-light/70 hover:text-white"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <FooterLayout />
     </main>
 </template>
-
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import ProductCard from '@/Components/ProductCard.vue';
-import AuthLayout from '@/Layouts/AuthLayout.vue';
-import { catalog, register } from '@/routes';
-
-
+import { Link } from "@inertiajs/vue3";
+import ProductCard from "@/Components/ProductCard.vue";
+import { catalog } from "@/routes";
+import AuthLayout from "../Layouts/AuthLayout.vue";
+import FooterLayout from "../Layouts/FooterLayout.vue";
 
 interface Category {
     id: number;
@@ -210,23 +160,37 @@ interface Product {
     reviews_count: number;
 }
 
-interface HomeProps {
+interface ProductsLatest {
     products: {
-        data: Product[]
-    };
+        data: Product[];
+    }
 }
 
-defineProps<HomeProps>();
-
+defineProps<ProductsLatest>();
 </script>
 
 <style scoped>
+main {
+    font-family: "Inter", sans-serif;
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.glass-nav {
+    backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
 .hero-gradient {
-    background: linear-gradient(135deg, #1A3D3B 0%, #2D6A4F 100%);
+    background: linear-gradient(135deg, #1a3d2b 0%, #2d6a4f 100%);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
 }
 
 .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
 </style>

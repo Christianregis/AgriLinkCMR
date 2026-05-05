@@ -104,7 +104,6 @@ interface ProductsData {
     meta: {
         links: PaginationLink[];
     }
-    // Add other pagination properties if needed, e.g., current_page, last_page, etc.
 }
 
 const page = usePage();

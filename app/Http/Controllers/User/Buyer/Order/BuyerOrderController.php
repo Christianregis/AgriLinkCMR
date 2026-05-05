@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User\Buyer\Order;
 use App\enum\order\OrderEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buyer\Order\OrderStoreRequest;
+use App\Http\Resources\Order\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -89,6 +90,9 @@ class BuyerOrderController extends Controller
 
     public function showOrders()
     {
-        return Inertia::render('Buyer/Orders/Show',[]);
+        $buyer = Auth::user();
+        return Inertia::render('Buyer/Orders/Show',[
+            'orders' => OrderResource::collection(Order::query()->with(['farmer'])->withBuyer($buyer->id)->latest()->paginate(10)->withQueryString())
+        ]);
     }
 }

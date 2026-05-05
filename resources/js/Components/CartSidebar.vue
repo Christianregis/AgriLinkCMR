@@ -4,7 +4,7 @@
         <Transition enter-active-class="transition-opacity ease-linear duration-300" enter-from-class="opacity-0"
             enter-to-class="opacity-100" leave-active-class="transition-opacity ease-linear duration-300"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="isOpen" @click="closeCart" class="fixed inset-0 bg-black bg-opacity-40"></div>
+            <div v-if="isOpen" @click="closeCart" class="fixed inset-0 bg-opacity-60 backdrop-blur-sm"></div>
         </Transition>
 
         <!-- Cart Sidebar -->

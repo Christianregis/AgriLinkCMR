@@ -68,7 +68,7 @@
                                 class="text-[10px] font-bold text-accent-cta bg-accent-light px-2 py-1 rounded-full">TOTAL</span>
                         </div>
                         <h3 class="text-2xl font-bold text-neutral-title">
-                            {{ props.stats.totalExpenses.toPrecision(2) }} <small class="text-xs">FCFA</small>
+                            {{ props.stats.totalExpenses }} <small class="text-xs">FCFA</small>
                         </h3>
                         <p class="text-xs text-neutral-muted font-medium uppercase tracking-wider mt-1">
                             Montant total dépensé
@@ -117,17 +117,20 @@
                                         order.status === 'pending' ? 'bg-blue-100 text-blue-700' :
                                             order.status === 'preparation' ? 'bg-yellow-100 text-yellow-700' :
                                                 order.status === 'ready' ? 'bg-green-100 text-green-700' :
-                                                    order.status === 'cancel' ? 'bg-red-100 text-red-700' :
-                                                        order.status === 'dispute' ? 'bg-purple-100 text-purple-700' :
-                                                            'bg-gray-100 text-gray-700'
+                                                    order.status === 'success' ? 'bg-green-100 text-green-700' :
+                                                        order.status === 'cancel' ? 'bg-red-100 text-red-700' :
+                                                            order.status === 'dispute' ? 'bg-purple-100 text-purple-700' :
+                                                                'bg-gray-100 text-gray-700'
                                     ]">
                                         {{
                                             order.status === 'pending' ? 'En attente' :
                                                 order.status === 'preparation' ? 'En préparation' :
                                                     order.status === 'ready' ? 'Prêt' :
-                                                        order.status === 'cancel' ? 'Annulée' :
-                                                            order.status === 'dispute' ? 'Litige' :
-                                                                'Inconnu'
+                                                        order.status === 'success' ? 'Livree' :
+
+                                                            order.status === 'cancel' ? 'Annulée' :
+                                                                order.status === 'dispute' ? 'Litige' :
+                                                                    'Inconnu'
                                         }}
                                     </span>
                                     <button
@@ -137,9 +140,9 @@
                                 </div>
                             </div>
                             <div class="p-4 bg-neutral-bg/50 text-center">
-                                <button class="text-xs font-bold text-brand-primary hover:underline">
+                                <Link class="text-xs font-bold text-brand-primary hover:underline" :href="buyerOrderShow()">
                                     Afficher les autres commandes
-                                </button>
+                                </Link>
                             </div>
                         </div>
                         <div v-else class="p-10 text-center">
@@ -211,7 +214,7 @@
 </template>
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
-import { catalog } from "@/routes";
+import { buyerOrderShow, catalog } from "@/routes";
 import type { Auth } from "@/types";
 import BuyerNavbar from "./Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "./Sidebar/BuyerSidebar.vue";

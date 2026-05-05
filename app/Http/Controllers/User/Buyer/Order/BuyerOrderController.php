@@ -85,4 +85,10 @@ class BuyerOrderController extends Controller
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la création de votre commande. Veuillez réessayer.');
         }
     }
+
+
+    public function showOrders()
+    {
+        return Inertia::render('Buyer/Orders/Show',[]);
+    }
 }

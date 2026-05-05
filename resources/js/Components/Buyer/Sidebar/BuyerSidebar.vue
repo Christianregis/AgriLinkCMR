@@ -23,11 +23,11 @@
                 <i class="fas fa-search w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Explorer le Marché</span>
             </Link>
-            <Link href="#"
+            <Link :href="buyerOrderShow()"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-shopping-bag w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Commandes</span>
-                <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">2</span>
+                <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
             <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
@@ -66,6 +66,6 @@
 
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3';
-import { catalog, dashboard, logout } from '@/routes';
+import { buyerOrderShow, catalog, dashboard, logout } from '@/routes';
 import { buyerProfile } from '@/routes';
 </script>

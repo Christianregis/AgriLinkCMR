@@ -38,7 +38,10 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
     Route::put('/buyer/edit', [ProfileBuyerController::class, 'updateProfileBuyer'])->name('buyerProfileUpdate');
 
     Route::get('/buyer/order/validate', [BuyerOrderController::class, 'confirmOrder'])->name('buyerOrderConfirm');
+
     Route::post('/buyer/order/store', [BuyerOrderController::class, 'store'])->name('buyerOrderStore');
+
+    Route::get('/buyer/order/show', [BuyerOrderController::class, 'showOrders'])->name('buyerOrderShow');
 });
 
 

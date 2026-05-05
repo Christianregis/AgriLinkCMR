@@ -2,7 +2,7 @@
     <Transition name="modal">
         <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
             <!-- Overlay -->
-            <div class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm" @click="closeModal"></div>
+            <div class="fixed inset-0 bg-opacity-60 backdrop-blur-sm" @click="closeModal"></div>
 
             <!-- Modal Content -->
             <div

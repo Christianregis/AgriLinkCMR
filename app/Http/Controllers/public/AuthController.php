@@ -6,6 +6,7 @@ use App\enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\form\LoginRequest;
 use App\Http\Requests\form\RegisterRequest;
+use App\Http\Resources\Order\OrderResource;
 use App\Http\Resources\Product\ProductLowResource;
 use App\Models\BuyerProfile;
 use App\Models\FarmerProfile;
@@ -78,7 +79,21 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         if ($user->hasRole('buyer')) {
-            return Inertia::render('Dashboard/IndexBuyer', []);
+            $buyer = Auth::user();
+            return Inertia::render('Dashboard/IndexBuyer', [
+                'stats' => [
+                    'countOrdersPending' => Order::query()->withBuyer($buyer->id)->withStatusPending()->count('*'),
+                    'countOrdersSuccess' => Order::query()->withBuyer($buyer->id)->withStatusSuccess()->count('*'),
+                    'totalExpenses' => Order::query()->withBuyer($buyer->id)->withStatusSuccess()->sum('total_amount'),
+                ],
+                'recentOrders' => OrderResource::collection(
+                    Order::query()
+                        ->with(['farmer'])
+                        ->withBuyer($buyer->id)
+                        ->latest()
+                        ->limit(5)->get()
+                )
+            ]);
         }
         if ($user->hasRole('farmer')) {
             $countProductsAvaliable = Product::query()
@@ -90,8 +105,8 @@ class AuthController extends Controller
                 ->withStatusSuccess()
                 ->sum('total_amount');
             $productsLow = Product::query()
-            ->quantityLow()
-            ->get();
+                ->quantityLow()
+                ->get();
 
             return Inertia::render('Dashboard/IndexFarmer', [
                 'sumAmountOrders' => $sumAmountOrders,

@@ -19,7 +19,7 @@ interface StatisticDashboardFarmer {
 
 interface ProductsLow {
     data: {
-        id: string,
+        id: number,
         title: string,
         quantity: number,
         unit: string,

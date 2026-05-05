@@ -333,7 +333,7 @@ onMounted(() => {
     }
 });
 
-// Fusioner les deux types dans la meme interfaece Props
+// Fusioner les deux types dans la meme interface Props
 interface Props extends Auth, StatisticDashboardFarmer { }
 
 defineProps<Props>();

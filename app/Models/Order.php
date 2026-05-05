@@ -53,8 +53,25 @@ class Order extends Model
         $query->where('farmer_id', $farmer_id);
     }
 
+    public function scopeWithBuyer($query, $buyer_id)
+    {
+        $query->where('buyer_id', $buyer_id);
+    }
+
     public function scopeWithStatusSuccess($query)
     {
         $query->where('status', OrderEnum::SUCCESS);
+    }
+    public function scopeWithStatusPending($query)
+    {
+        $query->where('status', OrderEnum::PENDING);
+    }
+    public function scopeWithStatusReady($query)
+    {
+        $query->where('status', OrderEnum::READY);
+    }
+    public function scopeWithStatusCancel($query)
+    {
+        $query->where('status', OrderEnum::CANCEL);
     }
 }

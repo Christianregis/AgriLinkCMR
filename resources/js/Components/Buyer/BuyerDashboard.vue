@@ -6,7 +6,7 @@
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="props.user.data.name" :profile_photo="props.user.data.profile_photo"/>
+            <BuyerNavbar :name="props.user.data.name" :profile_photo="props.user.data.profile_photo" />
 
             <!-- DASHBOARD CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
@@ -23,7 +23,7 @@
                         <Link :href="catalog.url()"
                             class="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-hover px-6 py-3 rounded-xl font-bold transition-all">
                             Faire mes courses <i class="fas fa-arrow-right text-sm"></i>
-                    </Link>
+                        </Link>
                     </div>
                     <i class="fas fa-carrot absolute -bottom-10 -right-10 text-white/10 text-[200px] rotate-12"></i>
                 </div>
@@ -39,7 +39,7 @@
                             <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">EN
                                 COURS</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-neutral-title">02</h3>
+                        <h3 class="text-2xl font-bold text-neutral-title">{{ props.stats.countOrdersPending }}</h3>
                         <p class="text-xs text-neutral-muted font-medium uppercase tracking-wider mt-1">
                             Commandes en livraison
                         </p>
@@ -51,9 +51,9 @@
                                 <i class="fas fa-check-double"></i>
                             </div>
                             <span
-                                class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">COMPLÉTÉES</span>
+                                class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">LIVRÉES</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-neutral-title">15</h3>
+                        <h3 class="text-2xl font-bold text-neutral-title">{{ props.stats.countOrdersSuccess }}</h3>
                         <p class="text-xs text-neutral-muted font-medium uppercase tracking-wider mt-1">
                             Commandes livrées
                         </p>
@@ -68,7 +68,7 @@
                                 class="text-[10px] font-bold text-accent-cta bg-accent-light px-2 py-1 rounded-full">TOTAL</span>
                         </div>
                         <h3 class="text-2xl font-bold text-neutral-title">
-                            85,400 <small class="text-xs">FCFA</small>
+                            {{ props.stats.totalExpenses.toPrecision(2) }} <small class="text-xs">FCFA</small>
                         </h3>
                         <p class="text-xs text-neutral-muted font-medium uppercase tracking-wider mt-1">
                             Montant total dépensé
@@ -84,80 +84,74 @@
                                 Historique des Commandes
                             </h3>
                             <div class="flex gap-2">
-                                <button
-                                    class="px-3 py-1.5 text-xs font-bold bg-neutral-bg text-neutral-muted rounded-lg hover:text-brand-primary">
-                                    Tout
-                                </button>
                                 <button class="px-3 py-1.5 text-xs font-bold text-brand-primary bg-brand-bg rounded-lg">
                                     Récent
                                 </button>
                             </div>
                         </div>
-                        <div class="divide-y divide-gray-50">
-                            <!-- Order Item 1 -->
-                            <div
+                        <div v-if="props.recentOrders.data.length >= 1" class="divide-y divide-gray-50">
+                            <!-- Order Item  -->
+                            <div v-for="order in props.recentOrders.data" :key="order.id"
                                 class="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-neutral-bg/30 transition-all">
                                 <div class="flex items-center gap-4">
                                     <div
                                         class="w-16 h-16 bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
-                                        <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=100"
+                                        <img :src="`https://ui-avatars.com/api/?name=` + order.order_number + `&background=2D6A4F&color=fff`"
                                             class="w-full h-full object-cover" />
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-neutral-title">Commande #AGL-2026-00452</h4>
+                                        <h4 class="font-bold text-neutral-title">Commande {{ order.order_number }}</h4>
                                         <p class="text-xs text-neutral-muted mt-1">
                                             Vendeur :
-                                            <span class="text-brand-primary font-semibold">Ferme de Penja</span>
+                                            <span class="text-brand-primary font-semibold">{{ order.farmer.name
+                                                }}</span>
                                         </p>
                                         <p class="text-[10px] text-neutral-muted mt-0.5">
-                                            18 Avril 2026 • 14,500 FCFA
+                                            {{ order.created_at }} • {{ order.total_amount }} FCFA
                                         </p>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between md:justify-end gap-6">
-                                    <span
-                                        class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full uppercase">En
-                                        cours</span>
+                                    <span :class="[
+                                        'px-3 py-1 text-[10px] font-bold rounded-full uppercase',
+                                        order.status === 'pending' ? 'bg-blue-100 text-blue-700' :
+                                            order.status === 'preparation' ? 'bg-yellow-100 text-yellow-700' :
+                                                order.status === 'ready' ? 'bg-green-100 text-green-700' :
+                                                    order.status === 'cancel' ? 'bg-red-100 text-red-700' :
+                                                        order.status === 'dispute' ? 'bg-purple-100 text-purple-700' :
+                                                            'bg-gray-100 text-gray-700'
+                                    ]">
+                                        {{
+                                            order.status === 'pending' ? 'En attente' :
+                                                order.status === 'preparation' ? 'En préparation' :
+                                                    order.status === 'ready' ? 'Prêt' :
+                                                        order.status === 'cancel' ? 'Annulée' :
+                                                            order.status === 'dispute' ? 'Litige' :
+                                                                'Inconnu'
+                                        }}
+                                    </span>
                                     <button
                                         class="px-4 py-2 border border-gray-200 rounded-xl text-xs font-bold text-neutral-title hover:bg-gray-50 transition-all">
                                         Détails
                                     </button>
                                 </div>
                             </div>
-                            <!-- Order Item 2 -->
-                            <div
-                                class="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-neutral-bg/30 transition-all">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-16 h-16 bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
-                                        <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&q=80&w=100"
-                                            class="w-full h-full object-cover" />
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-neutral-title">Commande #AGL-2026-00435</h4>
-                                        <p class="text-xs text-neutral-muted mt-1">
-                                            Vendeur :
-                                            <span class="text-brand-primary font-semibold">GIC ProAgro</span>
-                                        </p>
-                                        <p class="text-[10px] text-neutral-muted mt-0.5">
-                                            12 Avril 2026 • 8,200 FCFA
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between md:justify-end gap-6">
-                                    <span
-                                        class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase">Livrée</span>
-                                    <button
-                                        class="px-4 py-2 border border-gray-200 rounded-xl text-xs font-bold text-neutral-title hover:bg-gray-50 transition-all">
-                                        Re-commander
-                                    </button>
-                                </div>
+                            <div class="p-4 bg-neutral-bg/50 text-center">
+                                <button class="text-xs font-bold text-brand-primary hover:underline">
+                                    Afficher les autres commandes
+                                </button>
                             </div>
                         </div>
-                        <div class="p-4 bg-neutral-bg/50 text-center">
-                            <button class="text-xs font-bold text-brand-primary hover:underline">
-                                Afficher les 13 autres commandes
-                            </button>
+                        <div v-else class="p-10 text-center">
+                            <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-sm text-gray-500 font-semibold">
+                                Aucune commande pour le moment
+                            </p>
+
+                            <Link :href="catalog.url()"
+                                class="inline-block mt-4 px-5 py-2 bg-brand-primary text-white text-xs font-bold rounded-xl hover:bg-brand-hover transition">
+                                Voir les produits
+                            </Link>
                         </div>
                     </div>
 
@@ -209,33 +203,6 @@
                                 Voir tous mes favoris
                             </button>
                         </div>
-
-                        <!-- Recently Viewed -->
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                            <h3 class="text-md font-bold text-neutral-title mb-4">
-                                Récemment consultés
-                            </h3>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="relative group cursor-pointer">
-                                    <div class="aspect-square rounded-xl overflow-hidden border border-gray-100">
-                                        <img src="https://images.unsplash.com/photo-1590779033100-9f60705a2f3b?auto=format&fit=crop&q=80&w=150"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                                    </div>
-                                    <p class="text-[10px] font-bold text-neutral-title mt-2 truncate">
-                                        Tomates Bio
-                                    </p>
-                                </div>
-                                <div class="relative group cursor-pointer">
-                                    <div class="aspect-square rounded-xl overflow-hidden border border-gray-100">
-                                        <img src="https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&q=80&w=150"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                                    </div>
-                                    <p class="text-[10px] font-bold text-neutral-title mt-2 truncate">
-                                        Manioc Frais
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -248,7 +215,38 @@ import { catalog } from "@/routes";
 import type { Auth } from "@/types";
 import BuyerNavbar from "./Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "./Sidebar/BuyerSidebar.vue";
-const props = defineProps<Auth>();
+
+interface Farmer {
+    id: number,
+    name: string,
+}
+
+interface StatisticBuyerDashboard {
+    stats: {
+        countOrdersPending: number,
+        countOrdersSuccess: number,
+        totalExpenses: number,
+    },
+    recentOrders: {
+        data: {
+            id: number,
+            order_number: number,
+            buyer_id: number,
+            farmer_id: number,
+            status: string,
+            payment_method: string,
+            delivery_address?: string,
+            total_amount: number,
+            created_at: Date,
+            updated_at: Date,
+            farmer: Farmer
+        }[]
+    }
+}
+
+interface Props extends Auth, StatisticBuyerDashboard { }
+
+const props = defineProps<Props>()
 
 
 </script>

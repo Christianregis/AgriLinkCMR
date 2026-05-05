@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
         <BuyerSidebar />
@@ -228,14 +229,14 @@
                                     </div>
                                     <div class="flex justify-between text-brand-light/70">
                                         <span>Frais de livraison</span>
-                                        <span>{{ form.delivery_method === 'delivery' ? deleveryTax : '0' }} FCFA</span>
+                                        <span>{{ form.delivery_method === 'delivery' ? '2000' : '0' }} FCFA</span>
                                     </div>
                                     <div class="pt-4 border-t border-white/10 flex justify-between items-end">
                                         <span class="font-bold">Total à payer</span>
                                         <div class="text-right">
                                             <p class="text-2xl font-bold text-brand-primary">
-                                                {{ (cartStore.totalPrice + (form.delivery_method === 'delivery' ? deleveryTax :
-                                                0)).toLocaleString() }} FCFA
+                                                {{ (cartStore.totalPrice + (form.delivery_method === 'delivery' ? 2000 :
+                                                    0)).toLocaleString() }} FCFA
                                             </p>
                                             <p class="text-[10px] text-brand-light/50 uppercase tracking-widest">TVA
                                                 Incluse</p>
@@ -259,7 +260,10 @@
                 </div>
             </div>
         </main>
+        <PaymentStatusModal :isOpen="showModal" :type="modalType" :message='modalMessage' :buttonText="modalButtonText"
+            :buttonLink="modalButtonLink" @close="showModal = false" />
     </main>
+
 </template>
 
 <script setup lang="ts">
@@ -267,16 +271,16 @@ import { useForm, Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import PaymentStatusModal from '@/Components/PaymentStatusModal.vue';
 import { useCartStore } from '@/Pages/store/cartStore';
-import { catalog, productInfo } from '@/routes';
-
+import { buyerOrderStore, catalog, productInfo } from '@/routes';
 
 
 const page = usePage();
 const user = page.props.auth.user;
 
 const cartStore = useCartStore();
-const deleveryTax = ref<number>(2000);
 
 const form = useForm({
     items: cartStore.cartItems.map(item => ({
@@ -291,6 +295,12 @@ const form = useForm({
     total_amount: cartStore.totalPrice,
 });
 
+const showModal = ref<boolean>(false);
+const modalType = ref<'success' | 'failure'>('success')
+const modalMessage = ref<string>('')
+const modalButtonText = ref<string>('');
+const modalButtonLink = ref<string>('')
+
 const submitOrder = () => {
     // Mise à jour des items avant soumission au cas où le panier a changé
     form.items = cartStore.cartItems.map(item => ({
@@ -298,16 +308,25 @@ const submitOrder = () => {
         quantity: item.quantity,
         price: item.product.price
     }));
-    form.total_amount = cartStore.totalPrice + (form.delivery_method === 'delivery' ? deleveryTax.value : 0);
+    form.total_amount = cartStore.totalPrice
 
-    console.log(form.data())
+    form.post(buyerOrderStore.url(), {
+        onSuccess: () => {
+            showModal.value = true
+            modalType.value = 'success'
+            modalMessage.value = 'Paiement réussi ! Veuillez le consulter dans votre section mes commandes.'
+            modalButtonText.value = 'Aller à Mes commandes'
+            modalButtonLink.value = ''
+
+            cartStore.clearCart()
+        },
+    },)
+
 };
 </script>
 
 <style scoped>
-/* Custom styles if needed, but Tailwind handles most */
 .bg-brand-bg {
     background-color: #F0F7F4;
-    /* Exemple de variable neutral-bg */
 }
 </style>

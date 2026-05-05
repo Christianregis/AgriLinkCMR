@@ -14,8 +14,8 @@
             <div class="text-[10px] font-bold uppercase tracking-widest text-neutral-muted mb-4 px-4">
                 Menu Principal
             </div>
-            <Link :href="dashboard()" class="flex items-center space-x-3 px-4 py-3 rounded-xl sidebar-active">
-                <i class="fas fa-chart-line w-5 text-center"></i>
+            <Link :href="dashboard()" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
+                <i class="fas fa-tachometer-alt w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-semibold">Vue d'ensemble</span>
             </Link>
             <Link :href="farmerProductsShow.url()"

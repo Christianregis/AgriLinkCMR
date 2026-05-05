@@ -172,7 +172,7 @@ import { ref, computed } from 'vue'
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue'
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue'
 import Pagination from '@/Components/Pagination.vue'
-import { buyerOrderConfirm, catalog } from '@/routes'
+import { buyerOrderConfirm } from '@/routes'
 
 
 /**
@@ -271,8 +271,6 @@ const filteredOrders = computed<Order[]>(() => {
 
     return filtered
 })
-
-const totalPages = computed<number>(() => Math.ceil(filteredOrders.value.length / itemsPerPage.value))
 
 const startIndex = computed<number>(() => (currentPage.value - 1) * itemsPerPage.value)
 const endIndex = computed<number>(() => startIndex.value + itemsPerPage.value)

@@ -9,7 +9,10 @@ class OrderItem extends Model
 {
     protected $fillable = [
         'order_id',
-        'product_id'
+        'product_id',
+        'unit_price',
+        'quantity',
+        'subtotal'
     ];
 
     public function order(): BelongsTo

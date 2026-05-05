@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\Buyer\Order\BuyerOrderController;
 use App\Http\Controllers\User\Buyer\Profile\ProfileBuyerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\Farmer\Product\ProductController;
@@ -35,6 +36,8 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
     Route::get('/buyer/edit', [ProfileBuyerController::class, 'edit'])->name('buyerProfileEdit');
 
     Route::put('/buyer/edit', [ProfileBuyerController::class, 'updateProfileBuyer'])->name('buyerProfileUpdate');
+
+    Route::get('/buyer/order/validate', [BuyerOrderController::class, 'confirmOrder'])->name('buyerOrderConfirm');
 });
 
 

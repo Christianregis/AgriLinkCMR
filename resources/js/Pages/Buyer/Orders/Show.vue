@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
         <BuyerSidebar />
@@ -127,10 +128,10 @@
                                     class="flex-1 md:flex-none px-4 py-2 border border-brand-primary text-brand-primary rounded-xl text-xs font-bold hover:bg-brand-bg transition-all text-center">
                                     <i class="fas fa-eye mr-2"></i>Voir
                                 </Link>
-                                <button v-if="order.status === 'pending'" @click="deleteOrder(order.id)"
+                                <Link v-if="order.status === 'pending'" :href="buyerOrderDelete(order.id)" :method="'delete'"
                                     class="flex-1 md:flex-none px-4 py-2 border border-red-200 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 transition-all">
                                     <i class="fas fa-trash mr-2"></i>Supprimer
-                                </button>
+                                </Link>
                                 <button v-else disabled
                                     class="flex-1 md:flex-none px-4 py-2 border border-gray-200 text-gray-400 rounded-xl text-xs font-bold cursor-not-allowed opacity-50">
                                     <i class="fas fa-trash mr-2"></i>Supprimer
@@ -172,7 +173,10 @@ import { ref, computed } from 'vue'
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue'
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue'
 import Pagination from '@/Components/Pagination.vue'
-import { buyerOrderConfirm } from '@/routes'
+import { buyerOrderConfirm, buyerOrderDelete } from '@/routes'
+import { formatAmount } from '@/utils/formatAmount'
+import { formatDate } from '@/utils/formatDate'
+import FlashMessage from '@/Components/FlashMessage.vue'
 
 
 /**
@@ -225,22 +229,18 @@ const user = page.props.auth.user;
  */
 const props = defineProps<Props>()
 
-/**
- * Reactive state
- */
+
 const searchQuery = ref<string>('')
 const selectedStatus = ref<OrderStatus | ''>('')
 const sortBy = ref<'recent' | 'oldest' | 'amount-high' | 'amount-low'>('recent')
 const currentPage = ref<number>(1)
 const itemsPerPage = ref<number>(10)
 
-/**
- * Computed properties
- */
+
 const filteredOrders = computed<Order[]>(() => {
     let filtered: Order[] = props.orders.data || []
 
-    // Filter by search query
+    // Filtrage
     if (searchQuery.value) {
         filtered = filtered.filter(order =>
             order.order_number.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -315,33 +315,6 @@ const getStatusLabel = (status: OrderStatus): string => {
     }
 
     return statusLabels[status] || 'Inconnu'
-}
-
-/**
- * Delete order
- */
-const deleteOrder = (orderId: number): void => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')) {
-
-    }
-}
-
-/**
- * Format date to French locale
- */
-const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    })
-}
-
-/**
- * Format amount with French locale
- */
-const formatAmount = (amount: number): string => {
-    return new Intl.NumberFormat('fr-FR').format(amount)
 }
 
 </script>

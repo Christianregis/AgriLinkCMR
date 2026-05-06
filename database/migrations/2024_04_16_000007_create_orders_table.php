@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId("farmer_id")->constrained("users")->onDelete("cascade");
             $table->string("status"); // Remplacé de enum
             $table->string("payment_method")->nullable();
-            $table->text("delivery_address");
+            $table->text("delivery_address")->nullable();
             $table->decimal("total_amount", 10, 2);
             $table->text("notes")->nullable();
             $table->softDeletes();

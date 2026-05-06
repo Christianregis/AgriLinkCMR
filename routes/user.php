@@ -42,6 +42,8 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
     Route::post('/buyer/order/store', [BuyerOrderController::class, 'store'])->name('buyerOrderStore');
 
     Route::get('/buyer/order/show', [BuyerOrderController::class, 'showOrders'])->name('buyerOrderShow');
+
+    Route::delete('/buyer/order/{order_id}/delete', [BuyerOrderController::class, 'destroy'])->name('buyerOrderDelete');
 });
 
 

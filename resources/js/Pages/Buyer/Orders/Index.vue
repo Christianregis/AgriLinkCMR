@@ -274,7 +274,7 @@ import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import PaymentStatusModal from '@/Components/PaymentStatusModal.vue';
 import { useCartStore } from '@/Pages/store/cartStore';
-import { buyerOrderStore, catalog, productInfo } from '@/routes';
+import { buyerOrderShow, buyerOrderStore, catalog, productInfo } from '@/routes';
 
 
 const page = usePage();
@@ -316,7 +316,7 @@ const submitOrder = () => {
             modalType.value = 'success'
             modalMessage.value = 'Paiement réussi ! Veuillez le consulter dans votre section mes commandes.'
             modalButtonText.value = 'Aller à Mes commandes'
-            modalButtonLink.value = ''
+            modalButtonLink.value = buyerOrderShow.url()
 
             cartStore.clearCart()
         },

@@ -48,6 +48,11 @@ class Order extends Model
     }
 
     // Scopes
+    public function findById($query, $order_id)
+    {
+        $query->where('id', $order_id);
+    }
+    
     public function scopeWithFarmer($query, $farmer_id)
     {
         $query->where('farmer_id', $farmer_id);

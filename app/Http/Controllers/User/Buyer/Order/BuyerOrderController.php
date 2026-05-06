@@ -12,6 +12,7 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 
@@ -82,7 +83,7 @@ class BuyerOrderController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             // Log the error for debugging
-            // Log::error('Order creation failed: ' . $e->getMessage());
+            Log::error('Order creation failed: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la création de votre commande. Veuillez réessayer.');
         }
     }
@@ -91,8 +92,42 @@ class BuyerOrderController extends Controller
     public function showOrders()
     {
         $buyer = Auth::user();
-        return Inertia::render('Buyer/Orders/Show',[
+        return Inertia::render('Buyer/Orders/Show', [
             'orders' => OrderResource::collection(Order::query()->with(['farmer'])->withBuyer($buyer->id)->latest()->paginate(10)->withQueryString())
         ]);
+    }
+
+    public function destroy(mixed $order_id)
+    {
+        $buyer = Auth::user();
+        $order = Order::query()
+            ->withBuyer($buyer->id)
+            ->where('id', $order_id)
+            ->firstOrFail();
+
+        if ($order->status !== OrderEnum::PENDING) {
+            return redirect()->back()->with('error', 'Cette commande ne peut plus être annulée car son statut a changé.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($order->orderItems as $item) {
+                // Re-increment the product quantity
+                Product::where('id', $item->product_id)->increment('quantity', $item->quantity);
+            }
+
+            // Delete order items first, then the order
+            $order->orderItems()->delete();
+            $order->deleteOrFail();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'La commande a été annulée et les produits réaffectés au stock.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Order deletion failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation de la commande. Veuillez réessayer.');
+        }
     }
 }

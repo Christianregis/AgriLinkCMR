@@ -216,10 +216,10 @@
 
                                     <!-- ACTION ICON -->
                                     <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <div
+                                        <Link :href="farmerProductsEdit(item.product.id)"
                                             class="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
                                             <i class="fas fa-arrow-right text-sm"></i>
-                                        </div>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -314,6 +314,7 @@ import { Link, usePage } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue'
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue'
+import { farmerProductsEdit } from '@/routes'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 

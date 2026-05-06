@@ -77,8 +77,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { farmerOrderView } from '@/routes'
 import { Link } from '@inertiajs/vue3'
+import { farmerOrderView } from '@/routes'
 interface Buyer {
     name: string,
     email: string,

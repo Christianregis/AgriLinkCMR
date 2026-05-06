@@ -12,10 +12,7 @@
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <!-- PAGE HEADER WITH BACK BUTTON -->
                 <div class="flex items-center gap-4">
-                    <Link
-                        href="#"
-                        @click.prevent="goBack"
-                        class="p-2 hover:bg-white rounded-xl transition-all">
+                    <Link href="#" @click.prevent="goBack" class="p-2 hover:bg-white rounded-xl transition-all">
                         <i class="fas fa-arrow-left text-neutral-title text-xl"></i>
                     </Link>
                     <div>
@@ -38,15 +35,14 @@
                         <!-- Status Steps -->
                         <div v-for="(step) in statusSteps" :key="step.status" class="flex flex-col items-center flex-1">
                             <!-- Circle with icon -->
-                            <div
-                                :class="[
-                                    'w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold transition-all relative z-10 mb-4',
-                                    isStepCompleted(step.status)
-                                        ? step.completedClasses
-                                        : isStepCurrent(step.status)
-                                            ? step.currentClasses
-                                            : 'bg-gray-100 text-gray-400 border-4 border-gray-200'
-                                ]">
+                            <div :class="[
+                                'w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold transition-all relative z-10 mb-4',
+                                isStepCompleted(step.status)
+                                    ? step.completedClasses
+                                    : isStepCurrent(step.status)
+                                        ? step.currentClasses
+                                        : 'bg-gray-100 text-gray-400 border-4 border-gray-200'
+                            ]">
                                 <i :class="step.icon"></i>
                             </div>
 
@@ -68,20 +64,21 @@
                     </div>
 
                     <!-- Cancel Status (if applicable) -->
-                    <div v-if="order.data.status === 'cancel'" class="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-xl flex items-center gap-3">
+                    <div v-if="order.data.status === 'cancel'"
+                        class="mt-8 p-4 bg-red-50 border-2 border-red-200 rounded-xl flex items-center gap-3">
                         <i class="fas fa-ban text-red-600 text-xl"></i>
                         <div>
                             <p class="font-bold text-red-600">Commande Annulée</p>
-                            <p class="text-sm text-red-500">Cette commande a été annulée et aucune action supplémentaire n'est possible.</p>
+                            <p class="text-sm text-red-500">Cette commande a été annulée et aucune action supplémentaire
+                                n'est possible.</p>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div v-if="order.data.status !== 'cancel' && order.data.status !== 'dispute' && order.data.status !== 'success'" class="mt-8 flex gap-3 flex-wrap">
+                    <div v-if="order.data.status !== 'cancel' && order.data.status !== 'dispute' && order.data.status !== 'success'"
+                        class="mt-8 flex gap-3 flex-wrap">
                         <!-- Accept Order (Pending -> Preparation) -->
-                        <button
-                            v-if="order.data.status === 'pending'"
-                            @click="updateOrderStatus('preparation')"
+                        <button v-if="order.data.status === 'pending'" @click="updateOrderStatus('preparation')"
                             :disabled="isUpdating"
                             class="px-6 py-3 bg-brand-primary hover:bg-brand-hover text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                             <i class="fas fa-check"></i>
@@ -89,9 +86,7 @@
                         </button>
 
                         <!-- Mark as Ready (Preparation -> Ready) -->
-                        <button
-                            v-if="order.data.status === 'preparation'"
-                            @click="updateOrderStatus('ready')"
+                        <button v-if="order.data.status === 'preparation'" @click="updateOrderStatus('ready')"
                             :disabled="isUpdating"
                             class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                             <i class="fas fa-box"></i>
@@ -99,9 +94,7 @@
                         </button>
 
                         <!-- Mark as Delivered (Ready -> Success) -->
-                        <button
-                            v-if="order.data.status === 'ready'"
-                            @click="updateOrderStatus('success')"
+                        <button v-if="order.data.status === 'ready'" @click="updateOrderStatus('success')"
                             :disabled="isUpdating"
                             class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                             <i class="fas fa-truck"></i>
@@ -109,8 +102,7 @@
                         </button>
 
                         <!-- Cancel Order -->
-                        <button
-                            @click="showCancelModal = true"
+                        <button @click="showCancelModal = true"
                             class="px-6 py-3 border-2 border-red-200 text-red-600 font-bold rounded-xl hover:bg-red-50 transition-all flex items-center gap-2">
                             <i class="fas fa-times"></i>
                             Annuler la Commande
@@ -129,26 +121,31 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Order Number -->
                                 <div>
-                                    <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Numéro de Commande</p>
+                                    <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Numéro de Commande
+                                    </p>
                                     <p class="text-lg font-bold text-neutral-title">#{{ order.data.order_number }}</p>
                                 </div>
 
                                 <!-- Order Date -->
                                 <div>
                                     <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Date de Commande</p>
-                                    <p class="text-lg font-bold text-neutral-title">{{ formatDate(order.data.created_at) }}</p>
+                                    <p class="text-lg font-bold text-neutral-title">{{ formatDate(order.data.created_at)
+                                    }}</p>
                                 </div>
 
                                 <!-- Payment Method -->
                                 <div>
-                                    <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Méthode de Paiement</p>
+                                    <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Méthode de Paiement
+                                    </p>
                                     <p class="text-lg font-bold text-neutral-title">{{ order.data.payment_method }}</p>
                                 </div>
 
                                 <!-- Delivery Address -->
                                 <div>
-                                    <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Adresse de Livraison</p>
-                                    <p class="text-lg font-bold text-neutral-title">{{ order.data.delivery_address }}</p>
+                                    <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Adresse de Livraison
+                                    </p>
+                                    <p class="text-lg font-bold text-neutral-title">{{ order.data.delivery_address }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -159,19 +156,70 @@
                             </div>
                         </div>
 
-                        <!-- ORDER ITEMS -->
+                        <!-- ORDER ITEMS SECTION -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                             <h3 class="text-lg font-bold text-neutral-title mb-6">Produits Commandés</h3>
 
                             <div class="space-y-4">
-                                <div v-for="item in order.data.order_items" :key="item.id" class="flex items-center justify-between p-4 bg-neutral-bg rounded-xl">
-                                    <div class="flex-1">
-                                        <p class="font-bold text-neutral-title">Produit #{{ item.product_id }}</p>
-                                        <p class="text-sm text-neutral-muted">Quantité: {{ item.quantity }}</p>
+                                <div v-for="item in order.data.order_items" :key="item.id"
+                                    class="group flex items-center gap-4 p-5 bg-linear-to-r from-neutral-bg to-white hover:from-brand-bg/30 hover:to-white rounded-xl border border-gray-100 hover:border-brand-primary/30 transition-all duration-300 cursor-pointer">
+
+                                    <!-- PRODUCT IMAGE -->
+                                    <div class="relative shrink-0">
+                                        <div
+                                            class="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shadow-sm">
+                                            <img v-if="getPrimaryImage(item.product)"
+                                                :src="getPrimaryImage(item.product) ?? '#'" :alt="item.product.title"
+                                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                                            <div v-else
+                                                class="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200">
+                                                <i class="fas fa-image text-gray-400 text-2xl"></i>
+                                            </div>
+                                        </div>
+                                        <!-- Image count badge -->
+                                        <div v-if="item.product.product_images && item.product.product_images.length > 1"
+                                            class="absolute -bottom-2 -right-2 bg-brand-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                                            +{{ item.product.product_images.length - 1 }}
+                                        </div>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="font-bold text-neutral-title">{{ formatAmount(item.unit_price) }} FCFA</p>
-                                        <p class="text-sm text-neutral-muted">Sous-total: {{ formatAmount(item.subtotal) }} FCFA</p>
+
+                                    <!-- PRODUCT DETAILS -->
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-start justify-between gap-4">
+                                            <div class="flex-1">
+                                                <p
+                                                    class="font-bold text-neutral-title text-base group-hover:text-brand-primary transition-colors truncate">
+                                                    {{ item.product.title }}
+                                                </p>
+                                                <div class="flex items-center gap-2 mt-2">
+                                                    <span
+                                                        class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg border border-blue-100">
+                                                        <i class="fas fa-box-open text-xs"></i>
+                                                        Quantité: {{ item.quantity }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- PRICING SECTION -->
+                                            <div class="text-right shrink-0">
+                                                <div class="flex flex-col items-end gap-1">
+                                                    <p class="text-lg font-bold text-brand-primary">
+                                                        {{ formatAmount(item.subtotal) }} FCFA
+                                                    </p>
+                                                </div>
+                                                <p class="text-xs text-neutral-muted mt-2">
+                                                    {{ formatAmount(item.unit_price) }} FCFA/ {{ item.product.unit }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- ACTION ICON -->
+                                    <div class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div
+                                            class="w-10 h-10 rounded-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+                                            <i class="fas fa-arrow-right text-sm"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -185,18 +233,16 @@
                             <h3 class="text-lg font-bold text-neutral-title mb-6">Informations de l'Acheteur</h3>
 
                             <div class="flex items-center gap-4 mb-6">
-                                <img
-                                    :src="order.data.buyer.profile_photo || `https://ui-avatars.com/api/?name=${order.data.buyer.name}&background=2D6A4F&color=fff`"
-                                    :alt="order.data.buyer.name"
-                                    class="w-16 h-16 rounded-xl object-cover"
-                                />
+                                <img :src="order.data.buyer.profile_photo || `https://ui-avatars.com/api/?name=${order.data.buyer.name}&background=2D6A4F&color=fff`"
+                                    :alt="order.data.buyer.name" class="w-16 h-16 rounded-xl object-cover" />
                                 <div>
                                     <p class="font-bold text-neutral-title">{{ order.data.buyer.name }}</p>
                                     <p class="text-sm text-neutral-muted">{{ order.data.buyer.email }}</p>
                                 </div>
                             </div>
 
-                            <button class="w-full px-4 py-2 border-2 border-brand-primary text-brand-primary font-bold rounded-xl hover:bg-brand-bg transition-all">
+                            <button
+                                class="w-full px-4 py-2 border-2 border-brand-primary text-brand-primary font-bold rounded-xl hover:bg-brand-bg transition-all">
                                 <i class="fas fa-envelope mr-2"></i>
                                 Contacter l'Acheteur
                             </button>
@@ -210,7 +256,7 @@
                                 <!-- Subtotal -->
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Sous-total</p>
-                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal ) }} FCFA</p>
+                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) }} FCFA</p>
                                 </div>
 
                                 <!-- Shipping (if applicable) -->
@@ -222,7 +268,8 @@
                                 <!-- Total -->
                                 <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
                                     <p class="font-bold text-neutral-title">Total</p>
-                                    <p class="text-2xl font-bold text-brand-primary">{{ formatAmount(order.data.total_amount) }} FCFA</p>
+                                    <p class="text-2xl font-bold text-brand-primary">{{
+                                        formatAmount(order.data.total_amount) }} FCFA</p>
                                 </div>
                             </div>
                         </div>
@@ -244,17 +291,15 @@
         <div v-if="showCancelModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-lg">
                 <h3 class="text-xl font-bold text-neutral-title mb-4">Annuler la Commande</h3>
-                <p class="text-neutral-muted mb-6">Êtes-vous sûr de vouloir annuler cette commande ? Cette action ne peut pas être annulée.</p>
+                <p class="text-neutral-muted mb-6">Êtes-vous sûr de vouloir annuler cette commande ? Cette action ne
+                    peut pas être annulée.</p>
 
                 <div class="flex gap-3">
-                    <button
-                        @click="showCancelModal = false"
+                    <button @click="showCancelModal = false"
                         class="flex-1 px-4 py-2 border-2 border-gray-200 text-neutral-title font-bold rounded-xl hover:bg-gray-50 transition-all">
                         Annuler
                     </button>
-                    <button
-                        @click="updateOrderStatus('cancel')"
-                        :disabled="isUpdating"
+                    <button @click="updateOrderStatus('cancel')" :disabled="isUpdating"
                         class="flex-1 px-4 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                         Confirmer l'Annulation
                     </button>
@@ -282,12 +327,27 @@ interface Buyer {
     profile_photo?: string
 }
 
+interface ProductImages {
+    id: number,
+    path: string,
+    is_primary: boolean,
+    order: number,
+}
+
+interface Product {
+    id: number
+    title: string,
+    unit: string,
+    product_images: ProductImages[]
+}
+
 interface OrderItem {
     id: number
     quantity: number
     subtotal: number
     unit_price: number
     product_id: number
+    product: Product
 }
 
 interface Order {
@@ -461,6 +521,16 @@ const getStatusBadgeClasses = (): string => {
     return classes[props.order.data.status]
 }
 
+const getPrimaryImage = (product: Product): string | null => {
+    if (!product.product_images || product.product_images.length === 0) {
+        return null
+    }
+
+    const primaryImage = product.product_images.find(img => img.is_primary)
+
+    return primaryImage ? primaryImage.path : product.product_images[0].path
+}
+
 /**
  * Update order status
  */
@@ -524,6 +594,7 @@ select:focus {
     from {
         width: 0;
     }
+
     to {
         width: 100%;
     }

@@ -27,8 +27,9 @@ class FarmerOrderController extends Controller
     public function showOrder(mixed $order_id)
     {
         $farmer = Auth::user();
-        $order = Order::where('id', $order_id)
-            ->with(['buyer', 'orderItems'])
+        $order = Order::where('id', '=',$order_id)
+            ->withFarmer($farmer->id)
+            ->with(['buyer', 'orderItems.product.productImages'])
             ->firstOrFail();
         return Inertia::render('Farmer/Orders/Show', [
             'order' => OrderResource::make($order),

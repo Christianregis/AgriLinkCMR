@@ -53,7 +53,7 @@
                                 </div>
                                 <div v-else>
                                     <div v-for="product in productsLow.data" :key="product.id"
-                                        class="flex items-center justify-between p-3 bg-red-50 rounded-xl border border-red-100">
+                                        class="flex items-center justify-between p-3 mb-1.5 bg-red-50 rounded-xl border border-red-100">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-red-500 font-bold shadow-sm text-xs">

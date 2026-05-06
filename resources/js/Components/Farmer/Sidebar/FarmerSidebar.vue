@@ -23,11 +23,11 @@
                 <i class="fas fa-box w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Produits</span>
             </Link>
-            <Link href="#"
+            <Link :href="farmerOrdersShow()"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-receipt w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Commandes</span>
-                <span class="ml-auto bg-accent-cta text-white text-[10px] px-2 py-0.5 rounded-full">4</span>
+                <span class="ml-auto bg-accent-cta text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
             <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
@@ -66,6 +66,6 @@
 </template>
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { dashboard, farmerProductsShow, logout } from '@/routes';
+import { dashboard, farmerOrdersShow, farmerProductsShow, logout } from '@/routes';
 import { farmerProfile } from '@/routes';
 </script>

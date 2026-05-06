@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\User\Buyer\Order\BuyerOrderController;
 use App\Http\Controllers\User\Buyer\Profile\ProfileBuyerController;
+use App\Http\Controllers\User\Farmer\Order\FarmerOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\Farmer\Product\ProductController;
 use App\Http\Controllers\User\Farmer\Profile\ProfileFarmerController;
@@ -25,6 +26,8 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
     Route::put('/farmer/products/edit/{id}', [ProductController::class, 'update'])->name('farmerProductsUpdate');
 
     Route::delete('/farmer/products/delete/{product_id}', [ProductController::class, 'delete'])->name('farmerProductsDelete');
+
+    Route::get('/farmer/orders', [FarmerOrderController::class, 'showAllOrders'])->name('farmerOrdersShow');
 });
 
 

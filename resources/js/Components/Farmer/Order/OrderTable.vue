@@ -57,7 +57,7 @@
                             </span>
                         </td>
                         <td class="px-8 py-5 text-right">
-                            <Link href="#" class="p-2 text-brand-primary hover:bg-brand-bg rounded-lg transition-all">
+                            <Link :href="farmerOrderView(order.id)" class="p-2 text-brand-primary hover:bg-brand-bg rounded-lg transition-all">
                             <i class="fas fa-eye"></i>
                             </Link>
                             <button v-if="order.status === 'pending'" @click="'#'"
@@ -77,6 +77,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { farmerOrderView } from '@/routes'
 import { Link } from '@inertiajs/vue3'
 interface Buyer {
     name: string,

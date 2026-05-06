@@ -28,6 +28,8 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
     Route::delete('/farmer/products/delete/{product_id}', [ProductController::class, 'delete'])->name('farmerProductsDelete');
 
     Route::get('/farmer/orders', [FarmerOrderController::class, 'showAllOrders'])->name('farmerOrdersShow');
+    
+    Route::get('/farmer/orders/{order_id}',[FarmerOrderController::class, 'showOrder'])->name('farmerOrderView');
 });
 
 

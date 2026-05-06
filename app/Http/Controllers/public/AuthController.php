@@ -101,17 +101,25 @@ class AuthController extends Controller
                 ->avaliable()
                 ->count('*');
 
+            $countOrdersPending = Order::withFarmer($user->id)
+                ->withStatusPending()
+                ->count('*');
+
             $sumAmountOrders = Order::withFarmer($user->id)
                 ->withStatusSuccess()
                 ->sum('total_amount');
             $productsLow = Product::query()
                 ->quantityLow()
                 ->get();
+            $recentsOrders = Order::withFarmer($user->id)->with(['buyer', 'orderItems'])->latest()->limit(5)->get();
 
             return Inertia::render('Dashboard/IndexFarmer', [
                 'sumAmountOrders' => $sumAmountOrders,
                 'countProductsAvaliable' => $countProductsAvaliable,
+                'countOrdersPending' => $countOrdersPending,
+                'farmer_average_rating' => $user->average_rating,
                 'productsLow' => ProductLowResource::collection($productsLow),
+                'recentsOrders' => OrderResource::collection($recentsOrders),
             ]);
         }
         abort(403);

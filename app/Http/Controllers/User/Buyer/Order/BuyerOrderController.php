@@ -113,11 +113,11 @@ class BuyerOrderController extends Controller
 
         try {
             foreach ($order->orderItems as $item) {
-                // Re-increment the product quantity
+                // On Re-Incremente la quantite du produit
                 Product::where('id', $item->product_id)->increment('quantity', $item->quantity);
             }
 
-            // Delete order items first, then the order
+            // Suppression de la commande en commencant par supprimer les items de commande
             $order->orderItems()->delete();
             $order->deleteOrFail();
 

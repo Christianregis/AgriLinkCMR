@@ -23,7 +23,7 @@ class OrderItemsResource extends JsonResource
             'quantity' => $this->quantity,
             'subtotal' => $this->subtotal,
             'product' => $this->whenLoaded('product', function () {
-                return new ProductInformationsResource($this->product);
+                return ProductInformationsResource::make($this->product);
             }),
         ];
     }

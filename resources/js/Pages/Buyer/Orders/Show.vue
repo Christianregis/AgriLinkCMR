@@ -172,11 +172,11 @@ import { Link, usePage } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue'
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue'
+import FlashMessage from '@/Components/FlashMessage.vue'
 import Pagination from '@/Components/Pagination.vue'
 import { buyerOrderConfirm, buyerOrderDelete } from '@/routes'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
-import FlashMessage from '@/Components/FlashMessage.vue'
 
 
 /**

@@ -13,11 +13,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <ProductStatCard :label="`Produits Actifs`" :value="countProductsAvaliable"
                         :icon="`fas fa-seedling`" :bg_brand="`bg-brand-bg`" :text_brand="`text-brand-primary`" />
-                    <ProductStatCard :label="`Commande en cours`" :value="`08`" :icon="`fas fa-shopping-basket`"
+                    <ProductStatCard :label="`Commande en cours`" :value="countOrdersPending" :icon="`fas fa-shopping-basket`"
                         :bg_brand="`bg-blue-50`" :text_brand="`text-blue-600`" />
                     <ProductStatCard :label="`C.A du mois`" :value="sumAmountOrders + ` FCFA`" :icon="`fas fa-wallet`"
                         :bg_brand="`bg-accent-light`" :text_brand="`text-accent-cta`" />
-                    <ProductStatCard :label="`Note Moyenne`" :value="`4.8 / 5`" :icon="`fas fa-star`"
+                    <ProductStatCard :label="`Note Moyenne`" :value="farmer_average_rating ?? 0 +` / 5`" :icon="`fas fa-star`"
                         :text_brand="`text-accent-star`" :bg_brand="`bg-orange-50`" />
                 </div>
 
@@ -52,7 +52,8 @@
                                 Faible
                             </h3>
                             <div class="space-y-4">
-                                <div v-if="productsLow.data.length == 0" class="bg-green-50 rounded-xl border border-green-100 p-3 flex items-center justify-between text-green-500">
+                                <div v-if="productsLow.data.length == 0"
+                                    class="bg-green-50 rounded-xl border border-green-100 p-3 flex items-center justify-between text-green-500">
                                     Aucun Produit Faible
                                 </div>
                                 <div v-else>
@@ -70,7 +71,8 @@
                                                     {{ product.unit }}</p>
                                             </div>
                                         </div>
-                                        <Link class="text-brand-primary hover:underline text-xs font-bold" :href="farmerProductsEdit(product.id)">
+                                        <Link class="text-brand-primary hover:underline text-xs font-bold"
+                                            :href="farmerProductsEdit(product.id)">
                                             Réappro.
                                         </Link>
                                     </div>
@@ -142,88 +144,65 @@
                                 <tr>
                                     <th class="px-8 py-4">ID Commande</th>
                                     <th class="px-6 py-4">Client</th>
-                                    <th class="px-6 py-4">Produits</th>
+                                    <th class="px-6 py-4">Nbres Produits</th>
                                     <th class="px-6 py-4">Montant</th>
                                     <th class="px-6 py-4">Statut</th>
                                     <th class="px-8 py-4 text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50">
-                                <tr class="hover:bg-neutral-bg/30 transition-colors">
-                                    <td class="px-8 py-5 font-bold text-neutral-title">#AGL-2026-00452</td>
+                                <tr v-for="order in recentsOrders.data" :key="order.id"
+                                    class="hover:bg-neutral-bg/30 transition-colors">
+                                    <td class="px-8 py-5 font-bold text-neutral-title">#{{ order.order_number }}</td>
                                     <td class="px-6 py-5">
                                         <div class="flex items-center gap-2">
-                                            <img src="https://ui-avatars.com/api/?name=Jean+M&background=random"
+                                            <img :src="order.buyer.profile_photo || `https://ui-avatars.com/api/?name=${order.buyer.name}&background=random`"
                                                 class="w-7 h-7 rounded-full" />
-                                            <span class="text-sm font-medium text-neutral-body">Jean Marc</span>
+                                            <span class="text-sm font-medium text-neutral-body">{{ order.buyer.name
+                                                }}</span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5 text-sm text-neutral-muted">
-                                        Poivre (2kg), Tomates (5kg)
+                                        {{ order.order_items.length }}
                                     </td>
-                                    <td class="px-6 py-5 font-bold text-brand-dark text-sm">14,500 FCFA</td>
+                                    <td class="px-6 py-5 font-bold text-brand-dark text-sm">{{
+                                        order.total_amount.toLocaleString() }} FCFA</td>
                                     <td class="px-6 py-5">
-                                        <span
-                                            class="px-3 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full uppercase">En
-                                            cours</span>
+                                        <span :class="{
+                                            'px-3 py-1 text-[10px] font-bold rounded-full uppercase': true,
+                                            'bg-blue-100 text-blue-700': order.status === 'pending',
+                                            'bg-yellow-100 text-yellow-700': order.status === 'preparation',
+                                            'bg-green-100 text-green-700': order.status === 'success',
+                                            'bg-green-200 text-green-800': order.status === 'ready',
+                                            'bg-purple-100 text-purple-700' : order.status === 'dispute',
+                                            'bg-red-100 text-red-700': order.status === 'cancel',
+                                        }">
+                                            {{
+                                                order.status === 'pending' ? 'En attente' :
+                                                    order.status === 'preparation' ? 'En préparation' :
+                                                        order.status === 'ready' ? 'Prêt' :
+                                                            order.status === 'success' ? 'Livree' :
+
+                                                                order.status === 'cancel' ? 'Annulée' :
+                                                                    order.status === 'dispute' ? 'Litige' :
+                                                                        'Inconnu'
+                                            }}
+                                        </span>
                                     </td>
                                     <td class="px-8 py-5 text-right">
-                                        <button
+                                        <Link href="#"
                                             class="p-2 text-brand-primary hover:bg-brand-bg rounded-lg transition-all">
                                             <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button
-                                            class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-all ml-2">
-                                            <i class="fas fa-check"></i>
+                                        </Link>
+                                        <button v-if="order.status === 'pending'" @click="'#'"
+                                            class="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-all ml-2">
+                                            <i class="fas fa-times"></i>
                                         </button>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-neutral-bg/30 transition-colors">
-                                    <td class="px-8 py-5 font-bold text-neutral-title">#AGL-2026-00448</td>
-                                    <td class="px-6 py-5">
-                                        <div class="flex items-center gap-2">
-                                            <img src="https://ui-avatars.com/api/?name=Alice+B&background=random"
-                                                class="w-7 h-7 rounded-full" />
-                                            <span class="text-sm font-medium text-neutral-body">Alice Bella</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-5 text-sm text-neutral-muted">
-                                        Régime Bananes (x2)
-                                    </td>
-                                    <td class="px-6 py-5 font-bold text-brand-dark text-sm">5,000 FCFA</td>
-                                    <td class="px-6 py-5">
-                                        <span
-                                            class="px-3 py-1 bg-yellow-100 text-yellow-700 text-[10px] font-bold rounded-full uppercase">Attente
-                                            Paiement</span>
-                                    </td>
-                                    <td class="px-8 py-5 text-right">
-                                        <button
-                                            class="p-2 text-brand-primary hover:bg-brand-bg rounded-lg transition-all">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-neutral-bg/30 transition-colors">
-                                    <td class="px-8 py-5 font-bold text-neutral-title">#AGL-2026-00435</td>
-                                    <td class="px-6 py-5">
-                                        <div class="flex items-center gap-2">
-                                            <img src="https://ui-avatars.com/api/?name=Resto+Yaounde&background=random"
-                                                class="w-7 h-7 rounded-full" />
-                                            <span class="text-sm font-medium text-neutral-body">Le Gourmet
-                                                Yaoundé</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-5 text-sm text-neutral-muted">Panier Mixte (x5)</td>
-                                    <td class="px-6 py-5 font-bold text-brand-dark text-sm">45,000 FCFA</td>
-                                    <td class="px-6 py-5">
-                                        <span
-                                            class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase">Terminée</span>
-                                    </td>
-                                    <td class="px-8 py-5 text-right">
-                                        <button
-                                            class="p-2 text-brand-primary hover:bg-brand-bg rounded-lg transition-all">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                <tr v-if="recentsOrders.data.length === 0">
+                                    <td colspan="6" class="px-8 py-5 text-center text-neutral-muted">
+                                        Aucune commande récente.
                                     </td>
                                 </tr>
                             </tbody>
@@ -268,11 +247,39 @@ Chart.register(
     Title
 );
 
+interface Buyer {
+    name: string,
+    email: string,
+    profile_photo?: string
+}
+
+interface OrderItems {
+    quantity: number,
+    subtotal: number
+    unit_price: number,
+}
+
+
+interface RecentsOrders {
+    data: {
+        id: number,
+        status: string,
+        buyer: Buyer,
+        order_number: string
+        order_items: OrderItems[],
+        total_amount: number,
+
+    }[]
+}
+
 // Types de donnees pour les Statistiques du Dashboard
 interface StatisticDashboardFarmer {
     countProductsAvaliable: number;
-    sumAmountOrders: number;
+    sumAmountOrders: string;
+    countOrdersPending: number,
+    farmer_average_rating:number,
     productsLow: ProductsLow,
+    recentsOrders: RecentsOrders
 }
 
 interface ProductsLow {
@@ -283,7 +290,6 @@ interface ProductsLow {
         unit: string,
     }[]
 }
-
 
 const chartRef = ref<HTMLCanvasElement | null>(null);
 

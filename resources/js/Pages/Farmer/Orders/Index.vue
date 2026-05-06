@@ -59,10 +59,6 @@
 
                 <!-- ORDERS TABLE COMPONENT -->
                 <OrderTable :data="paginatedOrders" />
-
-                <div class="mt-6 flex justify-center">
-                    <Pagination :meta="orders.meta" />
-                </div>
                 <!-- EMPTY STATE -->
                 <div v-if="filteredOrders.length === 0"
                     class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
@@ -71,6 +67,10 @@
                     <p class="text-sm text-neutral-muted">
                         {{ searchQuery || selectedStatus ? 'Essayez de modifier vos filtres' : 'Vous n\'avez pas encor de commandes' }}
                     </p>
+                </div>
+                
+                <div class="mt-6 flex justify-center">
+                    <Pagination :meta="orders.meta" />
                 </div>
             </div>
         </main>

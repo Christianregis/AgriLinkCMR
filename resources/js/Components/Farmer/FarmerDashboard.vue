@@ -17,7 +17,7 @@
                         :bg_brand="`bg-blue-50`" :text_brand="`text-blue-600`" />
                     <ProductStatCard :label="`C.A du mois`" :value="sumAmountOrders + ` FCFA`" :icon="`fas fa-wallet`"
                         :bg_brand="`bg-accent-light`" :text_brand="`text-accent-cta`" />
-                    <ProductStatCard :label="`Note Moyenne`" :value="farmer_average_rating ?? 0 +` / 5`" :icon="`fas fa-star`"
+                    <ProductStatCard :label="`Note Moyenne`" :value="farmer_average_rating +` / 5`" :icon="`fas fa-star`"
                         :text_brand="`text-accent-star`" :bg_brand="`bg-orange-50`" />
                 </div>
 
@@ -29,17 +29,12 @@
                             <div>
                                 <h3 class="text-lg font-bold text-neutral-title">Évolution des Ventes</h3>
                                 <p class="text-sm text-neutral-muted italic">
-                                    Nombre de commandes et revenus (30 derniers jours)
+                                    Nombre de commandes et revenus (7 derniers jours)
                                 </p>
                             </div>
-                            <select
-                                class="bg-neutral-bg border-none rounded-lg px-4 py-2 text-xs font-bold text-neutral-body focus:ring-0 cursor-pointer">
-                                <option>30 derniers jours</option>
-                                <option>7 derniers jours</option>
-                            </select>
                         </div>
                         <div class="h-75 w-full">
-                            <canvas ref="chartRef"></canvas>
+                            <ChartRevenus :chart-data="revenueChartData" />
                         </div>
                     </div>
 
@@ -215,37 +210,12 @@
 </template>
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
-import {
-    Chart,
-    LineController,
-    LineElement,
-    PointElement,
-    LinearScale,
-    CategoryScale,
-    Filler,
-    Tooltip,
-    Legend,
-    Title,
-} from "chart.js/auto";
-import { onMounted, ref } from "vue";
 import { farmerProductsEdit } from "@/routes";
 import type { Auth } from "@/types";
 import FarmerNavbar from "./Navbar/FarmerNavbar.vue";
+import ChartRevenus from "./Order/ChartRevenus.vue";
 import ProductStatCard from "./Product/ProductStatCard.vue";
 import FarmerSidebar from "./Sidebar/FarmerSidebar.vue";
-
-
-Chart.register(
-    LineController,
-    LineElement,
-    PointElement,
-    LinearScale,
-    CategoryScale,
-    Filler,
-    Tooltip,
-    Legend,
-    Title
-);
 
 interface Buyer {
     name: string,
@@ -259,6 +229,10 @@ interface OrderItems {
     unit_price: number,
 }
 
+interface RevenueChartData {
+    labels: string[]
+    data: number[]
+}
 
 interface RecentsOrders {
     data: {
@@ -280,6 +254,7 @@ interface StatisticDashboardFarmer {
     farmer_average_rating:number,
     productsLow: ProductsLow,
     recentsOrders: RecentsOrders
+    revenueChartData: RevenueChartData,
 }
 
 interface ProductsLow {
@@ -290,54 +265,6 @@ interface ProductsLow {
         unit: string,
     }[]
 }
-
-const chartRef = ref<HTMLCanvasElement | null>(null);
-
-onMounted(() => {
-    if (!chartRef.value) {
-        return;
-    }
-
-    const ctx = chartRef.value.getContext("2d");
-
-    if (ctx) {
-        return new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: ["1 Avr", "5 Avr", "10 Avr", "15 Avr", "20 Avr", "25 Avr", "30 Avr"],
-                datasets: [
-                    {
-                        label: "Revenus (FCFA)",
-                        data: [12000, 45000, 28000, 65000, 42000, 85000, 185000],
-                        borderColor: "#2D6A4F",
-                        backgroundColor: "rgba(45, 106, 79, 0.1)",
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: "#2D6A4F",
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: (value: number | string) => {
-                                return value.toString() + " FCFA";
-                            },
-                        },
-                    },
-                },
-            },
-        });
-    }
-});
 
 // Fusioner les deux types dans la meme interface Props
 interface Props extends Auth, StatisticDashboardFarmer { }

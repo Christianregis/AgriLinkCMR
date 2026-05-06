@@ -13,6 +13,7 @@ use App\Models\FarmerProfile;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -113,6 +114,21 @@ class AuthController extends Controller
                 ->get();
             $recentsOrders = Order::withFarmer($user->id)->with(['buyer', 'orderItems'])->latest()->limit(5)->get();
 
+            // Calcul des revenus quotidiens pour les 7 derniers jours
+            $revenueData = [];
+            $labels = [];
+
+            for ($i = 6; $i >= 0; $i--) {
+                $date = Carbon::now()->subDays($i);
+                $dayRevenue = Order::withFarmer($user->id)
+                    ->withStatusSuccess()
+                    ->whereDate('created_at', $date->toDateString())
+                    ->sum('total_amount');
+
+                $revenueData[] = $dayRevenue;
+                $labels[] = $date->isoFormat('D MMM'); // Ex: 1 Avr, 5 Avr
+            }
+
             return Inertia::render('Dashboard/IndexFarmer', [
                 'sumAmountOrders' => $sumAmountOrders,
                 'countProductsAvaliable' => $countProductsAvaliable,
@@ -120,6 +136,10 @@ class AuthController extends Controller
                 'farmer_average_rating' => $user->average_rating,
                 'productsLow' => ProductLowResource::collection($productsLow),
                 'recentsOrders' => OrderResource::collection($recentsOrders),
+                'revenueChartData' => [
+                    'labels' => $labels,
+                    'data' => $revenueData,
+                ],
             ]);
         }
         abort(403);

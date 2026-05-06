@@ -3,7 +3,7 @@
     <div v-if="user.role === 'farmer'">
         <FarmerDashboard :user="page.props.auth.user" :count-products-avaliable="countProductsAvaliable"
             :products-low="productsLow" :sum-amount-orders="sumAmountOrders" :recents-orders="recentsOrders" :count-orders-pending="countOrdersPending"
-            :farmer_average_rating="farmer_average_rating"/>
+            :farmer_average_rating="farmer_average_rating ?? 0" :revenue-chart-data="revenueChartData"/>
     </div>
 </template>
 <script setup lang="ts">
@@ -36,13 +36,19 @@ interface RecentsOrders {
     }[]
 }
 
+interface RevenueChartData {
+    labels: string[]
+    data: number[]
+}
+
 interface StatisticDashboardFarmer {
-    farmer_average_rating: number,
+    farmer_average_rating?: number,
     countProductsAvaliable: number;
     sumAmountOrders: string;
     countOrdersPending: number,
     productsLow: ProductsLow,
     recentsOrders: RecentsOrders,
+    revenueChartData : RevenueChartData
 }
 
 interface ProductsLow {

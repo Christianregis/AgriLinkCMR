@@ -147,14 +147,34 @@ class BuyerOrderController extends Controller
     public function changeStatusToCanceled(mixed $order_id)
     {
         $buyer = Auth::user();
-        $order = Order::where('id', '=', $order_id)
+        $order = Order::query()
             ->withBuyer($buyer->id)
+            ->where('id', $order_id)
             ->firstOrFail();
 
-        $order->update([
-            'status' => OrderEnum::CANCEL,
-        ]);
+        if ($order->status !== OrderEnum::PENDING) {
+            return redirect()->back()->with('error', 'Cette commande ne peut plus être annulée car son statut a changé.');
+        }
 
-        return redirect()->back()->with('success', 'La commande a été annulée avec succès.');
+        DB::beginTransaction();
+
+        try {
+            foreach ($order->orderItems as $item) {
+                // On Re-Incremente la quantite du produit
+                Product::where('id', $item->product_id)->increment('quantity', $item->quantity);
+            }
+
+            $order->update([
+                'status' => OrderEnum::CANCEL,
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'La commande a été annulée avec succès.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Order deletion failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation de la commande. Veuillez réessayer.');
+        }
     }
 }

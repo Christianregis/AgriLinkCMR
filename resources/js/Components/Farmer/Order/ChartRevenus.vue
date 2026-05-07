@@ -175,6 +175,8 @@ watch(
 onMounted(() => {
     initChart()
 })
+
+
 </script>
 
 <style scoped>

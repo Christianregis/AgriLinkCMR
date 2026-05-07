@@ -29,7 +29,7 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
 
     Route::get('/farmer/orders', [FarmerOrderController::class, 'showAllOrders'])->name('farmerOrdersShow');
 
-    Route::get('/farmer/orders/{order_id}',[FarmerOrderController::class, 'showOrder'])->name('farmerOrderView');
+    Route::get('/farmer/orders/{order_id}', [FarmerOrderController::class, 'showOrder'])->name('farmerOrderView');
 
     Route::put('/farmer/orders/updateStatus', [FarmerOrderController::class, 'changeStatus'])->name('farmerOrderChangeStatus');
 });
@@ -51,6 +51,8 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
     Route::get('/buyer/order/show', [BuyerOrderController::class, 'showOrders'])->name('buyerOrderShow');
 
     Route::delete('/buyer/order/{order_id}/delete', [BuyerOrderController::class, 'destroy'])->name('buyerOrderDelete');
+
+    Route::get('/buyer/order/{order_id}/tracking', [BuyerOrderController::class, 'showOrder'])->name('buyerOrderTracking');
 });
 
 

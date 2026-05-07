@@ -5,6 +5,8 @@ namespace App\Http\Resources\Order;
 use App\Http\Resources\user\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Order\OrderItemsResource;
+use App\Http\Resources\Order\OrderStatusLogsResource;
 
 class OrderResource extends JsonResource
 {
@@ -35,6 +37,9 @@ class OrderResource extends JsonResource
             }),
             'order_items' => $this->whenLoaded('orderItems', function () {
                 return OrderItemsResource::collection($this->orderItems);
+            }),
+            'order_status_logs' => $this->whenLoaded('orderStatusLogs', function () {
+                return OrderStatusLogsResource::collection($this->orderStatusLogs);
             }),
         ];
     }

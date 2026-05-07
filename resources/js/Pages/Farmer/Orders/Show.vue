@@ -319,6 +319,7 @@ import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue'
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
 import { farmerOrderChangeStatus, farmerProductsEdit } from '@/routes'
+import type{ OrderStatus } from '@/types/Order'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 
@@ -372,7 +373,6 @@ interface Order {
     order_items: OrderItem[]
 }
 
-type OrderStatus = 'pending' | 'preparation' | 'ready' | 'success' | 'cancel' | 'dispute'
 
 interface StatusStep {
     status: OrderStatus

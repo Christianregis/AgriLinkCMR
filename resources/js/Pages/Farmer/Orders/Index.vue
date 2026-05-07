@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
         <FarmerSidebar />
@@ -65,14 +66,15 @@
                     <i class="fas fa-box-open text-5xl text-gray-300 mb-4"></i>
                     <h3 class="text-lg font-bold text-neutral-title mb-2">Aucune commande trouvée</h3>
                     <p class="text-sm text-neutral-muted">
-                        {{ searchQuery || selectedStatus ? 'Essayez de modifier vos filtres' : 'Vous n\'avez pas encor de commandes' }}
+                        {{ searchQuery || selectedStatus ? 'Essayez de modifier vos filtres' : 'Vous n\'avez pas encore de commandes' }}
                     </p>
                 </div>
-                
+
                 <div class="mt-6 flex justify-center">
                     <Pagination :meta="orders.meta" />
                 </div>
             </div>
+
         </main>
     </main>
 </template>
@@ -83,7 +85,9 @@ import { ref, computed } from 'vue'
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue'
 import OrderTable from '@/Components/Farmer/Order/OrderTable.vue'
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue'
+import FlashMessage from '@/Components/FlashMessage.vue'
 import Pagination from '@/Components/Pagination.vue'
+import type { OrderStatus } from '@/types/Order'
 
 
 /**
@@ -127,7 +131,6 @@ interface PaginationLink {
     active: boolean,
 }
 
-type OrderStatus = 'pending' | 'preparation' | 'ready' | 'success' | 'cancel' | 'dispute'
 
 interface Props {
     orders: {
@@ -195,7 +198,6 @@ const filteredOrders = computed<Order[]>(() => {
 const paginatedOrders = computed<Order[]>(() => {
     return filteredOrders.value
 })
-
 </script>
 
 <style scoped>

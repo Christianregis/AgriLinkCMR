@@ -130,4 +130,16 @@ class BuyerOrderController extends Controller
             return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation de la commande. Veuillez réessayer.');
         }
     }
+
+    public function showOrder(mixed $order_id)
+    {
+        $buyer = Auth::user();
+        $order = Order::where('id', '=', $order_id)
+            ->withBuyer($buyer->id)
+            ->with(['farmer', 'orderItems.product.productImages', 'orderStatusLogs'])
+            ->firstOrFail();
+        return Inertia::render('Buyer/Orders/OrderTracking', [
+            'order' => OrderResource::make($order),
+        ]);
+    }
 }

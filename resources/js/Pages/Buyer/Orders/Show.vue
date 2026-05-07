@@ -124,7 +124,7 @@
 
                             <!-- Actions -->
                             <div class="md:col-span-2 flex items-center gap-2">
-                                <Link href="#"
+                                <Link :href="buyerOrderTracking(order.id)"
                                     class="flex-1 md:flex-none px-4 py-2 border border-brand-primary text-brand-primary rounded-xl text-xs font-bold hover:bg-brand-bg transition-all text-center">
                                     <i class="fas fa-eye mr-2"></i>Voir
                                 </Link>
@@ -174,7 +174,7 @@ import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue'
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
 import Pagination from '@/Components/Pagination.vue'
-import { buyerOrderConfirm, buyerOrderDelete } from '@/routes'
+import { buyerOrderConfirm, buyerOrderDelete, buyerOrderTracking } from '@/routes'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 

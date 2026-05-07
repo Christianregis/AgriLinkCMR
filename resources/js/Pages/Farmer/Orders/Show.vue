@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
         <FarmerSidebar />
@@ -130,14 +131,16 @@
                                 <div>
                                     <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Date de Commande</p>
                                     <p class="text-lg font-bold text-neutral-title">{{ formatDate(order.data.created_at)
-                                    }}</p>
+                                        }}</p>
                                 </div>
 
                                 <!-- Payment Method -->
                                 <div>
                                     <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Méthode de Paiement
                                     </p>
-                                    <p class="text-lg font-bold text-neutral-title">{{ order.data.payment_method }}</p>
+                                    <p class="text-lg font-bold text-neutral-title">{{ order.data.payment_method ===
+                                        'momo' ? 'Mobile Money' : order.data.payment_method === 'stripe' ? 'Stripe' :
+                                        order.data.payment_method === 'cash' ? 'Paiement en Espèces' : 'Inconnu' }}</p>
                                 </div>
 
                                 <!-- Delivery Address -->
@@ -310,11 +313,12 @@
 </template>
 
 <script setup lang="ts">
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link, useForm, usePage } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue'
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue'
-import { farmerProductsEdit } from '@/routes'
+import FlashMessage from '@/Components/FlashMessage.vue'
+import { farmerOrderChangeStatus, farmerProductsEdit } from '@/routes'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 
@@ -533,28 +537,26 @@ const getPrimaryImage = (product: Product): string | null => {
 }
 
 /**
- * Update order status
+ * Mise a jour du status de la commande
  */
-const updateOrderStatus = async (newStatus: OrderStatus): Promise<void> => {
-    isUpdating.value = true
-    showCancelModal.value = false
-
-    // try {
-    //     router.patch(route('orders.update-status', props.order.id), {
-    //         status: newStatus
-    //     }, {
-    //         onSuccess: () => {
-    //             // The page will automatically refresh with the updated order
-    //         },
-    //         onError: () => {
-    //             console.error('Erreur lors de la mise à jour du statut')
-    //             isUpdating.value = false
-    //         }
-    //     })
-    // } catch (error) {
-    //     console.error('Erreur:', error)
-    //     isUpdating.value = false
-    // }
+const updateOrderStatus = (newStatus: OrderStatus)=>{
+    const form = useForm({
+        _method: 'put',
+        status: newStatus,
+        order_id: props.order.data.id
+    });
+    form.post(farmerOrderChangeStatus.url(), {
+        onStart: () => {
+            isUpdating.value = true;
+            showCancelModal.value = false;
+        },
+        onFinish: () => {
+            isUpdating.value = false;
+        },
+        onError: () => {
+            console.error('Erreur lors de la mise à jour du statut');
+        }
+    });
 }
 
 /**

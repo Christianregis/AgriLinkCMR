@@ -232,10 +232,10 @@ import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { buyerOrderShow, catalog, buyerOrderCancel, productInfo, showFarmerInfo } from '@/routes';
 import type { OrderStatus } from '@/types/Order';
 import { formatDate } from '@/utils/formatDate';
-import FlashMessage from '@/Components/FlashMessage.vue';
 
 // --- Interfaces TypeScript ---
 interface UserProfile {
@@ -257,7 +257,6 @@ interface ProductImage {
 interface Product {
     id: number;
     title: string;
-    primary_image_url?: string;
     product_images?: ProductImage[];
     unit: string;
 }
@@ -268,7 +267,7 @@ interface OrderItem {
     unit_price: number;
     quantity: number;
     subtotal: number;
-    product: Product; // Eager loaded product details
+    product: Product;
 }
 
 interface OrderStatusLog {
@@ -370,7 +369,7 @@ const formatPaymentMethod = (method: Order['payment_method']) => {
 };
 
 const getPrimaryImage = (product: Product) => {
-    return product.primary_image_url || product.product_images?.[0]?.path;
+    return product.product_images?.[0]?.path;
 };
 
 

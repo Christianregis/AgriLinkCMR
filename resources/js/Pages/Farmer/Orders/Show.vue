@@ -259,7 +259,7 @@
                                 <!-- Subtotal -->
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Sous-total</p>
-                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) ?? subtotal }} FCFA</p>
+                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) ?? prop }} FCFA</p>
                                 </div>
 
                                 <!-- Shipping (if applicable) -->
@@ -438,15 +438,13 @@ const statusSteps: StatusStep[] = [
  * Computed properties
  */
 const subtotal = computed<number>(() => {
-    return props.order.data.order_items.reduce((sum, item) => sum + item.subtotal, 0)
+    return props.order.data.order_items.reduce((sum, item) => sum + parseFloat(item.subtotal.toString()), 0)
 })
-console.log(subtotal.value)
 
 const shippingFee = computed<number>(() => {
     return props.order.data.total_amount - subtotal.value
 })
 
-console.log(shippingFee.value)
 /**
  * Methods
  */

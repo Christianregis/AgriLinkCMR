@@ -58,7 +58,7 @@ class FarmerOrderController extends Controller
         try {
             foreach ($order->orderItems as $item) {
                 // On Re-Incremente la quantite du produit
-                Product::where('id', $item->product_id)->increment('quantity', $item->quantity);
+                Product::where('id', '=', $item->product_id)->increment('quantity', $item->quantity);
             }
 
             $order->update([

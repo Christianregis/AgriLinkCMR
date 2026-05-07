@@ -259,7 +259,7 @@
                                 <!-- Subtotal -->
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Sous-total</p>
-                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) ?? prop }} FCFA</p>
+                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) }} FCFA</p>
                                 </div>
 
                                 <!-- Shipping (if applicable) -->

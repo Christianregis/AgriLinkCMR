@@ -43,9 +43,9 @@ interface RevenueChartData {
 
 interface StatisticDashboardFarmer {
     farmer_average_rating?: number,
-    countProductsAvaliable: number;
-    sumAmountOrders: string;
-    countOrdersPending: number,
+    countProductsAvaliable: number | string;
+    sumAmountOrders: string | number;
+    countOrdersPending: number | string,
     productsLow: ProductsLow,
     recentsOrders: RecentsOrders,
     revenueChartData : RevenueChartData

@@ -168,9 +168,9 @@ interface RecentsOrders {
 
 // Types de donnees pour les Statistiques du Dashboard
 interface StatisticDashboardFarmer {
-    countProductsAvaliable: number;
-    sumAmountOrders: string;
-    countOrdersPending: number,
+    countProductsAvaliable: number | string;
+    sumAmountOrders: string | number;
+    countOrdersPending: number | string,
     farmer_average_rating:number,
     productsLow: ProductsLow,
     recentsOrders: RecentsOrders

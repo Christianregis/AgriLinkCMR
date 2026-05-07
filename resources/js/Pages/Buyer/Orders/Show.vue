@@ -150,7 +150,7 @@
                                     'Commencez à faire vos courses maintenant'
                             }}
                         </p>
-                        <Link href="#"
+                        <Link :href="catalog()"
                             class="inline-flex items-center gap-2 px-6 py-3 bg-brand-primary text-white text-sm font-bold rounded-xl hover:bg-brand-hover transition-all">
                             <i class="fas fa-shopping-cart"></i>
                             Découvrir les produits
@@ -174,7 +174,7 @@ import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue'
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
 import Pagination from '@/Components/Pagination.vue'
-import { buyerOrderConfirm, buyerOrderDelete, buyerOrderTracking } from '@/routes'
+import { buyerOrderConfirm, buyerOrderDelete, buyerOrderTracking, catalog } from '@/routes'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 

@@ -182,7 +182,7 @@
                                         <!-- Image count badge -->
                                         <div v-if="item.product.product_images && item.product.product_images.length > 1"
                                             class="absolute -bottom-2 -right-2 bg-brand-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                                            +{{ item.product.product_images.length - 1 }}
+                                            +{{ item.product.product_images.length - 1 }} Images
                                         </div>
                                     </div>
 
@@ -259,13 +259,13 @@
                                 <!-- Subtotal -->
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Sous-total</p>
-                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) }} FCFA</p>
+                                    <p class="font-bold text-neutral-title">{{ formatAmount(subtotal) ?? subtotal }} FCFA</p>
                                 </div>
 
                                 <!-- Shipping (if applicable) -->
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Frais de Livraison</p>
-                                    <p class="font-bold text-neutral-title">{{ formatAmount(shippingFee) }} FCFA</p>
+                                    <p class="font-bold text-neutral-title">{{ formatAmount(shippingFee) ?? shippingFee }} FCFA</p>
                                 </div>
 
                                 <!-- Total -->
@@ -440,11 +440,13 @@ const statusSteps: StatusStep[] = [
 const subtotal = computed<number>(() => {
     return props.order.data.order_items.reduce((sum, item) => sum + item.subtotal, 0)
 })
+console.log(subtotal.value)
 
 const shippingFee = computed<number>(() => {
     return props.order.data.total_amount - subtotal.value
 })
 
+console.log(shippingFee.value)
 /**
  * Methods
  */

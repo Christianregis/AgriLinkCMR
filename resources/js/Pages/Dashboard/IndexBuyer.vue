@@ -17,9 +17,9 @@ interface Farmer {
 
 interface StatisticBuyerDashboard {
     stats: {
-        countOrdersPending: number,
-        countOrdersSuccess: number,
-        totalExpenses: number,
+        countOrdersPending: number | string,
+        countOrdersSuccess: number |string,
+        totalExpenses: number | string,
     },
     recentOrders: {
         data: {

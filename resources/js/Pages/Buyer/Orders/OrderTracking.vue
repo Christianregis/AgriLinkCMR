@@ -1,4 +1,5 @@
 <template>
+    <FlashMessage/>
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <BuyerSidebar />
 
@@ -68,7 +69,7 @@
                     <!-- Conditional Actions -->
                     <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
                         <!-- Annuler la commande (si PENDING) -->
-                        <button v-if="order.data.status === 'pending'" @click="cancelOrder(order.data.id)"
+                        <button v-if="order.data.status === 'pending'" @click="showCancelModal = true"
                             class="px-6 py-3 border-2 border-red-200 text-red-600 font-bold rounded-xl hover:bg-red-50 transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-times"></i> Annuler la Commande
                         </button>
@@ -154,7 +155,7 @@
                                             {{ item.product.title }}
                                         </Link>
                                         <p class="text-sm text-neutral-muted">{{ item.quantity }} {{ item.product.unit
-                                            }} x {{ item.unit_price.toLocaleString() }} FCFA</p>
+                                        }} x {{ item.unit_price.toLocaleString() }} FCFA</p>
                                     </div>
                                     <div class="shrink-0 text-right">
                                         <p class="text-base sm:text-lg font-bold text-brand-primary">{{
@@ -203,18 +204,38 @@
                 </div>
             </div>
         </div>
+        <!-- CANCEL CONFIRMATION MODAL -->
+        <div v-if="showCancelModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-lg">
+                <h3 class="text-xl font-bold text-neutral-title mb-4">Annuler la Commande</h3>
+                <p class="text-neutral-muted mb-6">Êtes-vous sûr de vouloir annuler cette commande ? Cette action ne
+                    peut pas être annulée.</p>
+
+                <div class="flex gap-3">
+                    <button @click="showCancelModal = false"
+                        class="flex-1 px-4 py-2 border-2 border-gray-200 text-neutral-title font-bold rounded-xl hover:bg-gray-50 transition-all">
+                        Annuler
+                    </button>
+                    <button @click="updateOrderStatus()" :disabled="isUpdating"
+                        class="flex-1 px-4 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        Confirmer l'Annulation
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 </template>
 
 <script setup lang="ts">
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
-import { buyerOrderDelete, buyerOrderShow, catalog, productInfo, showFarmerInfo } from '@/routes';
+import { buyerOrderShow, catalog, buyerOrderCancel, productInfo, showFarmerInfo } from '@/routes';
 import type { OrderStatus } from '@/types/Order';
 import { formatDate } from '@/utils/formatDate';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 // --- Interfaces TypeScript ---
 interface UserProfile {
@@ -352,19 +373,27 @@ const getPrimaryImage = (product: Product) => {
     return product.primary_image_url || product.product_images?.[0]?.path;
 };
 
-// --- Form handling for actions ---
-const form = useForm({});
 
-const cancelOrder = (orderId: number) => {
-    if (confirm('Êtes-vous sûr de vouloir annuler cette commande ? Cette action est irréversible.')) {
-        form.delete(buyerOrderDelete.url(orderId), {
-            onError: (errors) => {
-                console.error('Erreur lors de l\'annulation de la commande:', errors);
-                alert('Une erreur est survenue lors de l\'annulation de la commande.');
-            }
-        });
-    }
-};
+const showCancelModal = ref<boolean>(false)
+const isUpdating = ref<boolean>(false)
+
+const updateOrderStatus = () => {
+    const form = useForm({
+        _method: 'put',
+    });
+    form.post(buyerOrderCancel.url(props.order.data.id), {
+        onStart: () => {
+            isUpdating.value = true;
+            showCancelModal.value = false;
+        },
+        onFinish: () => {
+            isUpdating.value = false;
+        },
+        onError: () => {
+            console.error('Erreur lors de la mise à jour du statut');
+        }
+    });
+}
 
 const makePayment = (orderId: number) => {
     // Implement payment logic here. This might redirect to a payment gateway

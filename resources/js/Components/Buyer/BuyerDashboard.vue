@@ -104,7 +104,7 @@
                                         <p class="text-xs text-neutral-muted mt-1">
                                             Vendeur :
                                             <span class="text-brand-primary font-semibold">{{ order.farmer.name
-                                                }}</span>
+                                            }}</span>
                                         </p>
                                         <p class="text-[10px] text-neutral-muted mt-0.5">
                                             {{ order.created_at }} • {{ order.total_amount }} FCFA
@@ -133,14 +133,15 @@
                                                                     'Inconnu'
                                         }}
                                     </span>
-                                    <button
+                                    <Link :href="buyerOrderTracking(order.id)"
                                         class="px-4 py-2 border border-gray-200 rounded-xl text-xs font-bold text-neutral-title hover:bg-gray-50 transition-all">
                                         Détails
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                             <div class="p-4 bg-neutral-bg/50 text-center">
-                                <Link class="text-xs font-bold text-brand-primary hover:underline" :href="buyerOrderShow()">
+                                <Link class="text-xs font-bold text-brand-primary hover:underline"
+                                    :href="buyerOrderShow()">
                                     Afficher les autres commandes
                                 </Link>
                             </div>
@@ -214,7 +215,7 @@
 </template>
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
-import { buyerOrderShow, catalog } from "@/routes";
+import { buyerOrderShow, buyerOrderTracking, catalog } from "@/routes";
 import type { Auth } from "@/types";
 import BuyerNavbar from "./Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "./Sidebar/BuyerSidebar.vue";

@@ -566,7 +566,6 @@ const goBack = (): void => {
     window.history.back()
 }
 
-
 const page = usePage();
 const user = page.props.auth.user;
 </script>

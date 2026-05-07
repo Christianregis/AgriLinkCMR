@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -141,5 +142,19 @@ class BuyerOrderController extends Controller
         return Inertia::render('Buyer/Orders/OrderTracking', [
             'order' => OrderResource::make($order),
         ]);
+    }
+
+    public function changeStatusToCanceled(mixed $order_id)
+    {
+        $buyer = Auth::user();
+        $order = Order::where('id', '=', $order_id)
+            ->withBuyer($buyer->id)
+            ->firstOrFail();
+
+        $order->update([
+            'status' => OrderEnum::CANCEL,
+        ]);
+
+        return redirect()->back()->with('success', 'La commande a été annulée avec succès.');
     }
 }

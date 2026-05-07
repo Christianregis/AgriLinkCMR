@@ -53,6 +53,7 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
     Route::delete('/buyer/order/{order_id}/delete', [BuyerOrderController::class, 'destroy'])->name('buyerOrderDelete');
 
     Route::get('/buyer/order/{order_id}/tracking', [BuyerOrderController::class, 'showOrder'])->name('buyerOrderTracking');
+    Route::put('/buyer/order/{order_id}/cancel', [BuyerOrderController::class, 'changeStatusToCanceled'])->name('buyerOrderCancel');
 });
 
 

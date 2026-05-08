@@ -9,6 +9,7 @@ class OrderStatusLogs extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'user_id',
         'old_status',
         'new_status',
         'comment'

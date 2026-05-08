@@ -122,7 +122,7 @@ class AuthController extends Controller
                 $date = Carbon::now()->subDays($i);
                 $dayRevenue = Order::withFarmer($user->id)
                     ->withStatusSuccess()
-                    ->whereDate('created_at', '=', $date->toDateString(),true)
+                    ->whereDate('created_at', '=', $date->toDateString())
                     ->sum('total_amount');
 
                 $revenueData[] = $dayRevenue;

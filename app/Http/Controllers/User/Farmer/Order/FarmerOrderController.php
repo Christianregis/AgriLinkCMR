@@ -65,6 +65,13 @@ class FarmerOrderController extends Controller
                 'status' => $request->input('status'),
             ]);
 
+            $order->orderStatusLogs()->create([
+                'product_id' => $order->orderItems->first()->product_id,
+                'old_status' => $order->status,
+                'user_id' => $farmer->id,
+                'new_status' => $request->input('status'),
+            ]);
+
             DB::commit();
 
             return redirect()->back()->with('success', 'La commande a été mise à jour avec succès.');

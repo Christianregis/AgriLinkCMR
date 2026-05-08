@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use App\Models\OrderStatusLogs;
 
 class BuyerOrderController extends Controller
 {
@@ -33,7 +34,7 @@ class BuyerOrderController extends Controller
         try {
             // Grouper les elements de commande par farmer
             $itemsByFarmer = collect($validated['items'])->groupBy(function ($item) {
-                return Product::find($item['product_id'], '*')->user_id; // Assuming user_id on Product is farmer_id
+                return Product::find($item['product_id'])->user_id; // Assuming user_id on Product is farmer_id
             });
 
             foreach ($itemsByFarmer as $farmerId => $farmerItems) {
@@ -73,7 +74,7 @@ class BuyerOrderController extends Controller
                     ]);
 
                     // Decrementer la quantite du Produit
-                    Product::where('id', '=', $item['product_id'],true)->decrement('quantity', $item['quantity']);
+                    Product::where('id', '=', $item['product_id'])->decrement('quantity', $item['quantity']);
                 }
             }
 
@@ -114,7 +115,7 @@ class BuyerOrderController extends Controller
         try {
             foreach ($order->orderItems as $item) {
                 // On Re-Incremente la quantite du produit
-                Product::where('id', '=', $item->product_id,true)->increment('quantity', $item->quantity);
+                Product::where('id', '=', $item->product_id)->increment('quantity', $item->quantity);
             }
 
             // Suppression de la commande en commencant par supprimer les items de commande
@@ -148,10 +149,11 @@ class BuyerOrderController extends Controller
         $buyer = Auth::user();
         $order = Order::query()
             ->withBuyer($buyer->id)
+            ->with(['orderItems'])
             ->where('id', '=', $order_id)
             ->firstOrFail();
 
-        if ($order->status !== OrderEnum::PENDING->value) {
+        if ($order->status !== OrderEnum::PENDING) {
             return redirect()->back()->with('error', 'Cette commande ne peut plus être annulée car son statut a changé.');
         }
 
@@ -164,9 +166,15 @@ class BuyerOrderController extends Controller
             }
 
             $order->update([
-                'status' => OrderEnum::CANCEL->value,
+                'status' => OrderEnum::CANCEL,
             ]);
 
+            $order->orderStatusLogs()->create([
+                'product_id' => $order->orderItems->first()->product_id,
+                'user_id' => $buyer->id,
+                'old_status' => OrderEnum::PENDING,
+                'new_status' => OrderEnum::CANCEL,
+            ]);
 
             DB::commit();
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId("order_id")->constrained("orders")->onDelete("cascade");
             $table->foreignId("user_id")->constrained("users")->onDelete("cascade");
             $table->string("old_status");
+            $table->foreignId("product_id")->constrained("products")->onDelete("set null")->nullable();
             $table->string("new_status");
             $table->text("comment")->nullable();
             $table->timestamps();

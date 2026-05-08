@@ -18,6 +18,7 @@ class OrderStatusLogsResource extends JsonResource
             'id' => $this->id,
             'order_id' => $this->order_id,
             'product_id' => $this->product_id,
+            'user_id' => $this->user_id,
             'old_status' => $this->old_status,
             'new_status' => $this->new_status,
             'created_at' => $this->created_at->format("Y-m-d H:i:s"),

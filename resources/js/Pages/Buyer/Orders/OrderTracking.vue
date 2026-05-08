@@ -272,7 +272,8 @@ interface OrderItem {
 
 interface OrderStatusLog {
     id: number;
-    status: OrderStatus;
+    old_status: OrderStatus;
+    new_status: OrderStatus;
     created_at: string;
 }
 
@@ -354,7 +355,7 @@ const isStepCurrent = (stepStatus: Order['status']) => {
 };
 
 const getStepDate = (stepStatus: Order['status']) => {
-    const log = props.order.data.order_status_logs.find(log => log.status === stepStatus);
+    const log = props.order.data.order_status_logs.find(log => log.new_status === stepStatus);
 
     return log ? formatDate(log.created_at) : '';
 };

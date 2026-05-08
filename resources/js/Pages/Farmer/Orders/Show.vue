@@ -131,7 +131,7 @@
                                 <div>
                                     <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Date de Commande</p>
                                     <p class="text-lg font-bold text-neutral-title">{{ formatDate(order.data.created_at)
-                                        }}</p>
+                                    }}</p>
                                 </div>
 
                                 <!-- Payment Method -->
@@ -265,7 +265,8 @@
                                 <!-- Shipping (if applicable) -->
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Frais de Livraison</p>
-                                    <p class="font-bold text-neutral-title">{{ formatAmount(shippingFee) ?? shippingFee }} FCFA</p>
+                                    <p class="font-bold text-neutral-title">{{ formatAmount(shippingFee) ?? shippingFee
+                                        }} FCFA</p>
                                 </div>
 
                                 <!-- Total -->
@@ -319,7 +320,7 @@ import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue'
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
 import { farmerOrderChangeStatus, farmerProductsEdit } from '@/routes'
-import type{ OrderStatus } from '@/types/Order'
+import type { OrderStatus } from '@/types/Order'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 
@@ -388,7 +389,6 @@ interface Props {
         data: Order
     }
 }
-
 /**
  * Props definition
  */
@@ -539,7 +539,7 @@ const getPrimaryImage = (product: Product): string | null => {
 /**
  * Mise a jour du status de la commande
  */
-const updateOrderStatus = (newStatus: OrderStatus)=>{
+const updateOrderStatus = (newStatus: OrderStatus) => {
     console.log(newStatus)
     const form = useForm({
         _method: 'put',
@@ -569,6 +569,7 @@ const goBack = (): void => {
 
 const page = usePage();
 const user = page.props.auth.user;
+
 </script>
 
 <style scoped>

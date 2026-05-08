@@ -73,7 +73,7 @@ class BuyerOrderController extends Controller
                     ]);
 
                     // Decrementer la quantite du Produit
-                    Product::where('id', '=', $item['product_id'])->decrement('quantity', $item['quantity']);
+                    Product::where('id', '=', $item['product_id'],true)->decrement('quantity', $item['quantity']);
                 }
             }
 
@@ -102,10 +102,10 @@ class BuyerOrderController extends Controller
         $buyer = Auth::user();
         $order = Order::query()
             ->withBuyer($buyer->id)
-            ->where('id', $order_id)
+            ->where('id', '=', $order_id,true)
             ->firstOrFail();
 
-        if ($order->status !== OrderEnum::PENDING) {
+        if ($order->status !== OrderEnum::PENDING->value) {
             return redirect()->back()->with('error', 'Cette commande ne peut plus être annulée car son statut a changé.');
         }
 
@@ -114,7 +114,7 @@ class BuyerOrderController extends Controller
         try {
             foreach ($order->orderItems as $item) {
                 // On Re-Incremente la quantite du produit
-                Product::where('id', $item->product_id)->increment('quantity', $item->quantity);
+                Product::where('id', '=', $item->product_id,true)->increment('quantity', $item->quantity);
             }
 
             // Suppression de la commande en commencant par supprimer les items de commande
@@ -134,7 +134,7 @@ class BuyerOrderController extends Controller
     public function showOrder(mixed $order_id)
     {
         $buyer = Auth::user();
-        $order = Order::where('id', '=', $order_id)
+        $order = Order::where('id', '=', $order_id,true)
             ->withBuyer($buyer->id)
             ->with(['farmer', 'orderItems.product.productImages', 'orderStatusLogs'])
             ->firstOrFail();
@@ -148,7 +148,7 @@ class BuyerOrderController extends Controller
         $buyer = Auth::user();
         $order = Order::query()
             ->withBuyer($buyer->id)
-            ->where('id', $order_id)
+            ->where('id', '=', $order_id,true)
             ->firstOrFail();
 
         if ($order->status !== OrderEnum::PENDING->value) {
@@ -160,7 +160,7 @@ class BuyerOrderController extends Controller
         try {
             foreach ($order->orderItems as $item) {
                 // On Re-Incremente la quantite du produit
-                Product::where('id', $item->product_id)->increment('quantity', $item->quantity);
+                Product::where('id', '=', $item->product_id,true)->increment('quantity', $item->quantity);
             }
 
             $order->update([

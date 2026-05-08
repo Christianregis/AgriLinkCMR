@@ -61,7 +61,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('email', '=', $credentials['email'],true)->first();
         if (!$user || !$user->is_active) {
             return back()->with('error', 'Compte desactive: Veuillez l\'activer en consultant vos mails');
         }
@@ -122,7 +122,7 @@ class AuthController extends Controller
                 $date = Carbon::now()->subDays($i);
                 $dayRevenue = Order::withFarmer($user->id)
                     ->withStatusSuccess()
-                    ->whereDate('created_at', $date->toDateString())
+                    ->whereDate('created_at', '=', $date->toDateString(),true)
                     ->sum('total_amount');
 
                 $revenueData[] = $dayRevenue;

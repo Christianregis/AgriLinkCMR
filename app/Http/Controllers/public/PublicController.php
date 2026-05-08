@@ -60,9 +60,9 @@ class PublicController extends Controller
 
     public function showFarmerInfo(mixed $product_id)
     {
-        $product = Product::where('id', '=', $product_id)->firstOrFail();
+        $product = Product::where('id', '=', $product_id,true)->firstOrFail();
 
-        $farmer = FarmerProfile::where('id', '=', $product->user->farmerProfile->id)->firstOrFail();
+        $farmer = FarmerProfile::where('id', '=', $product->user->farmerProfile->id,true)->firstOrFail();
         return Inertia::render('Products/FarmerInfo', [
             'farmer' => FarmerResource::make($farmer),
         ]);

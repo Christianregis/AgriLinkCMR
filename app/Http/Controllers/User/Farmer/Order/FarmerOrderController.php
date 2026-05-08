@@ -33,7 +33,7 @@ class FarmerOrderController extends Controller
     public function showOrder(mixed $order_id)
     {
         $farmer = Auth::user();
-        $order = Order::where('id', '=', $order_id)
+        $order = Order::where('id', '=', $order_id,true)
             ->withFarmer($farmer->id)
             ->with(['buyer', 'orderItems.product.productImages'])
             ->firstOrFail();
@@ -45,7 +45,7 @@ class FarmerOrderController extends Controller
     public function changeStatus(Request $request)
     {
         $farmer = Auth::user();
-        $order = Order::where('id', '=', $request->order_id)
+        $order = Order::where('id', '=', $request->order_id,true)
             ->withFarmer($farmer->id)
             ->firstOrFail();
 
@@ -58,7 +58,7 @@ class FarmerOrderController extends Controller
         try {
             foreach ($order->orderItems as $item) {
                 // On Re-Incremente la quantite du produit
-                Product::where('id', '=', $item->product_id)->increment('quantity', $item->quantity);
+                Product::where('id', '=', $item->product_id,true)->increment('quantity', $item->quantity);
             }
 
             $order->update([

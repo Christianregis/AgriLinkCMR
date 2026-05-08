@@ -61,7 +61,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $user = User::where('email', '=', $credentials['email'],true)->first();
+        $user = User::where('email', '=', $credentials['email'])->first();
         if (!$user || !$user->is_active) {
             return back()->with('error', 'Compte desactive: Veuillez l\'activer en consultant vos mails');
         }

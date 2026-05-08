@@ -102,7 +102,7 @@ class BuyerOrderController extends Controller
         $buyer = Auth::user();
         $order = Order::query()
             ->withBuyer($buyer->id)
-            ->where('id', '=', $order_id,true)
+            ->where('id', '=', $order_id)
             ->firstOrFail();
 
         if ($order->status !== OrderEnum::PENDING->value) {
@@ -134,7 +134,7 @@ class BuyerOrderController extends Controller
     public function showOrder(mixed $order_id)
     {
         $buyer = Auth::user();
-        $order = Order::where('id', '=', $order_id,true)
+        $order = Order::where('id', '=', $order_id)
             ->withBuyer($buyer->id)
             ->with(['farmer', 'orderItems.product.productImages', 'orderStatusLogs'])
             ->firstOrFail();
@@ -148,7 +148,7 @@ class BuyerOrderController extends Controller
         $buyer = Auth::user();
         $order = Order::query()
             ->withBuyer($buyer->id)
-            ->where('id', '=', $order_id,true)
+            ->where('id', '=', $order_id)
             ->firstOrFail();
 
         if ($order->status !== OrderEnum::PENDING->value) {
@@ -160,7 +160,7 @@ class BuyerOrderController extends Controller
         try {
             foreach ($order->orderItems as $item) {
                 // On Re-Incremente la quantite du produit
-                Product::where('id', '=', $item->product_id,true)->increment('quantity', $item->quantity);
+                Product::where('id', '=', $item->product_id)->increment('quantity', $item->quantity);
             }
 
             $order->update([

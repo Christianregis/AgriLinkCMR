@@ -10,7 +10,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -152,7 +151,7 @@ class BuyerOrderController extends Controller
             ->where('id', $order_id)
             ->firstOrFail();
 
-        if ($order->status !== OrderEnum::PENDING) {
+        if ($order->status !== OrderEnum::PENDING->value) {
             return redirect()->back()->with('error', 'Cette commande ne peut plus être annulée car son statut a changé.');
         }
 
@@ -165,8 +164,9 @@ class BuyerOrderController extends Controller
             }
 
             $order->update([
-                'status' => OrderEnum::CANCEL,
+                'status' => OrderEnum::CANCEL->value,
             ]);
+
 
             DB::commit();
 

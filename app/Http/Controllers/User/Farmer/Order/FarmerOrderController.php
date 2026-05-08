@@ -49,7 +49,7 @@ class FarmerOrderController extends Controller
             ->withFarmer($farmer->id)
             ->firstOrFail();
 
-        if ($order->status !== OrderEnum::PENDING) {
+        if ($order->status !== OrderEnum::PENDING && $request->input('status') === OrderEnum::CANCEL->value) {
             return redirect()->back()->with('error', 'Cette commande ne peut plus être annulée car son statut a changé.');
         }
 
@@ -62,7 +62,7 @@ class FarmerOrderController extends Controller
             }
 
             $order->update([
-                'status' => $request->status,
+                'status' => $request->input('status'),
             ]);
 
             DB::commit();

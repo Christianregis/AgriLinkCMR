@@ -540,6 +540,7 @@ const getPrimaryImage = (product: Product): string | null => {
  * Mise a jour du status de la commande
  */
 const updateOrderStatus = (newStatus: OrderStatus)=>{
+    console.log(newStatus)
     const form = useForm({
         _method: 'put',
         status: newStatus,

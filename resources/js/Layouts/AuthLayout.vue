@@ -1,6 +1,6 @@
 <template>
     <!-- NAVBAR -->
-    <nav class="sticky top-0 z-50 border-b border-gray-100 glass-nav">
+    <nav class="sticky top-0 z-50 border-b border-gray-100 bg-[#f3f4f6] glass-nav">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Logo -->

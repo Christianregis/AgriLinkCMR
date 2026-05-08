@@ -19,9 +19,9 @@ class PublicController extends Controller
 {
     public function home()
     {
-        $products = Product::with(['productImages','category','region'])->limit(5)->latest()->get();
-        return Inertia::render('Home',[
-            'products' =>CatalogProductResource::collection($products)
+        $products = Product::with(['productImages', 'category', 'region'])->limit(5)->latest()->get();
+        return Inertia::render('Home', [
+            'products' => CatalogProductResource::collection($products)
         ]);
     }
     public function showCatalog(Request $request)
@@ -60,11 +60,26 @@ class PublicController extends Controller
 
     public function showFarmerInfo(mixed $product_id)
     {
-        $product = Product::where('id', $product_id)->firstOrFail();
+        $product = Product::where('id', '=', $product_id)->firstOrFail();
 
-        $farmer = FarmerProfile::where('id', $product->user->farmerProfile->id)->firstOrFail();
+        $farmer = FarmerProfile::where('id', '=', $product->user->farmerProfile->id)->firstOrFail();
         return Inertia::render('Products/FarmerInfo', [
             'farmer' => FarmerResource::make($farmer),
         ]);
+    }
+
+    public function about()
+    {
+        return Inertia::render('About',[]);
+    }
+
+    public function farmerImpact()
+    {
+        return Inertia::render('FarmerImpact',[]);
+    }
+
+    public function policies()
+    {
+        return Inertia::render('Policies',[]);
     }
 }

@@ -238,7 +238,7 @@
                                 class="w-5 h-5 mt-1 border-gray-300 rounded text-brand-primary focus:ring-brand-primary" />
                             <label for="terms" class="ml-3 text-sm text-neutral-muted" aria-required>
                                 J'accepte les
-                                <Link href="#" class="font-bold text-brand-primary hover:underline">conditions
+                                <Link :href="policies()" class="font-bold text-brand-primary hover:underline">conditions
                                     d'utilisation</Link>
                                 et la politique de confidentialité.
                             </label>
@@ -279,7 +279,7 @@
 <script setup lang="ts">
 import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import { connexion, home, register } from '@/routes';
+import { connexion, home, policies, register } from '@/routes';
 import FlashMessage from "../../Components/FlashMessage.vue";
 
 // Type definitions

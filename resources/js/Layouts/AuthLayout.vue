@@ -17,9 +17,11 @@
                     <Link :href="home()" class="font-semibold text-brand-primary">Accueil</Link>
                     <Link :href="catalog()" class="transition-colors text-neutral-muted hover:text-brand-primary">
                         Catalogue</Link>
-                    <Link href="#" class="transition-colors text-neutral-muted hover:text-brand-primary">Agriculteurs
+                    <Link :href="farmersImpact()" class="transition-colors text-neutral-muted hover:text-brand-primary">
+                        Agriculteurs
                     </Link>
-                    <Link href="#" class="transition-colors text-neutral-muted hover:text-brand-primary">À propos</Link>
+                    <Link :href="about()" class="transition-colors text-neutral-muted hover:text-brand-primary">À propos
+                    </Link>
                 </div>
 
                 <!-- Auth Buttons -->
@@ -47,22 +49,22 @@
             </div>
         </div>
     </nav>
-    <CartSidebar ref="cartSidebarRef"/>
+    <CartSidebar ref="cartSidebarRef" />
 </template>
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import CartSidebar from '@/Components/CartSidebar.vue';
 import { useCartStore } from "@/Pages/store/cartStore";
-import { catalog, connexion } from "@/routes";
+import { about, catalog, connexion } from "@/routes";
 import { inscription } from "@/routes";
 import { home } from "@/routes";
-
+import { farmersImpact } from "@/routes";
 
 const store = useCartStore();
 const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
 
-const openSidebar = () =>{
+const openSidebar = () => {
     cartSidebarRef.value?.openCart()
 }
 </script>

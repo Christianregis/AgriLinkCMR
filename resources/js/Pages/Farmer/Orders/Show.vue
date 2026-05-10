@@ -131,7 +131,7 @@
                                 <div>
                                     <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Date de Commande</p>
                                     <p class="text-lg font-bold text-neutral-title">{{ formatDate(order.data.created_at)
-                                    }}</p>
+                                        }}</p>
                                 </div>
 
                                 <!-- Payment Method -->
@@ -266,7 +266,7 @@
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Frais de Livraison</p>
                                     <p class="font-bold text-neutral-title">{{ formatAmount(shippingFee) ?? shippingFee
-                                        }} FCFA</p>
+                                    }} FCFA</p>
                                 </div>
 
                                 <!-- Total -->

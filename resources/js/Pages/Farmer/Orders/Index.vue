@@ -198,6 +198,8 @@ const filteredOrders = computed<Order[]>(() => {
 const paginatedOrders = computed<Order[]>(() => {
     return filteredOrders.value
 })
+
+
 </script>
 
 <style scoped>

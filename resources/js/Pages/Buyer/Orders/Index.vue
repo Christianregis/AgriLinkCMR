@@ -2,12 +2,12 @@
     <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <BuyerSidebar />
+        <BuyerSidebar ref="buyerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" />
+            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" @openbuyer-sidebar="openSidebar"/>
 
             <!-- PAGE CONTENT -->
             <div class="flex-1 overflow-y-auto p-4 md:p-8">
@@ -323,6 +323,13 @@ const submitOrder = () => {
     },)
 
 };
+
+const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null)
+
+const openSidebar = () => {
+
+    buyerSidebarRef.value?.toggleSidebar()
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,7 @@
 <template>
     <main class="antialiased">
         <AuthLayout />
+
         <!-- HERO SECTION -->
         <section class="relative pt-16 pb-24 overflow-hidden hero-gradient lg:pt-32 lg:pb-40">
             <div class="absolute inset-0 opacity-10">
@@ -117,7 +118,8 @@
 
             <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2">
                 <!-- Product Card -->
-                <ProductCard v-for="product in products.data" :key="product.id" :product="product" :display-mode="'grid'"/>
+                <ProductCard v-for="product in products.data" :key="product.id" :product="product"
+                    :display-mode="'grid'" />
             </div>
         </section>
 

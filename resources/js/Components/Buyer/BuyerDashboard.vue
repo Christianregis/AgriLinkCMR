@@ -1,12 +1,13 @@
 <template>
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <BuyerSidebar />
+        <BuyerSidebar ref="buyerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="props.user.data.name" :profile_photo="props.user.data.profile_photo" />
+            <BuyerNavbar :name="props.user.data.name" :profile_photo="props.user.data.profile_photo"
+                @openbuyer-sidebar="openSidebar" />
 
             <!-- DASHBOARD CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
@@ -215,6 +216,7 @@
 </template>
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { buyerOrderShow, buyerOrderTracking, catalog } from "@/routes";
 import type { Auth } from "@/types";
 import BuyerNavbar from "./Navbar/BuyerNavbar.vue";
@@ -250,8 +252,13 @@ interface StatisticBuyerDashboard {
 
 interface Props extends Auth, StatisticBuyerDashboard { }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
+const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null)
 
+const openSidebar = () => {
+
+    buyerSidebarRef.value?.toggleSidebar()
+}
 
 </script>
 <style scoped>

@@ -1,12 +1,12 @@
 <template>
     <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
-        <BuyerSidebar />
+        <BuyerSidebar ref="buyerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="user.name" :profile_photo="user.profile_photo_url" />
+            <BuyerNavbar :name="user.name" :profile_photo="user.profile_photo_url" @openbuyer-sidebar="openSidebar"/>
 
             <!-- PROFILE CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">
@@ -124,6 +124,7 @@
 </template>
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
@@ -158,6 +159,13 @@ const getBuyerTypeLabel = (type: string) => {
 
     return labels[type] || type;
 };
+
+const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null)
+
+const openSidebar = () => {
+
+    buyerSidebarRef.value?.toggleSidebar()
+}
 </script>
 
 <style scoped></style>

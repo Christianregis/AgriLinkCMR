@@ -1,11 +1,11 @@
 <template>
     <FlashMessage/>
     <main class="bg-neutral-bg flex min-h-screen antialiased">
-        <BuyerSidebar />
+        <BuyerSidebar ref="buyerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" />
+            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" @openbuyer-sidebar="openSidebar"/>
 
             <!-- ORDER TRACKING CONTENT -->
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
@@ -407,6 +407,13 @@ const leaveReview = (orderId: number) => {
     alert(`Laisser un avis pour la commande ${orderId}.`);
     // Example: Inertia.visit(route('buyer.orders.review', orderId));
 };
+
+const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null)
+
+const openSidebar = () => {
+
+    buyerSidebarRef.value?.toggleSidebar()
+}
 
 const page = usePage();
 const user = page.props.auth.user;

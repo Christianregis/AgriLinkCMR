@@ -1,7 +1,7 @@
 <template>
     <header class="h-20 glass-header border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-30">
         <div class="flex items-center">
-            <button class="lg:hidden text-neutral-body mr-4">
+            <button class="lg:hidden text-neutral-body mr-4" @click="handleOpenBuyerSidebar">
                 <i class="fas fa-bars text-xl"></i>
             </button>
             <h1 class="text-xl font-bold text-neutral-title">Mon Espace Acheteur</h1>
@@ -18,7 +18,7 @@
                 <i class="fas fa-shopping-cart text-lg"></i>
                 <span
                     class="absolute -top-1 -right-1 bg-accent-cta text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">{{
-                    store.totalItems }}</span>
+                        store.totalItems }}</span>
             </button>
             <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
                 <div class="text-right hidden sm:block">
@@ -50,5 +50,10 @@ const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
 
 const openSidebar = () => {
     cartSidebarRef.value?.openCart()
+}
+
+const emit = defineEmits(['openbuyerSidebar'])
+const handleOpenBuyerSidebar = () => {
+    emit('openbuyerSidebar');
 }
 </script>

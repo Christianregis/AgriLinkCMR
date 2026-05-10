@@ -74,7 +74,7 @@
             </section>
 
             <!-- Call to Action -->
-            <section class="px-4 py-20 bg-brand-dark text-white text-center">
+            <section class="px-4 py-20 bg-brand-hover text-white text-center">
                 <div class="max-w-4xl mx-auto">
                     <h2 class="mb-6 text-3xl font-bold md:text-4xl">Vous êtes Agriculteur ? Rejoignez-nous !</h2>
                     <p class="mb-10 text-lg text-brand-light/90">

@@ -15,7 +15,8 @@
             <div class="text-[10px] font-bold uppercase tracking-widest text-neutral-muted mb-4 px-4">
                 Menu Acheteur
             </div>
-            <Link :href="dashboard()" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
+            <Link :href="dashboard()"
+                class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-tachometer-alt w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-semibold">Tableau de bord</span>
             </Link>
@@ -65,11 +66,8 @@
     </aside>
 
     <!-- MOBILE SIDEBAR OVERLAY -->
-    <div
-        v-if="isSidebarOpen"
-        @click="closeSidebar"
-        class="fixed inset-0  lg:hidden z-30 transition-opacity duration-300"
-    ></div>
+    <div v-if="isSidebarOpen" @click="closeSidebar"
+        class="fixed inset-0  lg:hidden z-30 transition-opacity duration-300"></div>
 
     <!-- MOBILE SIDEBAR -->
     <aside :class="[
@@ -84,9 +82,7 @@
                 <span class="text-2xl font-bold text-brand-dark tracking-tight">AgriLink<span
                         class="text-brand-primary">.cm</span></span>
             </div>
-            <button
-                @click="closeSidebar"
-                class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-all">
+            <button @click="closeSidebar" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-all">
                 <i class="fas fa-times text-neutral-title text-xl"></i>
             </button>
         </div>
@@ -95,38 +91,28 @@
             <div class="text-[10px] font-bold uppercase tracking-widest text-neutral-muted mb-4 px-4">
                 Menu Acheteur
             </div>
-            <Link
-                :href="dashboard()"
-                @click="closeSidebar"
+            <Link :href="dashboard()" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-tachometer-alt w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-semibold">Tableau de bord</span>
             </Link>
-            <Link
-                :href="catalog()"
-                @click="closeSidebar"
+            <Link :href="catalog()" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-search w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Explorer le Marché</span>
             </Link>
-            <Link
-                :href="buyerOrderShow()"
-                @click="closeSidebar"
+            <Link :href="buyerOrderShow()" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-shopping-bag w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Commandes</span>
                 <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
-            <Link
-                href="#"
-                @click="closeSidebar"
+            <Link href="#" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-heart w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Favoris</span>
             </Link>
-            <Link
-                href="#"
-                @click="closeSidebar"
+            <Link href="#" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-envelope w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Messagerie</span>
@@ -135,16 +121,12 @@
             <div class="pt-8 text-[10px] font-bold uppercase tracking-widest text-neutral-muted mb-4 px-4">
                 Paramètres
             </div>
-            <Link
-                :href="buyerProfile()"
-                @click="closeSidebar"
+            <Link :href="buyerProfile()" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-user w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mon Profil</span>
             </Link>
-            <Link
-                href="#"
-                @click="closeSidebar"
+            <Link href="#" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-map-marker-alt w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Adresses</span>
@@ -152,9 +134,7 @@
         </nav>
 
         <div class="p-6 border-t border-gray-50">
-            <Link
-                :href="logout()"
-                @click="closeSidebar"
+            <Link :href="logout()" @click="closeSidebar"
                 class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-semibold">
                 <i class="fas fa-sign-out-alt w-5 text-center"></i> <span>Déconnexion</span>
             </Link>

@@ -18,7 +18,7 @@
             </div>
             <!-- PRODUCT ADDITION CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
-                <div class="max-w-4xl mx-auto">
+                <div class="max-w-6xl mx-auto">
                     <div class="mb-10 text-center">
                         <h1 class="text-3xl font-bold text-neutral-title">Ajouter un nouveau produit</h1>
                         <p class="mt-2 text-neutral-muted">
@@ -74,7 +74,7 @@
                                     <input v-model="form.title" type="text" placeholder="Ex: Tomates fraîches bio"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title
-                                        }}</p>
+                                    }}</p>
                                 </div>
                                 <div>
                                     <label
@@ -128,7 +128,7 @@
                                         <input v-model="form.unit" type="text" placeholder="Ex: Kg, Sacs, Litres"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                         <p v-if="form.errors.unit" class="mt-1 text-sm text-red-500">{{ form.errors.unit
-                                            }}</p>
+                                        }}</p>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-sm font-semibold text-neutral-title">Prix par
@@ -177,32 +177,85 @@
                                 </div>
                             </div>
 
-                            <!-- Step 3: Product Images -->
+                            <!-- Step 3: Product Images with Sidebar -->
                             <div v-if="currentStep === 3" class="space-y-6">
-                                <div>
-                                    <label class="block mb-2 text-sm font-semibold text-neutral-title">Images du
-                                        produit</label>
+                                <div class="flex gap-6 h-96">
+                                    <!-- LEFT SIDEBAR: Image Previews -->
                                     <div
-                                        class="flex justify-center px-6 pt-5 pb-6 mt-1 transition-colors border-2 border-gray-300 border-dashed cursor-pointer rounded-xl hover:border-brand-primary bg-neutral-bg">
-                                        <div class="space-y-1 text-center">
-                                            <i class="mb-2 text-3xl text-gray-400 fas fa-cloud-arrow-up"></i>
-                                            <div class="flex text-sm text-gray-600">
-                                                <input type="file" accept="image/*" multiple @change="handleImageUpload"
-                                                    class="font-semibold text-brand-primary" />
+                                        class="w-70 bg-gray-50 rounded-xl border border-gray-100 p-3 overflow-y-auto flex flex-col gap-2">
+                                        <!-- Warning if more than 6 images -->
+                                        <div v-if="imagePreviews.length > 6"
+                                            class="bg-amber-50 border border-amber-200 rounded-lg p-2 mb-2">
+                                            <div class="flex items-start gap-2">
+                                                <i
+                                                    class="fas fa-exclamation-triangle text-amber-600 text-sm mt-0.5 shrink-0"></i>
+                                                <div>
+                                                    <p class="text-xs font-bold text-amber-700">Limite atteinte</p>
+                                                    <p class="text-[10px] text-amber-600">Seules 6 images seront
+                                                        utilisées</p>
+                                                </div>
                                             </div>
-                                            <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB par image</p>
+                                        </div>
+
+                                        <!-- Image Thumbnails -->
+                                        <div v-if="displayedImages.length" class="flex flex-col gap-2">
+                                            <div v-for="(image, index) in displayedImages" :key="index"
+                                                class="relative group">
+                                                <img :src="image" :alt="`Image ${index + 1}`"
+                                                    class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-brand-primary transition-all cursor-pointer" />
+                                                <div
+                                                    class="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                                    <button @click="removeImage(index)" type="button"
+                                                        class="bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 transition-all">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- Image count badge -->
+                                                <div
+                                                    class="absolute top-1 left-1 bg-brand-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                                                    {{ index + 1 }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Empty state -->
+                                        <div v-else class="flex items-center justify-center h-full text-center">
+                                            <div class="text-gray-400">
+                                                <i class="fas fa-image text-2xl mb-2 block"></i>
+                                                <p class="text-xs">Aucune image</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <p v-if="form.errors.images" class="mt-1 text-sm text-red-500">{{ form.errors.images
-                                        }}</p>
-                                </div>
-                                <div v-if="imagePreviews.length" class="mt-4 grid grid-cols-3 gap-4">
-                                    <div v-for="(image, index) in imagePreviews" :key="index" class="relative">
-                                        <img :src="image" class="w-full h-24 object-cover rounded-lg" />
-                                        <button @click="removeImage(index)" type="button"
-                                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs">
-                                            <i class="fas fa-times"></i>
-                                        </button>
+
+                                    <!-- RIGHT SECTION: Upload Area -->
+                                    <div class="flex-1 flex flex-col h-50">
+                                        <label class="block mb-3 text-sm font-semibold text-neutral-title">Images du
+                                            produit</label>
+                                        <div
+                                            class="flex-1 flex justify-center px-6 py-8 transition-colors border-2 border-gray-300 border-dashed cursor-pointer rounded-xl hover:border-brand-primary bg-neutral-bg hover:bg-brand-bg/20 group">
+                                            <div class="space-y-3 text-center">
+                                                <i
+                                                    class="mb-2 text-4xl text-gray-400 fas fa-cloud-arrow-up group-hover:text-brand-primary transition-colors"></i>
+                                                <div class="flex text-sm text-gray-600">
+                                                    <input type="file" accept="image/*" multiple
+                                                        @change="handleImageUpload"
+                                                        class="font-semibold text-brand-primary cursor-pointer" />
+                                                </div>
+                                                <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB par image</p>
+                                                <p class="text-xs text-gray-400">Maximum {{ maxImages }} images</p>
+                                                <div v-if="imagePreviews.length"
+                                                    class="pt-2 border-t border-gray-200 mt-3">
+                                                    <p class="text-xs font-semibold text-neutral-title">
+                                                        {{ imagePreviews.length }} image{{ imagePreviews.length > 1 ?
+                                                        's' : '' }} ajoutée{{ imagePreviews.length > 1 ? 's' : '' }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Error message -->
+                                        <p v-if="form.errors.images" class="mt-3 text-sm text-red-500">{{
+                                            form.errors.images }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +271,7 @@
                                     Suivant
                                 </button>
                                 <button v-if="currentStep === 3" type="submit"
-                                    class="ml-auto w-full py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg">
+                                    class="ml-auto w-xs py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg">
                                     Ajouter le produit
                                 </button>
                             </div>
@@ -231,157 +284,183 @@
 </template>
 
 <script setup lang="ts">
-import { useForm, usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
-import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import { farmerProductsStore } from '@/routes';
-
+import { useForm, usePage } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue'
+import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue'
+import FlashMessage from '@/Components/FlashMessage.vue'
+import { farmerProductsStore } from '@/routes'
 
 interface Category {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 interface Region {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 interface ProductFormData {
-    title: string;
-    description: string;
-    quantity: number;
-    unit: string;
-    price: number;
-    min_order_qty: number;
-    price_negotiable: boolean;
-    harvest_date: string;
-    expires_at: string | null;
-    status: string;
-    user_id: number; // Will be set by backend or from auth user
-    category_id: number | null;
-    region_id: number | null;
-    images: File[];
+    title: string
+    description: string
+    quantity: number
+    unit: string
+    price: number
+    min_order_qty: number
+    price_negotiable: boolean
+    harvest_date: string
+    expires_at: string | null
+    status: string
+    user_id: number
+    category_id: number | null
+    region_id: number | null
+    images: File[]
 }
 
 interface ProductCreateProps {
     categories: {
         data: Category[]
-    };
+    }
     regions: {
-        data: Region[];
+        data: Region[]
     }
 }
 
 // Props
-const props = defineProps<ProductCreateProps>();
-const page = usePage();
-const user = page.props.auth.user.data;
-const categories = props.categories;
-const regions = props.regions;
+const props = defineProps<ProductCreateProps>()
+const page = usePage()
+const user = page.props.auth.user.data
+const categories = props.categories
+const regions = props.regions
+
+// Constants
+const maxImages = ref<number>(6)
 
 // Reactive state for multi-step form
-const currentStep = ref<number>(1);
-const imagePreviews = ref<string[]>([]);
+const currentStep = ref<number>(1)
+const imagePreviews = ref<string[]>([])
 
 // Form data using Inertia's useForm
 const form = useForm<ProductFormData>({
-    title: "",
-    description: "",
+    title: '',
+    description: '',
     quantity: 0,
     unit: '',
     price: 0,
     min_order_qty: 1,
     price_negotiable: false,
-    harvest_date: new Date().toISOString().slice(0, 10), // Default to today
+    harvest_date: new Date().toISOString().slice(0, 10),
     expires_at: null,
-    status: 'available', // Default status
+    status: 'available',
     user_id: user.id,
     category_id: null,
     region_id: null,
     images: [],
-});
+})
 
-// Methods for image handling
+/**
+ * Computed property: Display only the first 6 images
+ */
+const displayedImages = computed<string[]>(() => {
+    return imagePreviews.value.slice(0, maxImages.value)
+})
+
+/**
+ * Methods for image handling
+ */
 const handleImageUpload = (event: Event) => {
-    const target = event.target as HTMLInputElement;
+    const target = event.target as HTMLInputElement
 
     if (target.files) {
         for (let i = 0; i < target.files.length; i++) {
-            const file = target.files[i];
-            form.images.push(file);
-            imagePreviews.value.push(URL.createObjectURL(file));
+            const file = target.files[i]
+            form.images.push(file)
+            imagePreviews.value.push(URL.createObjectURL(file))
         }
     }
-};
+}
 
 const removeImage = (index: number) => {
-    form.images.splice(index, 1);
-    imagePreviews.value.splice(index, 1);
-};
+    form.images.splice(index, 1)
+    imagePreviews.value.splice(index, 1)
+}
 
-// Validation for each step (basic client-side validation)
+/**
+ * Validation for each step (basic client-side validation)
+ */
 const validateStep1 = (): boolean => {
     if (!form.title || !form.description || !form.category_id || !form.region_id || form.quantity <= 0 || !form.unit || form.price <= 0 || form.min_order_qty <= 0) {
-        // In a real app, you'd set specific error messages for each field
-        alert('Veuillez remplir tous les champs obligatoires de la première étape.');
+        alert('Veuillez remplir tous les champs obligatoires de la première étape.')
 
-        return false;
+        return false
     }
 
-    return true;
-};
+    return true
+}
 
 const validateStep2 = (): boolean => {
     if (!form.harvest_date) {
-        alert('Veuillez spécifier la date de récolte.');
+        alert('Veuillez spécifier la date de récolte.')
 
-        return false;
+        return false
     }
 
-    return true;
-};
+    return true
+}
 
 const nextStep = () => {
     if (currentStep.value === 1 && validateStep1()) {
-        currentStep.value++;
+        currentStep.value++
     } else if (currentStep.value === 2 && validateStep2()) {
-        currentStep.value++;
+        currentStep.value++
     }
-};
+}
 
 const prevStep = () => {
     if (currentStep.value > 1) {
-        currentStep.value--;
+        currentStep.value--
     }
-};
+}
 
 const errorsData = ref()
 const handleSubmit = () => {
     if (currentStep.value === 3) {
-        // Final validation for step 3 if needed (e.g., minimum number of images)
         if (form.images.length === 0) {
-            alert('Veuillez ajouter au moins une image pour votre produit.');
+            alert('Veuillez ajouter au moins une image pour votre produit.')
 
-            return;
+            return
         }
 
         form.post(farmerProductsStore.url(), {
-            onSuccess:()=>{
-                form.reset();
-                currentStep.value = 1;
+            onSuccess: () => {
+                form.reset()
+                currentStep.value = 1
             },
             onError: (errors) => {
-                errorsData.value = errors;
+                errorsData.value = errors
                 console.log(errorsData)
             },
-            forceFormData: true, // Important
-        });
+            forceFormData: true,
+        })
     }
-};
+}
 </script>
 
 <style scoped>
+/* Smooth transitions */
+* {
+    transition: all 0.3s ease;
+}
+
+/* Hover effects */
+button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+/* Focus states for accessibility */
+input:focus,
+select:focus {
+    outline: none;
+}
 </style>

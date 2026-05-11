@@ -7,30 +7,65 @@
                     class="text-sm text-brand-primary font-medium hover:underline">Réinitialiser</button>
             </div>
 
-            <!-- Categories -->
+            <!-- Categories with Autocomplete -->
             <div class="mb-8">
-                <h3 class="text-sm font-bold text-neutral-title uppercase tracking-wider mb-4">Catégories
-                </h3>
-                <div class="space-y-3">
-                    <label v-for="cat in allCategories" :key="cat.id" class="flex items-center group cursor-pointer">
+                <h3 class="text-sm font-bold text-neutral-title uppercase tracking-wider mb-4">Catégories</h3>
+
+                <!-- Search Input -->
+                <input v-model="categorySearchQuery" type="text" placeholder="Rechercher une catégorie..."
+                    class="w-full bg-neutral-bg border border-neutral-border rounded-lg px-4 py-2.5 mb-4 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-sm" />
+
+                <!-- Filtered Categories List -->
+                <div class="space-y-3 max-h-48 overflow-y-auto">
+                    <label v-for="cat in filteredCategories" :key="cat.id"
+                        class="flex items-center group cursor-pointer">
                         <input type="checkbox" :value="cat.id" v-model="selectedCategories"
                             class="w-5 h-5 rounded border-gray-300 text-brand-primary focus:ring-brand-primary" />
-                        <span class="ml-3 text-neutral-body group-hover:text-brand-primary transition-colors">{{
-                            cat.name }}</span>
+                        <span class="ml-3 text-neutral-body group-hover:text-brand-primary transition-colors text-sm">
+                            {{ cat.name }}
+                        </span>
                     </label>
+
+                    <!-- Empty State -->
+                    <div v-if="filteredCategories.length === 0" class="text-center py-4">
+                        <p class="text-neutral-muted text-sm">Aucune catégorie trouvée</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Region -->
+            <!-- Region with Autocomplete -->
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-neutral-title uppercase tracking-wider mb-4">Région</h3>
-                <select v-model="selectedRegion"
-                    class="w-full bg-neutral-bg border border-neutral-border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all">
-                    <option value="">Toutes les régions</option>
-                    <option v-for="reg in allRegions" :key="reg.id" :value="reg.id">
+
+                <!-- Search Input -->
+                <input v-model="regionSearchQuery" type="text" placeholder="Rechercher une région..."
+                    class="w-full bg-neutral-bg border border-neutral-border rounded-lg px-4 py-2.5 mb-4 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-sm" />
+
+                <!-- Filtered Regions List -->
+                <div class="space-y-2 max-h-48 overflow-y-auto">
+                    <button @click="selectedRegion = ''" :class="[
+                        'w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all',
+                        selectedRegion === ''
+                            ? 'bg-brand-bg text-brand-primary font-medium'
+                            : 'bg-neutral-bg text-neutral-body hover:bg-brand-bg/50 hover:text-brand-primary'
+                    ]">
+                        Toutes les régions
+                    </button>
+
+                    <button v-for="reg in filteredRegions" :key="reg.id" @click="selectedRegion = reg.id" :class="[
+                        'w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all',
+                        selectedRegion === reg.id
+                            ? 'bg-brand-bg text-brand-primary font-medium'
+                            : 'bg-neutral-bg text-neutral-body hover:bg-brand-bg/50 hover:text-brand-primary'
+                    ]">
                         {{ reg.name }}
-                    </option>
-                </select>
+                    </button>
+
+                    <!-- Empty State -->
+                    <div v-if="filteredRegions.length === 0" class="text-center py-4">
+                        <p class="text-neutral-muted text-sm">Aucune région trouvée</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Price Range -->
@@ -83,52 +118,90 @@
         </div>
     </aside>
 </template>
+
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import { inscription } from '@/routes';
+import { Link } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import { inscription } from '@/routes'
 
 // Types
 interface Category {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 interface Region {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 interface Props {
     categories: {
-        data: Category[];
+        data: Category[]
     }
     regions: {
         data: Region[]
-    };
+    }
 }
 
-const selectedCategories = ref<number[]>([]);
-const selectedRegion = ref<number | string>('');
-const maxPrice = ref<number>(50000);
-const minRating = ref<number>(0);
+// Props
+const props = defineProps<Props>()
+
+// State
+const selectedCategories = ref<number[]>([])
+const selectedRegion = ref<number | string>('')
+const maxPrice = ref<number>(50000)
+const minRating = ref<number>(0)
 const sortBy = ref<string>('latest')
 
+// Search queries
+const categorySearchQuery = ref<string>('')
+const regionSearchQuery = ref<string>('')
+
+// Emits
 const emit = defineEmits<{
     (e: 'filter', payload: {
-        selectedCategories: number[],
-        selectedRegion: number | string,
-        maxPrice: number,
-        minRating: number,
+        selectedCategories: number[]
+        selectedRegion: number | string
+        maxPrice: number
+        minRating: number
         sortBy: string
     }): void
 }>()
 
-const resetFilters = () => {
-    selectedCategories.value = [];
-    selectedRegion.value = '';
-    maxPrice.value = 50000;
-    minRating.value = 0;
+// Computed properties for filtered lists
+const filteredCategories = computed(() => {
+    if (!categorySearchQuery.value.trim()) {
+        return props.categories.data
+    }
+
+    const query = categorySearchQuery.value.toLowerCase().trim()
+
+    return props.categories.data.filter(cat =>
+        cat.name.toLowerCase().includes(query)
+    )
+})
+
+const filteredRegions = computed(() => {
+    if (!regionSearchQuery.value.trim()) {
+        return props.regions.data
+    }
+
+    const query = regionSearchQuery.value.toLowerCase().trim()
+
+    return props.regions.data.filter(reg =>
+        reg.name.toLowerCase().includes(query)
+    )
+})
+
+// Methods
+const resetFilters = (): void => {
+    selectedCategories.value = []
+    selectedRegion.value = ''
+    maxPrice.value = 50000
+    minRating.value = 0
+    categorySearchQuery.value = ''
+    regionSearchQuery.value = ''
 
     emit('filter', {
         selectedCategories: [],
@@ -136,22 +209,40 @@ const resetFilters = () => {
         maxPrice: 50000,
         minRating: 0,
         sortBy: 'latest'
-    });
-};
+    })
+}
 
-const props = defineProps<Props>()
-
-const allCategories = props.categories.data;
-const allRegions = props.regions.data;
-
-const handleFilter = () => {
+const handleFilter = (): void => {
     emit('filter', {
         selectedCategories: selectedCategories.value,
         selectedRegion: selectedRegion.value,
         maxPrice: maxPrice.value,
         minRating: minRating.value,
         sortBy: sortBy.value
-    });
-};
-
+    })
+}
 </script>
+
+<style scoped>
+/* Smooth scrolling for filtered lists */
+.space-y-3::-webkit-scrollbar,
+.space-y-2::-webkit-scrollbar {
+    width: 6px;
+}
+
+.space-y-3::-webkit-scrollbar-track,
+.space-y-2::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.space-y-3::-webkit-scrollbar-thumb,
+.space-y-2::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+.space-y-3::-webkit-scrollbar-thumb:hover,
+.space-y-2::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
     <header class="h-20 glass-header border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-30">
         <div class="flex items-center">
-            <button class="lg:hidden text-neutral-body mr-4">
+            <button class="lg:hidden text-neutral-body mr-4" @click="toggleSidebar">
                 <i class="fas fa-bars text-xl"></i>
             </button>
             <h1 class="text-xl font-bold text-neutral-title">
@@ -22,7 +22,8 @@
                         Producteur Certifié
                     </p>
                 </div>
-                <img :src="props.profile_photo ? props.profile_photo : `https://ui-avatars.com/api/?name=` + props.name + `&background=2D6A4F&color=fff`" class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
+                <img :src="props.profile_photo ? props.profile_photo : `https://ui-avatars.com/api/?name=` + props.name + `&background=2D6A4F&color=fff`"
+                    class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
             </div>
         </div>
     </header>
@@ -30,7 +31,12 @@
 <script setup lang="ts">
 interface User {
     name: string;
-    profile_photo? : string,
+    profile_photo?: string,
 }
 const props = defineProps<User>()
+
+const emit = defineEmits(['toggleSidebar'])
+const toggleSidebar = () => {
+    emit('toggleSidebar')
+}
 </script>

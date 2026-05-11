@@ -2,13 +2,13 @@
     <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
-        <FarmerSidebar />
+        <FarmerSidebar ref="farmerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
-            <!-- Affichage des messages d'erreurs si erreurs apres soumission -->
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo"
+                @toggle-sidebar="handleToogleSidebar" />            <!-- Affichage des messages d'erreurs si erreurs apres soumission -->
             <div v-if="errorsData" class="bg-red-50 border border-red-200 p-4 rounded-xl">
                 <ul class="text-red-600 text-sm space-y-1">
                     <li v-for="(error, key) in errorsData" :key="key">
@@ -444,6 +444,11 @@ const handleSubmit = () => {
             forceFormData: true,
         })
     }
+}
+
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
 }
 </script>
 

@@ -2,12 +2,12 @@
     <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
-        <FarmerSidebar />
+        <FarmerSidebar ref="farmerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" @toggle-sidebar="handleToogleSidebar"/>
 
             <!-- PRODUCT EDIT CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
@@ -369,6 +369,12 @@ const handleSubmit = () => {
         forceFormData: true, // Important for file uploads
     });
 };
+
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
+}
+
 </script>
 
 <style scoped>

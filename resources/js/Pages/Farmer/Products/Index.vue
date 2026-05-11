@@ -2,12 +2,12 @@
     <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
-        <FarmerSidebar />
+        <FarmerSidebar ref="farmerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" />
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" @toggle-sidebar="handleToogleSidebar"/>
 
             <!-- PRODUCTS CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import FarmerNavbar from '@/Components/Farmer/Navbar/FarmerNavbar.vue';
 import ProductsList from '@/Components/Farmer/Product/ProductsList.vue';
 import FarmerSidebar from '@/Components/Farmer/Sidebar/FarmerSidebar.vue';
@@ -112,6 +113,11 @@ const user = page.props.auth.user.data;
 defineProps<{
     products: ProductsData;
 }>();
+
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
+}
 </script>
 
 <style scoped>

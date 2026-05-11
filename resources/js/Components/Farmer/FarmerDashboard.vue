@@ -1,24 +1,25 @@
 <template>
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <FarmerSidebar />
+        <FarmerSidebar ref="farmerSidebarRef" />
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" />
+            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"
+                @toggle-sidebar="handleToogleSidebar" />
             <!-- DASHBOARD CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <!-- TOP STATS -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <ProductStatCard :label="`Produits Actifs`" :value="countProductsAvaliable"
                         :icon="`fas fa-seedling`" :bg_brand="`bg-brand-bg`" :text_brand="`text-brand-primary`" />
-                    <ProductStatCard :label="`Commande en cours`" :value="countOrdersPending" :icon="`fas fa-shopping-basket`"
-                        :bg_brand="`bg-blue-50`" :text_brand="`text-blue-600`" />
+                    <ProductStatCard :label="`Commande en cours`" :value="countOrdersPending"
+                        :icon="`fas fa-shopping-basket`" :bg_brand="`bg-blue-50`" :text_brand="`text-blue-600`" />
                     <ProductStatCard :label="`C.A du mois`" :value="sumAmountOrders + ` FCFA`" :icon="`fas fa-wallet`"
                         :bg_brand="`bg-accent-light`" :text_brand="`text-accent-cta`" />
-                    <ProductStatCard :label="`Note Moyenne`" :value="farmer_average_rating +` / 5`" :icon="`fas fa-star`"
-                        :text_brand="`text-accent-star`" :bg_brand="`bg-orange-50`" />
+                    <ProductStatCard :label="`Note Moyenne`" :value="farmer_average_rating + ` / 5`"
+                        :icon="`fas fa-star`" :text_brand="`text-accent-star`" :bg_brand="`bg-orange-50`" />
                 </div>
 
                 <!-- CHARTS & NOTIFICATIONS -->
@@ -122,13 +123,15 @@
                 </div>
 
                 <!-- RECENT ORDERS TABLE -->
-                <OrderTable :data="recentsOrders.data"/>
+                <OrderTable :data="recentsOrders.data" />
             </div>
         </main>
     </main>
 </template>
 <script lang="ts" setup>
 import { Link } from "@inertiajs/vue3";
+import { ref } from "vue";
+
 import { farmerProductsEdit } from "@/routes";
 import type { Auth } from "@/types";
 import FarmerNavbar from "./Navbar/FarmerNavbar.vue";
@@ -171,7 +174,7 @@ interface StatisticDashboardFarmer {
     countProductsAvaliable: number | string;
     sumAmountOrders: string | number;
     countOrdersPending: number | string,
-    farmer_average_rating:number,
+    farmer_average_rating: number,
     productsLow: ProductsLow,
     recentsOrders: RecentsOrders
     revenueChartData: RevenueChartData,
@@ -190,4 +193,9 @@ interface ProductsLow {
 interface Props extends Auth, StatisticDashboardFarmer { }
 
 defineProps<Props>();
+
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
+}
 </script>

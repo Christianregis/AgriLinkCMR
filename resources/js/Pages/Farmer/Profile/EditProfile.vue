@@ -1,10 +1,10 @@
 <template>
     <div class="min-h-screen bg-neutral-bg flex">
-        <FarmerSidebar />
+        <FarmerSidebar ref="farmerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
-            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo_url"/>
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo_url" @toggle-sidebar="handleToogleSidebar"/>
 
             <!-- PROFILE EDIT CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">
@@ -284,6 +284,11 @@ const handleSubmit = () => {
         forceFormData: true, // Important
     });
 };
+
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
+}
 </script>
 
 <style scoped></style>

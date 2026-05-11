@@ -2,13 +2,13 @@
     <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <FarmerSidebar />
+        <FarmerSidebar ref="farmerSidebarRef"/>
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" />
-
+            <FarmerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"
+                @toggle-sidebar="handleToogleSidebar" />
             <!-- DASHBOARD CONTENT -->
             <div class="flex-1 overflow-y-auto p-8 space-y-8">
                 <!-- PAGE HEADER -->
@@ -199,7 +199,10 @@ const paginatedOrders = computed<Order[]>(() => {
     return filteredOrders.value
 })
 
-
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
+}
 </script>
 
 <style scoped>

@@ -44,10 +44,10 @@ class ProductInformationsResource extends JsonResource
             ]),
 
             'farmer_profile' => $this->whenLoaded('user', fn() => [
-                'id' =>$this->user->id,
+                'id' => $this->user->id,
                 'reviews_count' => $this->views_count,
                 'name' => $this->user->name,
-                'profile_photo' => $this->user->profile_photo ? asset('storage/'.$this->user->profile_photo) : null,
+                'profile_photo' => $this->user->profile_photo ? asset('storage/' . $this->user->profile_photo) : null,
                 'average_rating' => $this->user->farmerProfile->average_rating,
             ]),
 
@@ -64,12 +64,29 @@ class ProductInformationsResource extends JsonResource
             ),
 
             'product_images' => $this->whenLoaded('productImages', function () {
-                return $this->productImages->map(fn($image) => [
-                    'id' => $image->id,
-                    'path' => asset('storage/' . $image->path),
-                    'is_primary' => $image->is_primary,
-                    'order' => $image->order,
-                ]);
+
+                return $this->getMedia('products')->map(function ($media, $index) {
+
+                    return [
+                        'id' => $media->id,
+
+                        // image originale
+                        'path' => $media->getUrl('large'),
+
+                        // // thumbnail
+                        // 'thumb' => $media->getUrl('thumb'),
+
+                        // // catalogue
+                        // 'catalog' => $media->getUrl('catalog'),
+
+                        // // grande image
+                        // 'large' => $media->getUrl('large'),
+
+                        'is_primary' => $index === 0,
+
+                        'order' => $index,
+                    ];
+                });
             }),
         ];
     }

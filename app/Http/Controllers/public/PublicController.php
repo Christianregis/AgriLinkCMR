@@ -52,7 +52,7 @@ class PublicController extends Controller
 
     public function showProductInfo(mixed $product_id)
     {
-        $product = Product::with(['category', 'user', 'region', 'productImages'])->where('id', $product_id)->firstOrFail();
+        $product = Product::with(['category', 'user', 'region', 'productImages','media'])->where('id', $product_id)->firstOrFail();
         return Inertia::render('Products/Show', [
             'product' => ProductInformationsResource::make($product),
         ]);

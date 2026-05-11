@@ -28,9 +28,9 @@ class FarmerProductResource extends JsonResource
 
             // image principale
             'primary_image_url' => optional(
-                $this->productImages->where('is_primary', true)->first()
+                $this->productImages[0]
             )->path
-                ? asset('storage/' . $this->productImages->where('is_primary', true)->first()->path)
+                ? asset('storage/' . $this->productImages[0]->path)
                 : null,
 
             'category' => new CategoryResource($this->whenLoaded('category')),

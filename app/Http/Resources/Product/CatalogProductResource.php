@@ -28,7 +28,7 @@ class CatalogProductResource extends JsonResource
             'harvest_date' => $this->harvest_date ?? null,
             'expire_at' => $this->expires_at ?? null,
             'status' => $this->status,
-            'primary_image_url' => asset('/storage/' . $this->productImages[0]->path) ?? null,
+            'primary_image_url' => $this->getFirstMediaUrl('products', 'catalog'),
             'category' => CategoryResource::make($this->category),
             'region' => RegionResource::make($this->region),
             'average_rating' => $this->user->farmerProfile->average_rating,

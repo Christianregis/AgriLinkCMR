@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
-    use SoftDeletes;
+    use SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
         'title',
@@ -34,7 +38,31 @@ class Product extends Model
     protected $casts = [
         'status' => ProductStatus::class
     ];
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        // 🔥 Thumbnail
+        $this->addMediaConversion('thumb')
+            ->fit(Fit::Crop, 300, 300)
+            ->format('webp')
+            ->quality(40)
+            ->nonQueued();
 
+        // 🔥 Catalogue
+        $this->addMediaConversion('catalog')
+            ->width(800)
+            ->height(800)
+            ->format('webp')
+            ->quality(60)
+            ->nonQueued();
+
+        // 🔥 Grande image
+        $this->addMediaConversion('large')
+            ->width(1200)
+            ->height(1200)
+            ->format('webp')
+            ->quality(80)
+            ->nonQueued();
+    }
     public function productImages(): HasMany
     {
         return $this->hasMany(ProductImage::class);

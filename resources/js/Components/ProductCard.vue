@@ -1,44 +1,76 @@
 <template>
-    <Link :href="productInfo(product.id)">
-        <div
-            :class="['relative overflow-hidden', { 'h-48 w-full md:w-1/3 md:h-auto': displayMode === 'list', 'h-48 w-full': displayMode === 'grid' }]">
-            <img :src="product.primary_image_url"
+    <Link :href="productInfo(product.id)"
+        :class="[
+            'group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300',
+            { 'flex flex-row w-full': displayMode === 'list' }
+        ]">
+
+        <!-- IMAGE -->
+        <div :class="[
+            'relative overflow-hidden shrink-0',
+            displayMode === 'list' ? ' w-52 h-full min-h-48' : 'h-48 w-full'
+        ]">
+            <img
+                :src="product.primary_image_url"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                alt="Product Image">
-            <div
-                class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-brand-dark shadow-sm uppercase tracking-wider">
-                <i class="fas fa-location-dot text-brand-primary mr-1"></i> {{ product.region.name
-                }}
+                alt="Product Image"
+            >
+            <!-- Region badge -->
+            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-brand-dark shadow-sm uppercase tracking-wider">
+                <i class="fas fa-location-dot text-brand-primary mr-1"></i> {{ product.region.name }}
             </div>
         </div>
-        <div :class="['p-5', { 'flex-1 flex flex-col justify-between': displayMode === 'list' }]">
+
+        <!-- CONTENT -->
+        <div :class="[
+            'p-5 flex flex-col',
+            displayMode === 'list' ? 'flex-1 justify-between' : ''
+        ]">
+            <!-- Top block -->
             <div>
-                <h3 class="font-bold text-neutral-title mb-1" :class="{ 'truncate': displayMode === 'grid' }">{{
-                    product.title }}</h3>
-                <div class="flex items-center text-xs text-neutral-muted mb-4">
+                <h3
+                    class="font-bold text-neutral-title mb-1"
+                    :class="displayMode === 'grid' ? 'truncate' : 'text-base leading-snug'"
+                >
+                    {{ product.title }}
+                </h3>
+
+                <!-- Stars -->
+                <div class="flex items-center text-xs text-neutral-muted mb-3">
                     <div class="flex text-accent-star mr-2">
                         <i v-for="i in 5" :key="i"
                             :class="[i <= product.average_rating ? 'fas' : 'far', 'fa-star']"></i>
                     </div>
                     <span>({{ product.reviews_count }})</span>
                 </div>
-                <p v-if="displayMode === 'list'" class="text-sm text-neutral-muted mb-3 line-clamp-3">{{
-                    product.description
-                    }}
+
+                <!-- Description — list mode only -->
+                <p v-if="displayMode === 'list'"
+                    class="text-sm text-neutral-muted line-clamp-2 leading-relaxed">
+                    {{ product.description.substring(0, 100) }}{{ product.description.length > 100 ? '...' : '' }}
                 </p>
             </div>
-            <div
-                :class="['flex items-center', { 'justify-between': displayMode === 'grid', 'justify-between mt-auto': displayMode === 'list' }]">
-                <p class="text-xl font-bold text-brand-primary">{{ product.price }} <span class="text-sm">FCFA / {{
-                    product.unit }}</span></p>
-                <button @click.prevent.stop="addToCart()"
-                    class="bg-brand-primary text-white px-2 py-1 rounded-lg text-sm font-bold hover:bg-brand-hover transition-all">
+
+            <!-- Bottom block: price + CTA -->
+            <div class="flex items-center justify-between mt-4">
+                <div>
+                    <p class="text-xl font-bold text-brand-primary leading-none">
+                        {{ product.price.toLocaleString() }}
+                        <span class="text-sm font-normal text-neutral-muted">FCFA / {{ product.unit }}</span>
+                    </p>
+                </div>
+
+                <button
+                    @click.prevent.stop="addToCart()"
+                    class="flex items-center gap-2 bg-brand-primary text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-brand-hover transition-all duration-200 shadow-sm hover:shadow"
+                >
                     <i class="fas fa-shopping-cart text-white text-xs"></i>
                 </button>
             </div>
         </div>
     </Link>
 </template>
+
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue';
@@ -46,6 +78,10 @@ import { useCartStore } from '@/Pages/store/cartStore';
 import { productInfo } from '@/routes';
 
 const cartStore = useCartStore();
+
+interface Region {
+    name: string,
+}
 
 interface Product {
     id: number,
@@ -60,14 +96,12 @@ interface Product {
     quantity: number,
     region: Region,
 }
-interface Region {
-    name: string,
-}
 
 interface Props {
     product: Product,
     displayMode: 'grid' | 'list'
 }
+
 const props = defineProps<Props>();
 const localQuantity = ref<number>(props.product.min_order_qty > 0 ? props.product.min_order_qty : 1);
 
@@ -98,8 +132,6 @@ const addToCart = () => {
     }
 
     cartStore.addItem(productToAdd, localQuantity.value)
-
     emit('add-to-cart', productToAdd)
 }
-
 </script>

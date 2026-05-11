@@ -37,7 +37,7 @@
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-neutral-title uppercase tracking-wider mb-4">Prix Max
                     (FCFA)</h3>
-                <input type="range" min="0" max="50000" step="500" v-model="maxPrice"
+                <input type="range" min="0" max="500000" step="500" v-model="maxPrice"
                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-primary" />
                 <div class="flex justify-between mt-2 text-sm text-neutral-muted font-medium">
                     <span>{{ maxPrice }}</span>
@@ -51,8 +51,8 @@
                 </h3>
                 <div class="space-y-2">
                     <button v-for="n in 5" :key="n" @click="minRating = n" :class="[
-                        'flex items-center text-sm',
-                        minRating === n ? 'text-brand-primary' : 'text-neutral-body hover:text-brand-primary'
+                        'flex items-center text-sm p-3 rounded-lg w-full text-left hover:bg-green-100 transition-colors',
+                        minRating === n ? 'text-brand-primary bg-green-100' : 'text-neutral-body hover:text-brand-primary'
                     ]">
                         <div class="flex text-accent-star mr-2">
                             <i v-for="i in 5" :key="i" :class="[i <= n ? 'fas' : 'far', 'fa-star']"></i>

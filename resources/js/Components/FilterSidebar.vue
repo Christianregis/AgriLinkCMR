@@ -37,11 +37,11 @@
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-neutral-title uppercase tracking-wider mb-4">Prix Max
                     (FCFA)</h3>
-                <input type="range" min="500" max="50000" step="500" v-model="maxPrice"
+                <input type="range" min="0" max="50000" step="500" v-model="maxPrice"
                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-primary" />
                 <div class="flex justify-between mt-2 text-sm text-neutral-muted font-medium">
                     <span>{{ maxPrice }}</span>
-                    <span>50,000+</span>
+                    <span></span>
                 </div>
             </div>
 

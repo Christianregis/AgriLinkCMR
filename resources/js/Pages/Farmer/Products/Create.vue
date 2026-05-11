@@ -2,13 +2,13 @@
     <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
         <!-- SIDEBAR -->
-        <FarmerSidebar ref="farmerSidebarRef"/>
+        <FarmerSidebar ref="farmerSidebarRef" />
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- HEADER -->
-            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo"
-                @toggle-sidebar="handleToogleSidebar" />            <!-- Affichage des messages d'erreurs si erreurs apres soumission -->
+            <FarmerNavbar :name="user.name" :profile_photo="user.profile_photo" @toggle-sidebar="handleToogleSidebar" />
+            <!-- Affichage des messages d'erreurs si erreurs apres soumission -->
             <div v-if="errorsData" class="bg-red-50 border border-red-200 p-4 rounded-xl">
                 <ul class="text-red-600 text-sm space-y-1">
                     <li v-for="(error, key) in errorsData" :key="key">
@@ -74,7 +74,7 @@
                                     <input v-model="form.title" type="text" placeholder="Ex: Tomates fraîches bio"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title
-                                    }}</p>
+                                        }}</p>
                                 </div>
                                 <div>
                                     <label
@@ -128,7 +128,7 @@
                                         <input v-model="form.unit" type="text" placeholder="Ex: Kg, Sacs, Litres"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                         <p v-if="form.errors.unit" class="mt-1 text-sm text-red-500">{{ form.errors.unit
-                                        }}</p>
+                                            }}</p>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-sm font-semibold text-neutral-title">Prix par
@@ -247,7 +247,7 @@
                                                     class="pt-2 border-t border-gray-200 mt-3">
                                                     <p class="text-xs font-semibold text-neutral-title">
                                                         {{ imagePreviews.length }} image{{ imagePreviews.length > 1 ?
-                                                        's' : '' }} ajoutée{{ imagePreviews.length > 1 ? 's' : '' }}
+                                                            's' : '' }} ajoutée{{ imagePreviews.length > 1 ? 's' : '' }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -432,6 +432,8 @@ const handleSubmit = () => {
             return
         }
 
+        form.images = form.images.slice(0, maxImages.value)
+        
         form.post(farmerProductsStore.url(), {
             onSuccess: () => {
                 form.reset()

@@ -174,7 +174,7 @@
                             <img :src="order.data.farmer.profile_photo || `https://ui-avatars.com/api/?name=${order.data.farmer.name}&background=random`"
                                 class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-brand-primary/50" />
                             <p class="text-lg font-bold text-neutral-title">{{ order.data.farmer.name }}</p>
-                            <Link :href="showFarmerInfo(order.data.farmer.id)"
+                            <Link :href="showFarmerInfo(order.data.order_items[0].product.id)"
                                 class="text-sm text-brand-primary hover:underline mt-1 inline-block">
                                 Voir le profil
                             </Link>

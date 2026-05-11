@@ -38,18 +38,14 @@
             </div>
         </div>
     </Link>
-    <CartSidebar ref="cartSidebarRef" />
-
 </template>
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue';
 import { useCartStore } from '@/Pages/store/cartStore';
 import { productInfo } from '@/routes';
-import CartSidebar from './CartSidebar.vue';
 
 const cartStore = useCartStore();
-const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
 
 interface Product {
     id: number,

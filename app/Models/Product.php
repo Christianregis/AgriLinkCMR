@@ -40,14 +40,12 @@ class Product extends Model implements HasMedia
     ];
     public function registerMediaConversions(?Media $media = null): void
     {
-        // 🔥 Thumbnail
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 300, 300)
             ->format('webp')
             ->quality(40)
             ->nonQueued();
 
-        // 🔥 Catalogue
         $this->addMediaConversion('catalog')
             ->width(800)
             ->height(800)
@@ -55,7 +53,6 @@ class Product extends Model implements HasMedia
             ->quality(60)
             ->nonQueued();
 
-        // 🔥 Grande image
         $this->addMediaConversion('large')
             ->width(1200)
             ->height(1200)

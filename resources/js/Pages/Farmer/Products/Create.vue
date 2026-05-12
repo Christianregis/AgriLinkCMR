@@ -433,7 +433,7 @@ const handleSubmit = () => {
         }
 
         form.images = form.images.slice(0, maxImages.value)
-        
+
         form.post(farmerProductsStore.url(), {
             onSuccess: () => {
                 form.reset()

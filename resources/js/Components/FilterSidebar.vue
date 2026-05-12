@@ -150,7 +150,7 @@ const props = defineProps<Props>()
 // State
 const selectedCategories = ref<number[]>([])
 const selectedRegion = ref<number | string>('')
-const maxPrice = ref<number>(50000)
+const maxPrice = ref<number>(0)
 const minRating = ref<number>(0)
 const sortBy = ref<string>('latest')
 

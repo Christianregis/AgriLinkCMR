@@ -150,7 +150,7 @@ interface Product {
     quantity: number;
     unit: string;
     price: number;
-    min_order_qte: number;
+    min_order_qty: number;
     price_negotiable: boolean;
     harvest_date: string | null;
     expire_at: string | null;

@@ -106,19 +106,6 @@ interface Props {
 const props = defineProps<Props>();
 const localQuantity = ref<number>(props.product.min_order_qty > 0 ? props.product.min_order_qty : 1);
 
-const emit = defineEmits<{
-    (
-        e: 'add-to-cart',
-        product: {
-            id: number
-            title: string
-            price: number
-            unit: string
-            primary_image_url: string
-            stock: number
-        }
-    ): void
-}>()
 
 const addToCart = () => {
     const productToAdd = {
@@ -133,6 +120,5 @@ const addToCart = () => {
     }
 
     cartStore.addItem(productToAdd, localQuantity.value)
-    emit('add-to-cart', productToAdd)
 }
 </script>

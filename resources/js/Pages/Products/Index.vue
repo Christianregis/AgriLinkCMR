@@ -39,7 +39,7 @@
                         :class="{ 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6': displayMode === 'grid', 'space-y-6': displayMode === 'list' }">
                         <div v-for="product in products.data" :key="product.id"
                             :class="['bg-white rounded-2xl overflow-hidden border border-gray-100 card-hover group', { 'flex flex-col md:flex-row': displayMode === 'list' }]">
-                            <ProductCard :product="product" :display-mode="displayMode" @add-to-cart="handleOpenCartSidebar"/>
+                            <ProductCard :product="product" :display-mode="displayMode" />
                         </div>
                     </div>
                     <div v-else class="text-center py-12 text-neutral-muted text-lg">
@@ -54,7 +54,7 @@
             </div>
         </main>
     </div>
-    <CartSidebar ref="cartSidebarRef"/>
+    <CartSidebar ref="cartSidebarRef" />
 </template>
 
 <script setup lang="ts">
@@ -143,10 +143,6 @@ const handleFilter = (filters: FilterForm) => {
 }
 
 const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
-
-const handleOpenCartSidebar = () =>{
-    cartSidebarRef.value?.openCart();
-}
 </script>
 
 <style scoped>

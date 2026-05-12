@@ -25,7 +25,49 @@
                 </div>
 
                 <!-- Auth Buttons -->
-                <div class="items-center hidden space-x-4 md:flex">
+                <div v-if="user && user.role === 'buyer'" class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center bg-gray-50 rounded-xl px-4 py-2 border border-gray-100">
+                        <i class="fas fa-search text-gray-400 mr-2"></i>
+                        <input type="text" placeholder="Rechercher une commande..."
+                            class="bg-transparent border-none focus:ring-0 text-sm text-neutral-body w-48" />
+                    </div>
+                    <button @click="openSidebar"
+                        class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span
+                            class="absolute -top-1 -right-1 bg-accent-cta text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">{{
+                                store.totalItems }}</span>
+                    </button>
+                    <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-bold text-neutral-title">{{ user.name }}</p>
+                            <p class="text-[10px] font-bold text-brand-primary uppercase tracking-wider">
+                                Acheteur Premium
+                            </p>
+                        </div>
+                        <img :src="user.profile_photo ? user.profile_photo : `https://ui-avatars.com/api/?name=` + user.name + `&background=2D6A4F&color=fff`"
+                            class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
+                    </div>
+                </div>
+                <div v-else-if="user && user.role === 'farmer'" class="flex items-center space-x-6">
+                    <button
+                        class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
+                        <i class="far fa-bell text-lg"></i>
+                        <span
+                            class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                    <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-bold text-neutral-title">{{ user.name }}</p>
+                            <p class="text-[10px] font-bold text-brand-primary uppercase tracking-wider">
+                                Producteur Certifié
+                            </p>
+                        </div>
+                        <img :src="user.profile_photo ? user.profile_photo : `https://ui-avatars.com/api/?name=` + user.name + `&background=2D6A4F&color=fff`"
+                            class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
+                    </div>
+                </div>
+                <div class="items-center hidden space-x-4 md:flex" v-else>
                     <button @click="openSidebar"
                         class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
                         <i class="fas fa-shopping-cart text-lg"></i>
@@ -39,7 +81,6 @@
                         class="bg-brand-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-brand-hover transition-all shadow-sm hover:shadow-md">
                         Rejoindre</Link>
                 </div>
-
                 <!-- Mobile menu button -->
                 <div class="flex items-center md:hidden">
                     <button @click="toggleMobileMenu"
@@ -68,13 +109,13 @@
                             <i class="fas fa-times text-2xl"></i>
                         </button>
                     </div>
-                <div class="flex items-center space-x-2 px-4 py-2">
-                    <div class="p-2 rounded-lg bg-brand-primary">
-                        <i class="text-xl text-white fas fa-leaf"></i>
+                    <div class="flex items-center space-x-2 px-4 py-2">
+                        <div class="p-2 rounded-lg bg-brand-primary">
+                            <i class="text-xl text-white fas fa-leaf"></i>
+                        </div>
+                        <span class="text-2xl font-bold tracking-tight text-brand-dark">AgriLink<span
+                                class="text-brand-primary">.cm</span></span>
                     </div>
-                    <span class="text-2xl font-bold tracking-tight text-brand-dark">AgriLink<span
-                            class="text-brand-primary">.cm</span></span>
-                </div>
                     <!-- Mobile Navigation Links -->
                     <Link :href="home()" @click="toggleMobileMenu"
                         class="block px-4 py-2 text-lg font-semibold text-neutral-title hover:text-brand-primary hover:bg-gray-50 transition-colors">
@@ -92,7 +133,49 @@
                     </Link>
 
                     <!-- Mobile Auth Buttons -->
-                    <div class="px-4 pt-4 border-t border-gray-100 space-y-3">
+                    <div v-if="user && user.role === 'buyer'" class="flex items-center space-x-6">
+                        <div class="hidden md:flex items-center bg-gray-50 rounded-xl px-4 py-2 border border-gray-100">
+                            <i class="fas fa-search text-gray-400 mr-2"></i>
+                            <input type="text" placeholder="Rechercher une commande..."
+                                class="bg-transparent border-none focus:ring-0 text-sm text-neutral-body w-48" />
+                        </div>
+                        <button @click="openSidebar"
+                            class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
+                            <i class="fas fa-shopping-cart text-lg"></i>
+                            <span
+                                class="absolute -top-1 -right-1 bg-accent-cta text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full">{{
+                                    store.totalItems }}</span>
+                        </button>
+                        <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
+                            <div class="text-right hidden sm:block">
+                                <p class="text-sm font-bold text-neutral-title">{{ user.name }}</p>
+                                <p class="text-[10px] font-bold text-brand-primary uppercase tracking-wider">
+                                    Acheteur Premium
+                                </p>
+                            </div>
+                            <img :src="user.profile_photo ? user.profile_photo : `https://ui-avatars.com/api/?name=` + user.name + `&background=2D6A4F&color=fff`"
+                                class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
+                        </div>
+                    </div>
+                    <div v-else-if="user && user.role === 'farmer'" class="flex items-center space-x-6">
+                        <button
+                            class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
+                            <i class="far fa-bell text-lg"></i>
+                            <span
+                                class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                        </button>
+                        <div class="flex items-center space-x-3 pl-6 border-l border-gray-100">
+                            <div class="text-right hidden sm:block">
+                                <p class="text-sm font-bold text-neutral-title">{{ user.name }}</p>
+                                <p class="text-[10px] font-bold text-brand-primary uppercase tracking-wider">
+                                    Producteur Certifié
+                                </p>
+                            </div>
+                            <img :src="user.profile_photo ? user.profile_photo : `https://ui-avatars.com/api/?name=` + user.name + `&background=2D6A4F&color=fff`"
+                                class="w-11 h-11 rounded-xl shadow-sm border border-gray-100" />
+                        </div>
+                    </div>
+                    <div v-else class="px-4 pt-4 border-t border-gray-100 space-y-3">
                         <button @click="openSidebar"
                             class="relative w-full flex items-center justify-center py-2 rounded-xl bg-gray-50 text-neutral-muted hover:text-brand-primary transition-colors">
                             <i class="fas fa-shopping-cart text-lg mr-2"></i> Panier
@@ -116,7 +199,7 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import CartSidebar from "@/Components/CartSidebar.vue";
 import { useCartStore } from "@/Pages/store/cartStore";
@@ -137,6 +220,9 @@ const showMobileMenu = ref(false);
 const toggleMobileMenu = () => {
     showMobileMenu.value = !showMobileMenu.value;
 };
+
+const page = usePage();
+const user = page.props.auth.user?.data;
 
 </script>
 

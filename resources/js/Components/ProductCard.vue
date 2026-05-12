@@ -15,6 +15,7 @@
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 alt="Product Image"
             >
+            <div class="absolute inset-0 bg-black/15 group-hover:bg-black/0 transition-all duration-500"></div>
             <!-- Region badge -->
             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-brand-dark shadow-sm uppercase tracking-wider">
                 <i class="fas fa-location-dot text-brand-primary mr-1"></i> {{ product.region.name }}

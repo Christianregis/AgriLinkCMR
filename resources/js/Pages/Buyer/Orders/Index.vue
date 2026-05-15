@@ -2,12 +2,13 @@
     <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <BuyerSidebar ref="buyerSidebarRef"/>
+        <BuyerSidebar ref="buyerSidebarRef" />
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" @openbuyer-sidebar="openSidebar"/>
+            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"
+                @openbuyer-sidebar="openSidebar" />
 
             <!-- PAGE CONTENT -->
             <div class="flex-1 overflow-y-auto p-4 md:p-8">
@@ -268,14 +269,14 @@
 
 <script setup lang="ts">
 import { useForm, Link, usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 import { ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import PaymentStatusModal from '@/Components/PaymentStatusModal.vue';
 import { useCartStore } from '@/Pages/store/cartStore';
-import { buyerOrderShow, buyerOrderStore, catalog, productInfo } from '@/routes';
-
+import { buyerOrderShow, buyerOrdersStripeCheckout, buyerOrderStore, catalog, productInfo } from '@/routes';
 
 const page = usePage();
 const user = page.props.auth.user;
@@ -301,29 +302,72 @@ const modalMessage = ref<string>('')
 const modalButtonText = ref<string>('');
 const modalButtonLink = ref<string>('')
 
-const submitOrder = () => {
-    // Mise à jour des items avant soumission au cas où le panier a changé
+const submitOrder = async () => {
+
+    // Mise à jour des items
     form.items = cartStore.cartItems.map(item => ({
+        product_title: item.product.title,
         product_id: item.product.id,
         quantity: item.quantity,
         price: item.product.price
-    }));
+    }))
+
     form.total_amount = cartStore.totalPrice
 
-    form.post(buyerOrderStore.url(), {
-        onSuccess: () => {
+    // SI STRIPE
+    if (form.payment_method === 'stripe') {
+
+        try {
+            const response = await axios.post(
+                buyerOrdersStripeCheckout.url(),
+                form.data()
+            )
+
+            window.location.href = response.data.url
+            cartStore.clearCart()
+
+
+        } catch (error) {
+
             showModal.value = true
+
+            modalType.value = 'failure'
+
+            modalMessage.value =
+                'Erreur lors du paiement Stripe.'
+
+            modalButtonText.value = 'Fermer'
+
+            modalButtonLink.value = '#'
+
+            console.error('Stripe Checkout Error:', error)
+        }
+
+        return
+    }
+
+    // PAIEMENT NORMAL
+    form.post(buyerOrderStore.url(), {
+
+        onSuccess: () => {
+
+            showModal.value = true
+
             modalType.value = 'success'
-            modalMessage.value = 'Paiement réussi ! Veuillez le consulter dans votre section mes commandes.'
-            modalButtonText.value = 'Aller à Mes commandes'
-            modalButtonLink.value = buyerOrderShow.url()
+
+            modalMessage.value =
+                'Commande effectuée avec succès !'
+
+            modalButtonText.value =
+                'Aller à Mes commandes'
+
+            modalButtonLink.value =
+                buyerOrderShow.url()
 
             cartStore.clearCart()
         },
-    },)
-
-};
-
+    })
+}
 const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null)
 
 const openSidebar = () => {

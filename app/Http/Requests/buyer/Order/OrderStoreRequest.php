@@ -29,6 +29,7 @@ class OrderStoreRequest extends FormRequest
             'items.*.product_id' => ['required', 'integer', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
             'items.*.price' => ['required', 'numeric', 'min:0'],
+            'items.*.product_title' => [Rule::requiredIf($this->delivery_method === 'stripe'), 'string', 'max:255'],
             'delivery_method' => ['required', 'in:delivery,pickup'],
             'delivery_address' => ['nullable', 'string', 'max:255', Rule::requiredIf($this->delivery_method === 'delivery')],
             'payment_method' => ['required', 'in:momo,cash,stripe'],

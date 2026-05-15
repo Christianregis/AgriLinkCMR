@@ -68,12 +68,6 @@
 
                     <!-- Conditional Actions -->
                     <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-                        <!-- Annuler la commande (si PENDING) -->
-                        <button v-if="order.data.status === 'pending'" @click="showCancelModal = true"
-                            class="px-6 py-3 border-2 border-red-200 text-red-600 font-bold rounded-xl hover:bg-red-50 transition-all flex items-center justify-center gap-2">
-                            <i class="fas fa-times"></i> Annuler la Commande
-                        </button>
-
                         <!-- Effectuer le paiement (si PENDING et momo) -->
                         <button v-if="order.data.status === 'pending' && order.data.payment_method === 'momo'"
                             @click="makePayment(order.data.id)"

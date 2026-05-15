@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\User\Buyer\Order\BuyerOrderController;
+use App\Http\Controllers\User\Buyer\Order\CheckoutController;
 use App\Http\Controllers\User\Buyer\Profile\ProfileBuyerController;
 use App\Http\Controllers\User\Farmer\Order\FarmerOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\Farmer\Product\ProductController;
 use App\Http\Controllers\User\Farmer\Profile\ProfileFarmerController;
-
+use Inertia\Inertia;
 
 // Routes pour l'agriculteur
 Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function () {
@@ -54,6 +55,18 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 
     Route::get('/buyer/order/{order_id}/tracking', [BuyerOrderController::class, 'showOrder'])->name('buyerOrderTracking');
     Route::put('/buyer/order/{order_id}/cancel', [BuyerOrderController::class, 'changeStatusToCanceled'])->name('buyerOrderCancel');
+
+    // Route::post('/checkout', [CheckoutController::class, 'checkout'])
+    //     ->name('checkout');
+
+    Route::post('/buyer/orders/stripe-checkout', [CheckoutController::class, 'stripeCheckout'])
+        ->name('buyerOrdersStripeCheckout');
+
+    Route::get('/buyer/orders/payment/success', [CheckoutController::class, 'paymentSuccess'])
+        ->name('buyerOrdersPaymentSuccess');
+
+    Route::get('/buyer/orders/payment/cancel', [CheckoutController::class, 'paymentCancel'])
+        ->name('buyerOrdersPaymentCancel');
 });
 
 

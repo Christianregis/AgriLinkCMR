@@ -74,7 +74,7 @@
                                     <input v-model="form.title" type="text" placeholder="Ex: Tomates fraîches bio"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title
-                                        }}</p>
+                                    }}</p>
                                 </div>
                                 <div>
                                     <label
@@ -128,7 +128,7 @@
                                         <input v-model="form.unit" type="text" placeholder="Ex: Kg, Sacs, Litres"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                         <p v-if="form.errors.unit" class="mt-1 text-sm text-red-500">{{ form.errors.unit
-                                            }}</p>
+                                        }}</p>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-sm font-semibold text-neutral-title">Prix par
@@ -179,85 +179,143 @@
 
                             <!-- Step 3: Product Images with Sidebar -->
                             <div v-if="currentStep === 3" class="space-y-6">
-                                <div class="flex gap-6 h-96">
-                                    <!-- LEFT SIDEBAR: Image Previews -->
-                                    <div
-                                        class="w-70 bg-gray-50 rounded-xl border border-gray-100 p-3 overflow-y-auto flex flex-col gap-2">
-                                        <!-- Warning if more than 6 images -->
-                                        <div v-if="imagePreviews.length > 6"
-                                            class="bg-amber-50 border border-amber-200 rounded-lg p-2 mb-2">
-                                            <div class="flex items-start gap-2">
-                                                <i
-                                                    class="fas fa-exclamation-triangle text-amber-600 text-sm mt-0.5 shrink-0"></i>
-                                                <div>
-                                                    <p class="text-xs font-bold text-amber-700">Limite atteinte</p>
-                                                    <p class="text-[10px] text-amber-600">Seules 6 images seront
-                                                        utilisées</p>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <!-- Image Thumbnails -->
-                                        <div v-if="displayedImages.length" class="flex flex-col gap-2">
-                                            <div v-for="(image, index) in displayedImages" :key="index"
-                                                class="relative group">
-                                                <img :src="image" :alt="`Image ${index + 1}`"
-                                                    class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-brand-primary transition-all cursor-pointer" />
-                                                <div
-                                                    class="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                                    <button @click="removeImage(index)" type="button"
-                                                        class="bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 transition-all">
-                                                        <i class="fas fa-trash text-xs"></i>
-                                                    </button>
-                                                </div>
-                                                <!-- Image count badge -->
-                                                <div
-                                                    class="absolute top-1 left-1 bg-brand-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-                                                    {{ index + 1 }}
-                                                </div>
-                                            </div>
-                                        </div>
+                                <!-- Input fichier caché unique, partagé par tous les boutons + -->
+                                <input id="product-images-input" type="file" accept="image/*" multiple
+                                    @change="handleImageUpload" class="hidden" />
 
-                                        <!-- Empty state -->
-                                        <div v-else class="flex items-center justify-center h-full text-center">
-                                            <div class="text-gray-400">
-                                                <i class="fas fa-image text-2xl mb-2 block"></i>
-                                                <p class="text-xs">Aucune image</p>
-                                            </div>
+                                <!-- Warning si > 6 images -->
+                                <div v-if="imagePreviews.length > 6"
+                                    class="bg-amber-50 border border-amber-200 rounded-lg p-2">
+                                    <div class="flex items-start gap-2">
+                                        <i
+                                            class="fas fa-exclamation-triangle text-amber-600 text-sm mt-0.5 shrink-0"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-amber-700">Limite atteinte</p>
+                                            <p class="text-[10px] text-amber-600">Seules 6 images seront utilisées</p>
                                         </div>
-                                    </div>
-
-                                    <!-- RIGHT SECTION: Upload Area -->
-                                    <div class="flex-1 flex flex-col h-50">
-                                        <label class="block mb-3 text-sm font-semibold text-neutral-title">Images du
-                                            produit</label>
-                                        <div
-                                            class="flex-1 flex justify-center px-6 py-8 transition-colors border-2 border-gray-300 border-dashed cursor-pointer rounded-xl hover:border-brand-primary bg-neutral-bg hover:bg-brand-bg/20 group">
-                                            <div class="space-y-3 text-center">
-                                                <i
-                                                    class="mb-2 text-4xl text-gray-400 fas fa-cloud-arrow-up group-hover:text-brand-primary transition-colors"></i>
-                                                <div class="flex text-sm text-gray-600">
-                                                    <input type="file" accept="image/*" multiple
-                                                        @change="handleImageUpload"
-                                                        class="font-semibold text-brand-primary cursor-pointer" />
-                                                </div>
-                                                <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB par image</p>
-                                                <p class="text-xs text-gray-400">Maximum {{ maxImages }} images</p>
-                                                <div v-if="imagePreviews.length"
-                                                    class="pt-2 border-t border-gray-200 mt-3">
-                                                    <p class="text-xs font-semibold text-neutral-title">
-                                                        {{ imagePreviews.length }} image{{ imagePreviews.length > 1 ?
-                                                            's' : '' }} ajoutée{{ imagePreviews.length > 1 ? 's' : '' }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Error message -->
-                                        <p v-if="form.errors.images" class="mt-3 text-sm text-red-500">{{
-                                            form.errors.images }}</p>
                                     </div>
                                 </div>
+
+                                <!-- ── ÉTAT ZÉRO IMAGE : layout horizontal d'origine ────────────────── -->
+                                <div v-if="imagePreviews.length === 0" class="flex gap-6 h-96">
+
+                                    <!-- PANNEAU GAUCHE : carte + à la place du vide -->
+                                    <div class="w-70 bg-gray-50 rounded-xl border border-gray-100 p-3 flex">
+                                        <label for="product-images-input" class="w-full flex flex-col items-center justify-center
+                       rounded-xl border-2 border-dashed border-gray-300
+                       cursor-pointer hover:border-brand-primary
+                       hover:bg-brand-primary/5 transition-all group">
+                                            <div class="flex flex-col items-center gap-2 text-gray-400
+                            group-hover:text-brand-primary transition-colors">
+                                                <span class="w-10 h-10 rounded-full border-2 border-current
+                                 flex items-center justify-center">
+                                                    <i class="fas fa-plus text-base"></i>
+                                                </span>
+                                                <p class="text-xs font-medium">Ajouter une image</p>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- PANNEAU DROIT : zone d'upload d'origine -->
+                                    <div class="flex-1 flex flex-col">
+                                        <label class="block mb-3 text-sm font-semibold text-neutral-title">
+                                            Images du produit
+                                        </label>
+                                        <label for="product-images-input" class="flex-1 flex justify-center px-6 py-8 transition-colors
+                       border-2 border-gray-300 border-dashed cursor-pointer
+                       rounded-xl hover:border-brand-primary
+                       bg-neutral-bg hover:bg-brand-primary/5 group">
+                                            <div class="space-y-3 text-center self-center">
+                                                <i class="mb-2 text-4xl text-gray-400
+                              fas fa-cloud-arrow-up
+                              group-hover:text-brand-primary transition-colors"></i>
+                                                <p class="text-sm font-semibold text-brand-primary">
+                                                    Choisir des fichiers
+                                                </p>
+                                                <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB par image</p>
+                                                <p class="text-xs text-gray-400">Maximum {{ maxImages }} images</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- ── 1+ IMAGES : grille de cartes ─────────────────────────────────── -->
+                                <div v-else>
+                                    <label class="block mb-3 text-sm font-semibold text-neutral-title">
+                                        Images du produit
+                                        <span class="ml-2 text-xs font-normal text-neutral-muted">
+                                            ({{ displayedImages.length }}/{{ maxImages }})
+                                        </span>
+                                    </label>
+
+                                    <div class="grid grid-cols-3 gap-3">
+
+                                        <!-- Cartes images existantes -->
+                                        <div v-for="(image, index) in displayedImages" :key="index"
+                                            class="relative group aspect-square">
+                                            <img :src="image" :alt="`Image ${index + 1}`" class="w-full h-full object-cover rounded-xl
+                           border-2 border-gray-200
+                           hover:border-brand-primary transition-all" />
+
+                                            <!-- Badge numéro -->
+                                            <div class="absolute top-1.5 left-1.5 bg-brand-primary text-white
+                            text-[10px] font-bold px-1.5 py-0.5 rounded">
+                                                {{ index + 1 }}
+                                            </div>
+
+                                            <!-- Overlay suppression au survol -->
+                                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/25
+                            rounded-xl transition-all
+                            flex items-center justify-center
+                            opacity-0 group-hover:opacity-100">
+                                                <button @click="removeImage(index)" type="button" class="bg-red-600 hover:bg-red-700 text-white
+                               rounded-full p-2 transition-all
+                               hover:scale-110 active:scale-95">
+                                                    <i class="fas fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Carte + active (moins de 6 images) -->
+                                        <label v-if="imagePreviews.length < maxImages" for="product-images-input" class="aspect-square flex flex-col items-center justify-center
+                       rounded-xl border-2 border-dashed border-gray-300
+                       cursor-pointer hover:border-brand-primary
+                       hover:bg-brand-primary/5 bg-gray-50
+                       transition-all group">
+                                            <span class="w-10 h-10 rounded-full border-2 border-gray-300
+                             group-hover:border-brand-primary
+                             flex items-center justify-center
+                             text-gray-300 group-hover:text-brand-primary
+                             transition-colors mb-1">
+                                                <i class="fas fa-plus text-base"></i>
+                                            </span>
+                                            <p class="text-[11px] text-gray-400
+                          group-hover:text-brand-primary transition-colors">
+                                                Ajouter
+                                            </p>
+                                        </label>
+
+                                        <!-- Carte + grisée (6 images atteintes) -->
+                                        <div v-else class="aspect-square flex flex-col items-center justify-center
+                       rounded-xl border-2 border-dashed border-gray-200
+                       bg-gray-100 cursor-not-allowed opacity-50 select-none">
+                                            <span class="w-10 h-10 rounded-full border-2 border-gray-300
+                             flex items-center justify-center
+                             text-gray-300 mb-1">
+                                                <i class="fas fa-plus text-base"></i>
+                                            </span>
+                                            <p class="text-[11px] text-gray-300">Maximum atteint</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- Message d'erreur images -->
+                                <p v-if="form.errors.images" class="text-sm text-red-500">
+                                    {{ form.errors.images }}
+                                </p>
+
                             </div>
 
                             <!-- Navigation Buttons -->

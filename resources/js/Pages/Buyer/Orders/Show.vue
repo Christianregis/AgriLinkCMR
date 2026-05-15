@@ -128,14 +128,14 @@
                                     class="flex-1 md:flex-none px-4 py-2 border border-brand-primary text-brand-primary rounded-xl text-xs font-bold hover:bg-brand-bg transition-all text-center">
                                     <i class="fas fa-eye mr-2"></i>Voir
                                 </Link>
-                                <Link v-if="order.status === 'pending'" :href="buyerOrderDelete(order.id)" :method="'delete'"
+                                <!-- <Link v-if="order.status === 'pending'" :href="buyerOrderDelete(order.id)" :method="'delete'"
                                     class="flex-1 md:flex-none px-4 py-2 border border-red-200 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 transition-all">
                                     <i class="fas fa-trash mr-2"></i>Supprimer
                                 </Link>
                                 <button v-else disabled
                                     class="flex-1 md:flex-none px-4 py-2 border border-gray-200 text-gray-400 rounded-xl text-xs font-bold cursor-not-allowed opacity-50">
                                     <i class="fas fa-trash mr-2"></i>Supprimer
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -174,7 +174,7 @@ import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue'
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue'
 import FlashMessage from '@/Components/FlashMessage.vue'
 import Pagination from '@/Components/Pagination.vue'
-import { buyerOrderConfirm, buyerOrderDelete, buyerOrderTracking, catalog } from '@/routes'
+import { buyerOrderConfirm, buyerOrderTracking, catalog } from '@/routes'
 import { formatAmount } from '@/utils/formatAmount'
 import { formatDate } from '@/utils/formatDate'
 

@@ -103,7 +103,7 @@
                         </button>
 
                         <!-- Cancel Order -->
-                        <button @click="showCancelModal = true"
+                        <button v-if="order.data.status === 'pending'" @click="showCancelModal = true"
                             class="px-6 py-3 border-2 border-red-200 text-red-600 font-bold rounded-xl hover:bg-red-50 transition-all flex items-center gap-2">
                             <i class="fas fa-times"></i>
                             Annuler la Commande

@@ -25,7 +25,7 @@
                                 <img :src="order.buyer.profile_photo || `https://ui-avatars.com/api/?name=${order.buyer.name}&background=random`"
                                     class="w-7 h-7 rounded-full" />
                                 <span class="text-sm font-medium text-neutral-body">{{ order.buyer.name
-                                    }}</span>
+                                }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-5 text-sm text-neutral-muted">
@@ -60,10 +60,6 @@
                                 class="p-2 text-brand-primary hover:bg-brand-bg rounded-lg transition-all">
                                 <i class="fas fa-eye"></i>
                             </Link>
-                            <button v-if="order.status === 'pending'" @click="showCancelModal = true"
-                                class="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-all ml-2">
-                                <i class="fas fa-times"></i>
-                            </button>
                         </td>
                         <!-- CANCEL CONFIRMATION MODAL -->
                         <div v-if="showCancelModal"
@@ -79,7 +75,7 @@
                                         class="flex-1 px-4 py-2 border-2 border-gray-200 text-neutral-title font-bold rounded-xl hover:bg-gray-50 transition-all">
                                         Annuler
                                     </button>
-                                    <button @click="updateOrderStatus('cancel',order.id)" :disabled="isUpdating"
+                                    <button @click="updateOrderStatus('cancel', order.id)" :disabled="isUpdating"
                                         class="flex-1 px-4 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                                         Confirmer l'Annulation
                                     </button>
@@ -131,7 +127,7 @@ const isUpdating = ref<boolean>(false)
 /**
  * Mise a jour du status de la commande
  */
-const updateOrderStatus = (newStatus: OrderStatus, order_id: number)=>{
+const updateOrderStatus = (newStatus: OrderStatus, order_id: number) => {
     const form = useForm({
         _method: 'put',
         status: newStatus,

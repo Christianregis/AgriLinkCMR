@@ -83,7 +83,7 @@
                             :disabled="isUpdating"
                             class="px-6 py-3 bg-brand-primary hover:bg-brand-hover text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                             <i class="fas fa-check"></i>
-                            Accepter la Commande
+                            Preparer la Commande
                         </button>
 
                         <!-- Mark as Ready (Preparation -> Ready) -->

@@ -7,7 +7,7 @@ use App\Http\Controllers\User\Farmer\Order\FarmerOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\Farmer\Product\ProductController;
 use App\Http\Controllers\User\Farmer\Profile\ProfileFarmerController;
-use Inertia\Inertia;
+use App\Http\Controllers\User\UserController;
 
 // Routes pour l'agriculteur
 Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function () {
@@ -56,6 +56,8 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
     Route::get('/buyer/order/{order_id}/tracking', [BuyerOrderController::class, 'showOrder'])->name('buyerOrderTracking');
     Route::put('/buyer/order/{order_id}/cancel', [BuyerOrderController::class, 'changeStatusToCanceled'])->name('buyerOrderCancel');
 
+    Route::post('/buyer/order/leaveComment', [BuyerOrderController::class, 'leaveReview'])->name('buyerOrderLeaveComment');
+
     // Route::post('/checkout', [CheckoutController::class, 'checkout'])
     //     ->name('checkout');
 
@@ -70,5 +72,8 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 });
 
 
+Route::prefix('user')->middleware('auth')->group(function (){
+    Route::get('/user/messages', [UserController::class, 'showMessageForm'])->name('userMessageShow');
+});
 // Routes pour l'administrateur
 Route::middleware(['role:admin', 'auth'])->group(function () {});

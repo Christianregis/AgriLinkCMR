@@ -20,6 +20,7 @@ class Order extends Model
         'payment_method',
         'delivery_address',
         'total_amount',
+        'comment',
         'notes'
     ];
 
@@ -47,12 +48,14 @@ class Order extends Model
         return $this->hasMany(OrderStatusLogs::class);
     }
 
+
+
     // Scopes
     public function findById($query, $order_id)
     {
         $query->where('id', $order_id);
     }
-    
+
     public function scopeWithFarmer($query, $farmer_id)
     {
         $query->where('farmer_id', $farmer_id);

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use App\Services\OrderService;
+use Illuminate\Http\Request;
 
 class BuyerOrderController extends Controller
 {
@@ -36,9 +37,21 @@ class BuyerOrderController extends Controller
             $request->validated()
         );
 
-        redirect()->back()->with('success', 'Votre commande a été passée avec succès !');
+        return redirect()->back()->with('success', 'Votre commande a été passée avec succès !');
     }
 
+    public function leaveReview(Request $request)
+    {
+
+
+        $order = Order::where('order_number', '=', $request->input('reviewOrderId'))->firstOrFail();
+
+        $order->update([
+            'comment' => $request->input('reviewText')
+        ]);
+
+        return redirect()->back()->with('success', 'Votre avis a été envoyé avec succès !');
+    }
 
     public function showOrders()
     {

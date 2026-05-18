@@ -1,11 +1,12 @@
 <template>
-    <FlashMessage/>
+    <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
-        <BuyerSidebar ref="buyerSidebarRef"/>
+        <BuyerSidebar ref="buyerSidebarRef" />
 
         <!-- MAIN CONTENT -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo" @openbuyer-sidebar="openSidebar"/>
+            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"
+                @openbuyer-sidebar="openSidebar" />
 
             <!-- ORDER TRACKING CONTENT -->
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
@@ -68,17 +69,12 @@
 
                     <!-- Conditional Actions -->
                     <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-                        <!-- Effectuer le paiement (si PENDING et momo) -->
-                        <button v-if="order.data.status === 'pending' && order.data.payment_method === 'momo'"
-                            @click="makePayment(order.data.id)"
-                            class="px-6 py-3 bg-brand-primary hover:bg-brand-hover text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
-                            <i class="fas fa-money-bill-wave"></i> Effectuer le Paiement
-                        </button>
 
                         <!-- Laisser un avis (si DELIVERED) -->
-                        <button v-if="order.data.status === 'success'" @click="leaveReview(order.data.id)"
-                            class="px-6 py-3 bg-accent-cta hover:bg-accent-cta/90 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
-                            <i class="fas fa-star"></i> Laisser un Avis
+                        <button v-if="order.data.status === 'success'"
+                            @click="order.data.comment ?? leaveReview(order.data.order_number)"
+                            :class="['px-6 py-3', order.data.comment ?? 'bg-accent-cta hover:bg-accent-cta/90', 'text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2']">
+                            <i class="fas fa-star"></i> {{ order.data.comment ?? 'Laisser un Avis' }}
                         </button>
 
                         <!-- Continuer les achats -->
@@ -217,6 +213,38 @@
                 </div>
             </div>
         </div>
+        <!-- REVIEW MODAL -->
+        <div v-if="showReviewModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-lg">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-full bg-accent-cta/10 flex items-center justify-center">
+                        <i class="fas fa-star text-accent-cta"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-title">Laisser un avis au vendeur sur la commande #{{
+                        reviewOrderid }} ?</h3>
+                </div>
+                <p class="text-sm text-neutral-muted mb-5">Partagez votre expérience avec cette commande. Votre avis
+                    aide les autres acheteurs.</p>
+
+                <textarea v-model="form.reviewText" rows="4"
+                    placeholder="Décrivez votre expérience avec ce vendeur et cette commande..."
+                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm text-neutral-title placeholder-gray-400 focus:outline-none focus:border-brand-primary resize-none transition-colors"></textarea>
+
+                <div class="flex gap-3 mt-5">
+                    <button @click="showReviewModal = false; form.reviewText = ''"
+                        class="flex-1 px-4 py-2 border-2 border-gray-200 text-neutral-title font-bold rounded-xl hover:bg-gray-50 transition-all">
+                        Annuler
+                    </button>
+                    <button @click="submitReview(order.data.order_number)"
+                        :disabled="!form.reviewText.trim() || form.processing"
+                        class="flex-1 px-4 py-2 bg-accent-cta hover:bg-accent-cta/90 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i>{{
+                            form.processing ? 'Envoie en cours...' : 'Envoyer'
+                        }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 </template>
 
@@ -227,7 +255,7 @@ import { computed, ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import { buyerOrderShow, catalog, buyerOrderCancel, productInfo, showFarmerInfo } from '@/routes';
+import { buyerOrderShow, catalog, buyerOrderCancel, productInfo, showFarmerInfo, buyerOrderLeaveComment } from '@/routes';
 import type { OrderStatus } from '@/types/Order';
 import { formatDate } from '@/utils/formatDate';
 
@@ -291,6 +319,7 @@ interface Order {
     notes?: string;
     created_at: string;
     updated_at: string;
+    comment?: string;
     farmer: User; // Assuming farmer details are loaded
     order_items: OrderItem[];
     order_status_logs: OrderStatusLog[];
@@ -389,17 +418,37 @@ const updateOrderStatus = () => {
     });
 }
 
-const makePayment = (orderId: number) => {
-    // Implement payment logic here. This might redirect to a payment gateway
-    // or open a payment modal. For now, a placeholder.
-    alert(`Procéder au paiement pour la commande ${orderId} via Mobile Money.`);
-    // Example: form.post(route('buyer.orders.pay', orderId));
+
+const showReviewModal = ref<boolean>(false)
+const reviewOrderid = ref<string>('')
+const leaveReview = (orderId: string) => {
+    showReviewModal.value = true;
+
+    reviewOrderid.value = orderId
 };
 
-const leaveReview = (orderId: number) => {
-    // Implement review modal or redirect to review page
-    alert(`Laisser un avis pour la commande ${orderId}.`);
-    // Example: Inertia.visit(route('buyer.orders.review', orderId));
+interface LeaveCommentForm {
+    reviewText: string,
+    reviewOrderId: string | null
+
+}
+const form = useForm<LeaveCommentForm>({
+    reviewText: '',
+    reviewOrderId: null
+});
+form.reviewText = ''
+const submitReview = (orderId: string) => {
+
+    form.reviewOrderId = orderId
+    form.post(buyerOrderLeaveComment.url(), {
+        onSuccess: () => {
+            form.reset()
+            showReviewModal.value = false
+        },
+        onError: (errors) => {
+            console.log('An Error was occured during submitting form ', errors)
+        }
+    })
 };
 
 const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null)

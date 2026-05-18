@@ -29,6 +29,7 @@ class OrderResource extends JsonResource
             'notes' => $this->notes,
             'created_at' => $this->created_at->format("Y-m-d"),
             'updated_at' => $this->updated_at->format("Y-m-d"),
+            'comment' => $this->comment,
             'farmer' => $this->whenLoaded('farmer', function () {
                 return UserResource::make($this->farmer);
             }),

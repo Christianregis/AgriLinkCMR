@@ -19,7 +19,7 @@ class MessageResource extends JsonResource
             'conversation_id' => $this->conversation_id,
             'sender_id' => $this->sender_id,
             'body' => $this->body,
-            'attachment_path' => $this->attachment_path,
+            'attachment_path' => $this->attachment_path ? asset('/storage/' . $this->attachment_path) : null,
             'read_at' => $this->read_at,
             'created_at' => $this->created_at
         ];

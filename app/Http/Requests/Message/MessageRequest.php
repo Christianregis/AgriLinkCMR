@@ -25,7 +25,7 @@ class MessageRequest extends FormRequest
     {
         return [
             'body' => ['string', 'max:2000', 'required'],
-            'attachment_path' => ['file', 'mimes:png,jpg,xls,pdf,jpeg,webp', 'max:2048', 'nullable'],
+            'attachment' => ['file', 'mimes:png,jpg,xls,pdf,jpeg,webp', 'max:2048', 'nullable'],
         ];
     }
 }

@@ -25,15 +25,19 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $conversation = Conversation::where('id', '=', $conversation_id)->firstOrFail();
+        $attachmentPath = null;
 
-        $media = $conversation
-            ->addMedia($data['attachment_path'])
-            ->toMediaCollection('attachements_path');
+        if ($request->hasFile('attachment')) {
+
+            $attachmentPath = $request
+                ->file('attachment')
+                ->store('messages/attachments', 'public');
+        }
 
         $message = $conversation->messages()->create([
             'sender_id' => Auth::user()->id,
             'body' => $data['body'],
-            'attachment_path' => $data['attachment_path'] ? $media->getPathRelativeToRoot() : null,
+            'attachment_path' => $data['attachment'] ? $attachmentPath : null,
             'read_at' => Carbon::now(),
         ]);
 

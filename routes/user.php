@@ -76,6 +76,7 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 
 Route::prefix('user')->middleware('auth')->group(function (){
     Route::get('/messages', [UserController::class, 'showMessageForm'])->name('userMessageShow');
+    Route::post('/conversations/{conversation_id}/messages/add', [UserController::class, 'sendMessage'])->name('userMessageAddNew');
 });
 // Routes pour l'administrateur
 Route::middleware(['role:admin', 'auth'])->group(function () {});

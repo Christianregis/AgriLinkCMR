@@ -138,7 +138,7 @@
                             </div>
 
                             <!-- DISCUSSION BUTTON -->
-                            <button @click="handleStartConversation(product.data.farmer_profile.id, product.data.id)"
+                            <button v-if="user.role === 'buyer'" @click="handleStartConversation(product.data.farmer_profile.id, product.data.id)"
                                 class="flex items-center gap-2 bg-white border border-brand-primary text-brand-primary px-4 py-3 rounded-xl text-sm font-bold hover:bg-brand-primary hover:text-white transition-all duration-200 shadow-sm hover:shadow whitespace-nowrap">
                                 <i class="fas fa-comments text-xs"></i>
 
@@ -156,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import CartSidebar from '@/Components/CartSidebar.vue'; // Adjust path as needed
 import AuthLayout from '@/Layouts/AuthLayout.vue';
@@ -217,7 +217,8 @@ interface ProductShowProps {
 }
 
 const props = defineProps<ProductShowProps>();
-
+const page = usePage();
+const user = page.props.auth.user.data;
 const cartStore = useCartStore();
 const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
 

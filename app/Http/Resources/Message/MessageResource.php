@@ -20,8 +20,8 @@ class MessageResource extends JsonResource
             'sender_id' => $this->sender_id,
             'body' => $this->body,
             'attachment_path' => $this->attachment_path,
-            'read_at' => $this->read_at->format('Y m d H:m'),
-            'created_at' => $this->created_at->format('Y m d H:m')
+            'read_at' => $this->read_at,
+            'created_at' => $this->created_at
         ];
     }
 }

@@ -103,7 +103,8 @@
                                         <div v-if="conversation.product" class="flex items-center gap-2 mt-2">
 
                                             <div class="w-8 h-8 rounded-lg overflow-hidden bg-gray-100">
-                                                <img v-if="conversation.product.primary_image" :src="conversation.product.primary_image"
+                                                <img v-if="conversation.product.primary_image"
+                                                    :src="conversation.product.primary_image"
                                                     class="w-full h-full object-cover" />
                                             </div>
 
@@ -193,7 +194,8 @@
                                         <div class="flex items-center gap-3">
 
                                             <h3 class="font-bold text-neutral-title">
-                                                {{ selectedConversation.farmer.name }}
+                                                <Link :href="showFarmerInfo(selectedConversation.product.id)">{{
+                                                    selectedConversation.farmer.name }}</Link>
                                             </h3>
 
                                             <span v-if="selectedConversation.is_archived"
@@ -209,7 +211,8 @@
                                             <i class="fas fa-leaf text-green-600 text-xs"></i>
 
                                             <p class="text-sm text-neutral-muted">
-                                                {{ selectedConversation.product.title }}
+                                                <Link :href="productInfo(selectedConversation.product.id)">{{
+                                                    selectedConversation.product.title }}</Link>
                                             </p>
 
                                             <span v-if="selectedConversation.product.price"
@@ -276,7 +279,7 @@
                                             : 'justify-start'">
 
                                             <span class="text-[11px] text-neutral-muted">
-                                                {{ message.created_at }}
+                                                {{ formatDate(message.created_at) ?? '0' }}
                                             </span>
 
                                             <i v-if="message.read_at && message.sender_id === user.data.id"
@@ -308,7 +311,8 @@
                                         class="flex-1 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-3xl px-2 py-2 focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all">
 
                                         <textarea v-model="form.body" rows="1" placeholder="Écrivez votre message..."
-                                            class="flex-1 bg-transparent resize-none border-none outline-none px-3 py-2 text-[15px]"></textarea>
+                                            class="flex-1 bg-transparent resize-none border-none outline-none px-3 py-2 text-[15px]"
+                                            :required="true"></textarea>
 
                                         <button type="submit" :disabled="form.processing"
                                             class="shrink-0 w-11 h-11 rounded-2xl bg-brand-primary hover:bg-brand-hover text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50">
@@ -326,14 +330,18 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
+import { watch } from 'vue'
 import BuyerNavbar from "@/Components/Buyer/Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "@/Components/Buyer/Sidebar/BuyerSidebar.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
+import echo from "@/echo";
+import { productInfo, showFarmerInfo, userMessageAddNew } from "@/routes";
+import { formatDate } from "@/utils/formatDate";
 
 interface Message {
-    id: number;
+    id: number,
     conversation_id: number;
     sender_id: number;
     body: string;
@@ -367,7 +375,7 @@ interface Conversation {
     updated_at: string;
 
     farmer: Farmer;
-    product?: Product | null;
+    product: Product
 
     messages: Message[];
 
@@ -400,6 +408,7 @@ const selectedConversation = ref<Conversation | null>(
 
 
 const form = useForm({
+
     body: "",
     attachment: null as File | null,
 });
@@ -417,13 +426,28 @@ const submit = () => {
         return;
     }
 
+    const optimisticMessage = {
+        id: selectedConversation.value.id,
+        conversation_id: selectedConversation.value.id,
+        sender_id: user.data.id,
+        body: form.body,
+        attachment_path: undefined,
+        read_at: undefined,
+        created_at: selectedConversation.value.created_at,
+    }
+    console.log(optimisticMessage.created_at)
+    selectedConversation.value.messages.push(
+        optimisticMessage
+    )
     form.post(
-        `/buyer/messages/${selectedConversation.value.id}`,
+        userMessageAddNew.url(selectedConversation.value.id),
         {
             forceFormData: true,
             preserveScroll: true,
             onSuccess: () => {
-                form.reset();
+
+                form.reset('body', 'attachment');
+
             },
         }
     );
@@ -435,6 +459,29 @@ const selectConversation = (conversation: Conversation) => {
 
 const page = usePage();
 const user = page.props.auth.user;
+watch(selectedConversation, (conversation, oldConversation) => {
+
+    // Quitter ancienne conversation
+    if (oldConversation) {
+
+        echo.leave(`conversation.${oldConversation.id}`)
+
+    }
+
+    // Rejoindre nouvelle conversation
+    if (conversation) {
+
+        echo.private(`conversation.${conversation.id}`)
+
+            .listen('.message.sent', (event: any) => {
+
+                conversation.messages.push(event.message)
+
+            })
+
+    }
+
+})
 </script>
 
 <style scoped>

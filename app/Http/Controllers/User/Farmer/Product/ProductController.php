@@ -116,7 +116,7 @@ class ProductController extends Controller
             ])
             ->findOrFail($id);
 
-        // 🔒 sécurité
+        // sécurité
         if (Auth::id() !== $product->user_id) {
             abort(403);
         }

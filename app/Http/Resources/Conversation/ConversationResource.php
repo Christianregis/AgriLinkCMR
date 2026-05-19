@@ -18,6 +18,7 @@ class ConversationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'farmer_id' => $this->farmer_id,
             'buyer_id' => $this->buyer_id,
             'product_id' => $this->product_id,

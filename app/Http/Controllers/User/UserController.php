@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function showMessageForm()
     {
-        $conversations = Conversation::with('farmer')->where('buyer_id', Auth::user()->id)->get();
+        $conversations = Conversation::with('farmer')->where('buyer_id', Auth::user()->id)->latest()->get();
         return Inertia::render('Messages/Index', [
             'conversations' => $conversations,
         ]);

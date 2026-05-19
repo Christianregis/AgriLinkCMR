@@ -102,23 +102,48 @@
 
                     <!-- Farmer Information -->
                     <div class="pt-6 border-t border-gray-100">
-                        <h2 class="text-xl font-bold text-neutral-title mb-4">Informations sur le vendeur</h2>
-                        <div class="flex items-center space-x-4">
-                            <img :src="product.data.farmer_profile.profile_photo || 'https://via.placeholder.com/80x80?text=Agriculteur'"
-                                alt="Seller Profile Photo"
-                                class="w-16 h-16 rounded-full object-cover border-2 border-brand-primary" />
-                            <div>
-                                <h3 class="font-semibold text-neutral-title">{{ product.data.farmer_profile.name }}</h3>
-                                <div class="flex items-center text-sm text-neutral-muted">
-                                    <div class="flex text-accent-star mr-2">
-                                        <i v-for="i in 5" :key="i"
-                                            :class="[i <= product.data.farmer_profile.average_rating ? 'fas' : 'far', 'fa-star']"></i>
+                        <h2 class="text-xl font-bold text-neutral-title mb-4">
+                            Informations sur le vendeur
+                        </h2>
+
+                        <div class="flex items-center justify-between gap-4 flex-wrap">
+
+                            <!-- SELLER INFO -->
+                            <div class="flex items-center space-x-4">
+                                <img :src="product.data.farmer_profile.profile_photo || 'https://via.placeholder.com/80x80?text=Agriculteur'"
+                                    alt="Seller Profile Photo"
+                                    class="w-16 h-16 rounded-full object-cover border-2 border-brand-primary" />
+
+                                <div>
+                                    <h3 class="font-semibold text-neutral-title">
+                                        {{ product.data.farmer_profile.name }}
+                                    </h3>
+
+                                    <div class="flex items-center text-sm text-neutral-muted">
+                                        <div class="flex text-accent-star mr-2">
+                                            <i v-for="i in 5" :key="i"
+                                                :class="[i <= product.data.farmer_profile.average_rating ? 'fas' : 'far', 'fa-star']"></i>
+                                        </div>
+
+                                        <span>
+                                            ({{ product.data.farmer_profile.reviews_count || 0 }} avis)
+                                        </span>
                                     </div>
-                                    <span>({{ product.data.farmer_profile.reviews_count || 0 }} avis)</span>
+
+                                    <Link :href="showFarmerInfo(product.data.id)"
+                                        class="text-sm text-brand-primary hover:underline mt-1 block">
+                                        Voir le profil
+                                    </Link>
                                 </div>
-                                <Link :href="showFarmerInfo(product.data.id)"
-                                    class="text-sm text-brand-primary hover:underline mt-1 block">Voir le profil</Link>
                             </div>
+
+                            <!-- DISCUSSION BUTTON -->
+                            <button @click="handleStartConversation(product.data.farmer_profile.id, product.data.id)"
+                                class="flex items-center gap-2 bg-white border border-brand-primary text-brand-primary px-4 py-3 rounded-xl text-sm font-bold hover:bg-brand-primary hover:text-white transition-all duration-200 shadow-sm hover:shadow whitespace-nowrap">
+                                <i class="fas fa-comments text-xs"></i>
+
+                                <span>Discuter</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -131,11 +156,11 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import CartSidebar from '@/Components/CartSidebar.vue'; // Adjust path as needed
 import AuthLayout from '@/Layouts/AuthLayout.vue';
-import { showFarmerInfo } from '@/routes';
+import { buyerConversationStart, showFarmerInfo } from '@/routes';
 import { useCartStore } from '../store/cartStore';
 
 // Type definitions based on your provided PHP model and existing components
@@ -253,6 +278,27 @@ const addToCart = () => {
     cartSidebarRef.value?.openCart(); // Open cart sidebar after adding item
 };
 
+interface Form {
+    farmer_id: number,
+    product_id: number,
+}
+
+const handleStartConversation = (farmer_id: number, product_id: number) => {
+    const form = useForm<Form>({
+        farmer_id: farmer_id,
+        product_id: product_id
+    });
+
+    form.post(buyerConversationStart.url(), {
+        onSuccess: () => {
+            form.reset();
+        },
+        onError: (error) => {
+            console.log("An Error an Occured", error)
+        }
+
+    })
+}
 </script>
 
 <style scoped>

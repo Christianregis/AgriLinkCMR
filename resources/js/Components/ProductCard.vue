@@ -1,23 +1,21 @@
 <template>
-    <Link :href="productInfo(product.id)"
-        :class="[
-            'group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300',
-            { 'flex flex-row w-full': displayMode === 'list' }
-        ]">
+    <Link :href="productInfo(product.id)" :class="[
+        'group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300',
+        { 'flex flex-row w-full': displayMode === 'list' }
+    ]">
 
         <!-- IMAGE -->
         <div :class="[
             'relative overflow-hidden shrink-0',
             displayMode === 'list' ? ' w-52 h-full min-h-48' : 'h-48 w-full'
         ]">
-            <img
-                :src="product.primary_image_url"
+            <img :src="product.primary_image_url"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                alt="Product Image"
-            >
+                alt="Product Image">
             <div class="absolute inset-0 bg-black/15 group-hover:bg-black/0 transition-all duration-500"></div>
             <!-- Region badge -->
-            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-brand-dark shadow-sm uppercase tracking-wider">
+            <div
+                class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-brand-dark shadow-sm uppercase tracking-wider">
                 <i class="fas fa-location-dot text-brand-primary mr-1"></i> {{ product.region.name }}
             </div>
         </div>
@@ -29,10 +27,8 @@
         ]">
             <!-- Top block -->
             <div>
-                <h3
-                    class="font-bold text-neutral-title mb-1"
-                    :class="displayMode === 'grid' ? 'truncate' : 'text-base leading-snug'"
-                >
+                <h3 class="font-bold text-neutral-title mb-1"
+                    :class="displayMode === 'grid' ? 'truncate' : 'text-base leading-snug'">
                     {{ product.title }}
                 </h3>
 
@@ -46,8 +42,7 @@
                 </div>
 
                 <!-- Description — list mode only -->
-                <p v-if="displayMode === 'list'"
-                    class="text-sm text-neutral-muted line-clamp-2 leading-relaxed">
+                <p v-if="displayMode === 'list'" class="text-sm text-neutral-muted line-clamp-2 leading-relaxed">
                     {{ product.description.substring(0, 100) }}{{ product.description.length > 100 ? '...' : '' }}
                 </p>
             </div>
@@ -61,10 +56,8 @@
                     </p>
                 </div>
 
-                <button
-                    @click.prevent.stop="addToCart()"
-                    class="flex items-center gap-2 bg-brand-primary text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-brand-hover transition-all duration-200 shadow-sm hover:shadow"
-                >
+                <button @click.prevent.stop="addToCart()"
+                    class="flex items-center gap-2 bg-brand-primary text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-brand-hover transition-all duration-200 shadow-sm hover:shadow">
                     <i class="fas fa-shopping-cart text-white text-xs"></i>
                 </button>
             </div>

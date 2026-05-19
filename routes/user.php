@@ -58,6 +58,8 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 
     Route::post('/buyer/order/leaveComment', [BuyerOrderController::class, 'leaveReview'])->name('buyerOrderLeaveComment');
 
+    Route::post('/conversation/start', [BuyerOrderController::class, 'startConversation'])->name('buyerConversationStart');
+
     // Route::post('/checkout', [CheckoutController::class, 'checkout'])
     //     ->name('checkout');
 
@@ -73,7 +75,7 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 
 
 Route::prefix('user')->middleware('auth')->group(function (){
-    Route::get('/user/messages', [UserController::class, 'showMessageForm'])->name('userMessageShow');
+    Route::get('/messages', [UserController::class, 'showMessageForm'])->name('userMessageShow');
 });
 // Routes pour l'administrateur
 Route::middleware(['role:admin', 'auth'])->group(function () {});

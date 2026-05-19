@@ -5,7 +5,9 @@ namespace App\Http\Controllers\User\Buyer\Order;
 use App\enum\order\OrderEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buyer\Order\OrderStoreRequest;
+use App\Http\Requests\Conversation\ConversationRequest;
 use App\Http\Resources\Order\OrderResource;
+use App\Models\Conversation;
 use App\Models\Order;
 use App\Models\Product;
 use Exception;
@@ -147,5 +149,19 @@ class BuyerOrderController extends Controller
             Log::error('Order deletion failed: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation de la commande. Veuillez réessayer.');
         }
+    }
+
+
+    public function startConversation(ConversationRequest $request)
+    {
+        $data = $request->validated();
+
+        Conversation::firstOrCreate([
+            'buyer_id' => Auth::user()->id,
+            'farmer_id' => $data['farmer_id'],
+            'product_id' => $data['product_id'],
+        ]);
+
+        return redirect()->route('userMessageShow');
     }
 }

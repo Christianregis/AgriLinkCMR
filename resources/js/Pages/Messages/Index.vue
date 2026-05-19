@@ -72,7 +72,7 @@
                                     <!-- AVATAR -->
                                     <div class="relative shrink-0">
 
-                                        <img :src="'/storage/'+conversation.farmer.profile_photo"
+                                        <img :src="'/storage/' + conversation.farmer.profile_photo"
                                             class="w-14 h-14 rounded-2xl object-cover border border-gray-100" />
 
                                         <span
@@ -97,7 +97,6 @@
                                                         : ''
                                                 }}
                                             </span>
-
                                         </div>
 
                                         <!-- PRODUCT -->
@@ -186,7 +185,7 @@
                                     </button>
 
                                     <!-- FARMER -->
-                                    <img :src="'/storage/'+selectedConversation.farmer.profile_photo"
+                                    <img :src="'/storage/' + selectedConversation.farmer.profile_photo"
                                         class="w-12 h-12 rounded-2xl object-cover" />
 
                                     <div>

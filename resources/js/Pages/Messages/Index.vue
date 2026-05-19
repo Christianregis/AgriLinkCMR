@@ -50,8 +50,6 @@
                         </div>
 
                         <!-- CONVERSATIONS -->
-                        <!-- ✅ UPDATE SIDEBAR CONVERSATIONS -->
-
                         <div class="flex-1 overflow-y-auto">
 
                             <button v-for="conversation in conversations.data" :key="conversation.id"
@@ -231,11 +229,6 @@
 
                                     <button
                                         class="w-11 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center">
-                                        <i class="fas fa-phone text-neutral-muted"></i>
-                                    </button>
-
-                                    <button
-                                        class="w-11 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center">
                                         <i class="fas fa-ellipsis-v text-neutral-muted"></i>
                                     </button>
 
@@ -246,50 +239,7 @@
                             <!-- MESSAGES -->
                             <div ref="messagesContainer" class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-4">
 
-                                <div v-for="message in selectedConversation.messages" :key="message.id" class="flex"
-                                    :class="message.sender_id === user.data.id
-                                        ? 'justify-end'
-                                        : 'justify-start'">
-
-                                    <div class="max-w-[85%] md:max-w-[70%]">
-
-                                        <!-- MESSAGE -->
-                                        <div class="rounded-3xl px-5 py-4 shadow-sm" :class="message.sender_id === user.data.id
-                                            ? 'bg-brand-primary text-white rounded-br-md'
-                                            : 'bg-white border border-gray-100 text-neutral-text rounded-bl-md'">
-
-                                            <!-- BODY -->
-                                            <p class="text-[15px] leading-relaxed whitespace-pre-line">
-                                                {{ message.body }}
-                                            </p>
-
-                                            <!-- ATTACHMENT -->
-                                            <a v-if="message.attachment_path" :href="message.attachment_path"
-                                                target="_blank"
-                                                class="mt-4 flex items-center gap-3 bg-black/5 rounded-2xl px-4 py-3 text-sm font-medium">
-                                                <i class="fas fa-paperclip"></i>
-                                                Pièce jointe
-                                            </a>
-
-                                        </div>
-
-                                        <!-- META -->
-                                        <div class="flex items-center gap-2 mt-2 px-2" :class="message.sender_id === user.data.id
-                                            ? 'justify-end'
-                                            : 'justify-start'">
-
-                                            <span class="text-[11px] text-neutral-muted">
-                                                {{ formatDate(message.created_at) ?? '0' }}
-                                            </span>
-
-                                            <i v-if="message.read_at && message.sender_id === user.data.id"
-                                                class="fas fa-check-double text-[11px] text-blue-500"></i>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
+                                <MessageBubble :selected-conversation="selectedConversation" />
 
                             </div>
 
@@ -336,52 +286,11 @@ import { watch } from 'vue'
 import BuyerNavbar from "@/Components/Buyer/Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "@/Components/Buyer/Sidebar/BuyerSidebar.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
+import MessageBubble from "@/Components/MessageBubble.vue";
 import echo from "@/echo";
 import { productInfo, showFarmerInfo, userMessageAddNew } from "@/routes";
-import { formatDate } from "@/utils/formatDate";
+import type { Conversation } from "@/types/Conversation";
 
-interface Message {
-    id: number,
-    conversation_id: number;
-    sender_id: number;
-    body: string;
-    attachment_path?: string;
-    read_at?: string;
-    created_at: string;
-}
-
-interface Farmer {
-    id: number;
-    name: string;
-    profile_photo: string;
-}
-
-
-interface Product {
-    id: number;
-    title: string;
-    primary_image: string;
-    price?: number;
-}
-
-interface Conversation {
-    id: number;
-    farmer_id: number;
-    buyer_id: number;
-    product_id?: number | null;
-    last_message_at?: string | null;
-    is_archived: boolean;
-    created_at: string;
-    updated_at: string;
-
-    farmer: Farmer;
-    product: Product
-
-    messages: Message[];
-
-    last_message?: string;
-    unread_count?: number;
-}
 
 interface Props {
     conversations: {
@@ -433,7 +342,7 @@ const submit = () => {
         body: form.body,
         attachment_path: undefined,
         read_at: undefined,
-        created_at: selectedConversation.value.created_at,
+        created_at: Date.toString(),
     }
     console.log(optimisticMessage.created_at)
     selectedConversation.value.messages.push(

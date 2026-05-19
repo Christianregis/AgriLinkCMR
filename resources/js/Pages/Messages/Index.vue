@@ -325,7 +325,6 @@ interface Props {
 
 defineProps<Props>();
 
-
 const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null);
 const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
 

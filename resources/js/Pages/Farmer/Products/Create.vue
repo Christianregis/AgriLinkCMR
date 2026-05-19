@@ -74,7 +74,7 @@
                                     <input v-model="form.title" type="text" placeholder="Ex: Tomates fraîches bio"
                                         class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                     <p v-if="form.errors.title" class="mt-1 text-sm text-red-500">{{ form.errors.title
-                                    }}</p>
+                                        }}</p>
                                 </div>
                                 <div>
                                     <label
@@ -128,7 +128,7 @@
                                         <input v-model="form.unit" type="text" placeholder="Ex: Kg, Sacs, Litres"
                                             class="w-full px-4 py-3 transition-all border bg-neutral-bg border-neutral-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" />
                                         <p v-if="form.errors.unit" class="mt-1 text-sm text-red-500">{{ form.errors.unit
-                                        }}</p>
+                                            }}</p>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-sm font-semibold text-neutral-title">Prix par
@@ -200,23 +200,6 @@
                                 <!-- ── ÉTAT ZÉRO IMAGE : layout horizontal d'origine ────────────────── -->
                                 <div v-if="imagePreviews.length === 0" class="flex gap-6 h-96">
 
-                                    <!-- PANNEAU GAUCHE : carte + à la place du vide -->
-                                    <div class="w-70 bg-gray-50 rounded-xl border border-gray-100 p-3 flex">
-                                        <label for="product-images-input" class="w-full flex flex-col items-center justify-center
-                       rounded-xl border-2 border-dashed border-gray-300
-                       cursor-pointer hover:border-brand-primary
-                       hover:bg-brand-primary/5 transition-all group">
-                                            <div class="flex flex-col items-center gap-2 text-gray-400
-                            group-hover:text-brand-primary transition-colors">
-                                                <span class="w-10 h-10 rounded-full border-2 border-current
-                                 flex items-center justify-center">
-                                                    <i class="fas fa-plus text-base"></i>
-                                                </span>
-                                                <p class="text-xs font-medium">Ajouter une image</p>
-                                            </div>
-                                        </label>
-                                    </div>
-
                                     <!-- PANNEAU DROIT : zone d'upload d'origine -->
                                     <div class="flex-1 flex flex-col">
                                         <label class="block mb-3 text-sm font-semibold text-neutral-title">
@@ -278,16 +261,17 @@
                                         </div>
 
                                         <!-- Carte + active (moins de 6 images) -->
-                                        <label v-if="imagePreviews.length < maxImages" for="product-images-input" class="aspect-square flex flex-col items-center justify-center
-                       rounded-xl border-2 border-dashed border-gray-300
-                       cursor-pointer hover:border-brand-primary
-                       hover:bg-brand-primary/5 bg-gray-50
-                       transition-all group">
+                                        <label v-if="imagePreviews.length < maxImages"
+                                            for="product-images-input" class="aspect-square flex flex-col items-center justify-center
+                                                rounded-xl border-2 border-dashed border-gray-300
+                                                cursor-pointer hover:border-brand-primary
+                                                hover:bg-brand-primary/5 bg-gray-50
+                                                transition-all group">
                                             <span class="w-10 h-10 rounded-full border-2 border-gray-300
-                             group-hover:border-brand-primary
-                             flex items-center justify-center
-                             text-gray-300 group-hover:text-brand-primary
-                             transition-colors mb-1">
+                                        group-hover:border-brand-primary
+                                        flex items-center justify-center
+                                        text-gray-300 group-hover:text-brand-primary
+                                        transition-colors mb-1">
                                                 <i class="fas fa-plus text-base"></i>
                                             </span>
                                             <p class="text-[11px] text-gray-400

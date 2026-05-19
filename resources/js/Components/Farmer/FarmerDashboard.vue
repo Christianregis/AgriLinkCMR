@@ -111,7 +111,7 @@
                                     Aucun message récent
                                 </h4>
 
-                                <p class="text-xs text-neutral-muted max-w-[220px] leading-relaxed">
+                                <p class="text-xs text-neutral-muted max-w-55 leading-relaxed">
                                     Vos nouvelles conversations et messages apparaîtront ici.
                                 </p>
 

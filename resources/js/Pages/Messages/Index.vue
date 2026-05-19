@@ -2,15 +2,17 @@
     <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <BuyerSidebar ref="buyerSidebarRef" />
+        <BuyerSidebar v-if="user.data.role == 'buyer'" ref="buyerSidebarRef" />
+        <FarmerSidebar v-else ref="farmerSidebarRef" />
 
         <!-- MAIN -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
 
             <!-- NAVBAR -->
-            <BuyerNavbar :name="user.data.name" :profile_photo="user.data.profile_photo"
-                @openbuyer-sidebar="openSidebar" />
-
+            <BuyerNavbar v-if="user.data.role == 'buyer'" :name="user.data.name"
+                :profile_photo="user.data.profile_photo" @openbuyer-sidebar="openSidebar" />
+            <FarmerNavbar v-else :name="user.data.name" :profile_photo="user.data.profile_photo"
+                @toggle-sidebar="handleToogleSidebar" />
             <!-- CONTENT -->
             <div class="flex-1 overflow-hidden p-4 md:p-8">
 
@@ -70,7 +72,7 @@
                                     <!-- AVATAR -->
                                     <div class="relative shrink-0">
 
-                                        <img :src="conversation.farmer.profile_photo"
+                                        <img :src="user.data.role == 'buyer' ? conversation.farmer.profile_photo : conversation.buyer.profile_photo"
                                             class="w-14 h-14 rounded-2xl object-cover border border-gray-100" />
 
                                         <span
@@ -85,7 +87,8 @@
                                         <div class="flex items-center justify-between gap-3">
 
                                             <h3 class="font-semibold text-neutral-title truncate">
-                                                {{ conversation.farmer.name }}
+                                                {{ user.data.role == 'buyer' ? conversation.farmer.name :
+                                                    conversation.buyer.name }}
                                             </h3>
 
                                             <span class="text-[11px] text-neutral-muted whitespace-nowrap">
@@ -146,9 +149,8 @@
                     </aside>
 
                     <!-- CHAT AREA -->
-                    <section class="flex-1 flex flex-col bg-[#FCFDFC]"
+                    <section class="flex-1 flex flex-col bg-[#FCFDFC] min-h-0 overflow-hidden"
                         :class="selectedConversation ? 'flex' : 'hidden md:flex'">
-
                         <!-- EMPTY STATE -->
                         <div v-if="!selectedConversation" class="flex-1 flex flex-col items-center justify-center px-8">
 
@@ -163,7 +165,7 @@
 
                             <p class="text-neutral-muted text-center max-w-md leading-relaxed">
                                 Sélectionnez une conversation pour commencer à
-                                discuter avec un agriculteur.
+                                discuter avec un {{ user.data.role === 'buyer' ? 'agriculteur' : 'client' }}.
                             </p>
 
                         </div>
@@ -171,106 +173,127 @@
                         <!-- CHAT -->
                         <template v-else>
 
-                            <!-- CHAT HEADER -->
+                            <!-- CHAT CONTAINER -->
+                            <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+                                <!-- CHAT HEADER -->
+                                <div
+                                    class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between shrink-0">
 
-                            <div class="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
 
-                                <div class="flex items-center gap-4">
+                                    <div class="flex items-center gap-4">
 
-                                    <!-- MOBILE BACK -->
-                                    <button @click="selectedConversation = null"
-                                        class="md:hidden w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center">
-                                        <i class="fas fa-arrow-left"></i>
-                                    </button>
-
-                                    <!-- FARMER -->
-                                    <img :src="selectedConversation.farmer.profile_photo"
-                                        class="w-12 h-12 rounded-2xl object-cover" />
-
-                                    <div>
-
-                                        <div class="flex items-center gap-3">
-
-                                            <h3 class="font-bold text-neutral-title">
-                                                <Link :href="showFarmerInfo(selectedConversation.product.id)">{{
-                                                    selectedConversation.farmer.name }}</Link>
-                                            </h3>
-
-                                            <span v-if="selectedConversation.is_archived"
-                                                class="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
-                                                Archivé
-                                            </span>
-
-                                        </div>
-
-                                        <!-- PRODUCT -->
-                                        <div v-if="selectedConversation.product" class="flex items-center gap-2 mt-1">
-
-                                            <i class="fas fa-leaf text-green-600 text-xs"></i>
-
-                                            <p class="text-sm text-neutral-muted">
-                                                <Link :href="productInfo(selectedConversation.product.id)">{{
-                                                    selectedConversation.product.title }}</Link>
-                                            </p>
-
-                                            <span v-if="selectedConversation.product.price"
-                                                class="text-accent-cta font-semibold text-sm">
-                                                • {{ selectedConversation.product.price }} FCFA
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <!-- ACTIONS -->
-                                <div class="flex items-center gap-2">
-
-                                    <button
-                                        class="w-11 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center">
-                                        <i class="fas fa-ellipsis-v text-neutral-muted"></i>
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                            <!-- MESSAGES -->
-                            <div ref="messagesContainer" class="flex-1 overflow-y-auto px-4 md:px-6 py-6 space-y-4">
-
-                                <MessageBubble :selected-conversation="selectedConversation" />
-
-                            </div>
-
-                            <!-- INPUT -->
-                            <div class="bg-white border-t border-gray-100 p-4 md:p-5">
-
-                                <form @submit.prevent="submit" class="flex items-center gap-3">
-
-                                    <!-- FILE -->
-                                    <label
-                                        class="shrink-0 w-12 h-12 rounded-2xl border border-gray-200 hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-all">
-                                        <i class="fas fa-paperclip text-neutral-muted"></i>
-
-                                        <input type="file" class="hidden" @change="handleFile" />
-                                    </label>
-
-                                    <!-- TEXTAREA -->
-                                    <div
-                                        class="flex-1 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-3xl px-2 py-2 focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all">
-
-                                        <textarea v-model="form.body" rows="1" placeholder="Écrivez votre message..."
-                                            class="flex-1 bg-transparent resize-none border-none outline-none px-3 py-2 text-[15px]"
-                                            :required="true"></textarea>
-
-                                        <button type="submit" :disabled="form.processing"
-                                            class="shrink-0 w-11 h-11 rounded-2xl bg-brand-primary hover:bg-brand-hover text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50">
-                                            <i class="fas fa-paper-plane"></i>
+                                        <!-- MOBILE BACK -->
+                                        <button @click="selectedConversation = null"
+                                            class="md:hidden w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center">
+                                            <i class="fas fa-arrow-left"></i>
                                         </button>
+
+                                        <!-- FARMER -->
+                                        <img :src="user.data.role == 'buyer'
+                                            ? selectedConversation.farmer.profile_photo
+                                            : selectedConversation.buyer.profile_photo"
+                                            class="w-12 h-12 rounded-2xl object-cover" />
+
+                                        <div>
+
+                                            <div class="flex items-center gap-3">
+
+                                                <h3 class="font-bold text-neutral-title">
+                                                    <Link :href="user.data.role == 'buyer'
+                                                        ? showFarmerInfo(selectedConversation.product.id)
+                                                        : '#'">
+                                                        {{
+                                                            user.data.role == 'buyer'
+                                                                ? selectedConversation.farmer.name
+                                                                : selectedConversation.buyer.name
+                                                        }}
+                                                    </Link>
+                                                </h3>
+
+                                                <span v-if="selectedConversation.is_archived"
+                                                    class="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                                                    Archivé
+                                                </span>
+
+                                            </div>
+
+                                            <!-- PRODUCT -->
+                                            <div v-if="selectedConversation.product"
+                                                class="flex items-center gap-2 mt-1">
+
+                                                <i class="fas fa-leaf text-green-600 text-xs"></i>
+
+                                                <p class="text-sm text-neutral-muted">
+                                                    <Link :href="productInfo(selectedConversation.product.id)">
+                                                        {{ selectedConversation.product.title }}
+                                                    </Link>
+                                                </p>
+
+                                                <span v-if="selectedConversation.product.price"
+                                                    class="text-accent-cta font-semibold text-sm">
+                                                    • {{ selectedConversation.product.price }} FCFA
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
                                     </div>
-                                </form>
+
+                                    <!-- ACTIONS -->
+                                    <div class="flex items-center gap-2">
+
+                                        <button
+                                            class="w-11 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center justify-center">
+                                            <i class="fas fa-ellipsis-v text-neutral-muted"></i>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- SCROLLABLE MESSAGES -->
+                                <div ref="messagesContainer"
+                                    class="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-6 space-y-4">
+
+                                    <MessageBubble :selected-conversation="selectedConversation" />
+
+                                </div>
+
+                                <!-- FIXED INPUT -->
+                                <div class="bg-white border-t border-gray-100 p-4 md:p-5 shrink-0">
+                                    <form @submit.prevent="submit" class="flex items-center gap-3">
+
+                                        <!-- FILE -->
+                                        <label
+                                            class="shrink-0 w-12 h-12 rounded-2xl border border-gray-200 hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-all">
+                                            <i class="fas fa-paperclip text-neutral-muted"></i>
+
+                                            <input type="file" class="hidden" @change="handleFile" />
+                                        </label>
+
+                                        <!-- TEXTAREA -->
+                                        <div
+                                            class="flex-1 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-3xl px-2 py-2 focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all">
+
+                                            <textarea v-model="form.body" rows="1"
+                                                placeholder="Écrivez votre message..."
+                                                class="flex-1 bg-transparent resize-none border-none outline-none px-3 py-2 text-[15px]"
+                                                :required="true"></textarea>
+
+                                            <button type="submit" :disabled="form.processing"
+                                                class="shrink-0 w-11 h-11 rounded-2xl bg-brand-primary hover:bg-brand-hover text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
                             </div>
+
                         </template>
                     </section>
                 </div>
@@ -285,11 +308,13 @@ import { ref } from "vue";
 import { watch } from 'vue'
 import BuyerNavbar from "@/Components/Buyer/Navbar/BuyerNavbar.vue";
 import BuyerSidebar from "@/Components/Buyer/Sidebar/BuyerSidebar.vue";
+import FarmerNavbar from "@/Components/Farmer/Navbar/FarmerNavbar.vue";
+import FarmerSidebar from "@/Components/Farmer/Sidebar/FarmerSidebar.vue";
 import FlashMessage from "@/Components/FlashMessage.vue";
 import MessageBubble from "@/Components/MessageBubble.vue";
 import echo from "@/echo";
 import { productInfo, showFarmerInfo, userMessageAddNew } from "@/routes";
-import type { Conversation } from "@/types/Conversation";
+import type { Conversation } from "@/types/conversation";
 
 
 interface Props {
@@ -302,7 +327,11 @@ defineProps<Props>();
 
 
 const buyerSidebarRef = ref<InstanceType<typeof BuyerSidebar> | null>(null);
+const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
 
+const handleToogleSidebar = () => {
+    farmerSidebarRef.value?.toggleSidebar();
+}
 const openSidebar = () => {
     buyerSidebarRef.value?.toggleSidebar();
 };
@@ -335,19 +364,6 @@ const submit = () => {
         return;
     }
 
-    const optimisticMessage = {
-        id: selectedConversation.value.id,
-        conversation_id: selectedConversation.value.id,
-        sender_id: user.data.id,
-        body: form.body,
-        attachment_path: undefined,
-        read_at: undefined,
-        created_at: Date.toString(),
-    }
-    console.log(optimisticMessage.created_at)
-    selectedConversation.value.messages.push(
-        optimisticMessage
-    )
     form.post(
         userMessageAddNew.url(selectedConversation.value.id),
         {

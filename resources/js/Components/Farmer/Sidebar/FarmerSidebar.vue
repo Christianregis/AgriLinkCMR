@@ -31,7 +31,7 @@
                 <span class="font-medium">Commandes</span>
                 <span class="ml-auto bg-accent-cta text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
-            <Link href="#"
+            <Link :href="userMessageShow()"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-comment-dots w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Messages</span>
@@ -108,7 +108,7 @@
                 <span class="font-medium">Commandes</span>
                 <span class="ml-auto bg-accent-cta text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
-            <Link href="#" @click="closeSidebar"
+            <Link :href="userMessageShow()" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-comment-dots w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Messages</span>
@@ -147,7 +147,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { dashboard, farmerOrdersShow, farmerProductsShow, logout, farmerProfile } from '@/routes'
+import { dashboard, farmerOrdersShow, farmerProductsShow, logout, farmerProfile, userMessageShow } from '@/routes'
 
 /**
  * Reactive state

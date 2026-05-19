@@ -14,6 +14,12 @@ export interface Farmer {
     profile_photo: string;
 }
 
+export interface Buyer {
+    id: number;
+    name: string;
+    profile_photo: string;
+}
+
 export interface Product {
     id: number;
     title: string;
@@ -32,6 +38,7 @@ export interface Conversation {
     updated_at: string;
 
     farmer: Farmer;
+    buyer: Buyer;
     product: Product;
 
     messages: Message[];

@@ -44,7 +44,7 @@
 </template>
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
-import type { Conversation } from '@/types/Conversation';
+import type { Conversation } from '@/types/conversation';
 import { formatDate } from '@/utils/formatDate';
 
 const page = usePage();

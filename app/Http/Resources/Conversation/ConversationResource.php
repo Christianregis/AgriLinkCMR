@@ -25,6 +25,8 @@ class ConversationResource extends JsonResource
             'last_message_at' => $this->last_message_at,
             'is_archived' => $this->is_archived,
             'farmer' => UserResource::make($this->farmer),
+            'buyer' => UserResource::make($this->buyer),
+
             // 'farmer' => $this->whenLoaded('farmer', function () {
             //     UserResource::make($this->farmer);
             // }),

@@ -54,7 +54,7 @@
 
                         <div class="flex-1 overflow-y-auto">
 
-                            <button v-for="conversation in conversations" :key="conversation.id"
+                            <button v-for="conversation in conversations.data" :key="conversation.id"
                                 @click="selectConversation(conversation)"
                                 class="w-full px-5 py-4 border-b border-gray-50 transition-all hover:bg-[#F8FAF9] text-left relative"
                                 :class="selectedConversation?.id === conversation.id
@@ -72,7 +72,7 @@
                                     <!-- AVATAR -->
                                     <div class="relative shrink-0">
 
-                                        <img :src="'/storage/' + conversation.farmer.profile_photo"
+                                        <img :src="conversation.farmer.profile_photo"
                                             class="w-14 h-14 rounded-2xl object-cover border border-gray-100" />
 
                                         <span
@@ -103,14 +103,14 @@
                                         <div v-if="conversation.product" class="flex items-center gap-2 mt-2">
 
                                             <div class="w-8 h-8 rounded-lg overflow-hidden bg-gray-100">
-                                                <img v-if="conversation.product.image" :src="conversation.product.image"
+                                                <img v-if="conversation.product.primary_image" :src="conversation.product.primary_image"
                                                     class="w-full h-full object-cover" />
                                             </div>
 
                                             <div class="min-w-0">
 
                                                 <p class="text-[12px] font-semibold text-brand-primary truncate">
-                                                    {{ conversation.product.name }}
+                                                    {{ conversation.product.title }}
                                                 </p>
 
                                                 <p v-if="conversation.product.price"
@@ -185,7 +185,7 @@
                                     </button>
 
                                     <!-- FARMER -->
-                                    <img :src="'/storage/' + selectedConversation.farmer.profile_photo"
+                                    <img :src="selectedConversation.farmer.profile_photo"
                                         class="w-12 h-12 rounded-2xl object-cover" />
 
                                     <div>
@@ -209,7 +209,7 @@
                                             <i class="fas fa-leaf text-green-600 text-xs"></i>
 
                                             <p class="text-sm text-neutral-muted">
-                                                {{ selectedConversation.product.name }}
+                                                {{ selectedConversation.product.title }}
                                             </p>
 
                                             <span v-if="selectedConversation.product.price"
@@ -293,41 +293,34 @@
                             <!-- INPUT -->
                             <div class="bg-white border-t border-gray-100 p-4 md:p-5">
 
-                                <form @submit.prevent="submit" class="flex items-end gap-3">
+                                <form @submit.prevent="submit" class="flex items-center gap-3">
 
                                     <!-- FILE -->
                                     <label
-                                        class="w-12 h-12 rounded-2xl border border-gray-200 hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-all">
+                                        class="shrink-0 w-12 h-12 rounded-2xl border border-gray-200 hover:bg-gray-50 flex items-center justify-center cursor-pointer transition-all">
                                         <i class="fas fa-paperclip text-neutral-muted"></i>
 
                                         <input type="file" class="hidden" @change="handleFile" />
                                     </label>
 
                                     <!-- TEXTAREA -->
-                                    <div class="flex-1 relative">
+                                    <div
+                                        class="flex-1 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-3xl px-2 py-2 focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all">
 
                                         <textarea v-model="form.body" rows="1" placeholder="Écrivez votre message..."
-                                            class="w-full resize-none rounded-3xl border border-gray-200 bg-gray-50 px-5 py-4 pr-14 text-[15px] focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"></textarea>
+                                            class="flex-1 bg-transparent resize-none border-none outline-none px-3 py-2 text-[15px]"></textarea>
 
                                         <button type="submit" :disabled="form.processing"
-                                            class="absolute right-3 bottom-3 w-10 h-10 rounded-2xl bg-brand-primary hover:bg-brand-hover text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50">
+                                            class="shrink-0 w-11 h-11 rounded-2xl bg-brand-primary hover:bg-brand-hover text-white flex items-center justify-center transition-all shadow-sm disabled:opacity-50">
                                             <i class="fas fa-paper-plane"></i>
                                         </button>
-
                                     </div>
-
                                 </form>
-
                             </div>
-
                         </template>
-
                     </section>
-
                 </div>
-
             </div>
-
         </main>
     </main>
 </template>
@@ -358,8 +351,8 @@ interface Farmer {
 
 interface Product {
     id: number;
-    name: string;
-    image?: string;
+    title: string;
+    primary_image: string;
     price?: number;
 }
 
@@ -383,7 +376,9 @@ interface Conversation {
 }
 
 interface Props {
-    conversations: Conversation[];
+    conversations: {
+        data: Conversation[]
+    };
 }
 
 defineProps<Props>();

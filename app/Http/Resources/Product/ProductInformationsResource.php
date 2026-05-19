@@ -63,6 +63,10 @@ class ProductInformationsResource extends JsonResource
                 $this->region->id,
             ),
 
+            'primary_image' => $this->whenLoaded('productImages', function () {
+                $this->getMedia('products')->first()->getUrl('thumb');
+            }),
+
             'product_images' => $this->whenLoaded('productImages', function () {
 
                 return $this->getMedia('products')->map(function ($media, $index) {

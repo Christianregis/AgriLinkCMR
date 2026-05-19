@@ -80,43 +80,41 @@
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-md font-bold text-neutral-title">Derniers Messages</h3>
-                                <span
-                                    class="bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">2
-                                    Nouveaux</span>
                             </div>
-                            <div class="space-y-4">
-                                <div
+                            <div v-if="lastMessages.data.length" class="space-y-4">
+                                <div v-for="message in lastMessages.data" :key="message.id"
                                     class="flex items-start gap-3 p-2 hover:bg-neutral-bg rounded-xl transition-colors cursor-pointer">
-                                    <img src="https://ui-avatars.com/api/?name=Samuel+E&background=random"
+                                    <img :src="'https://ui-avatars.com/api/?name=' + message.sender.name + '&background=random'"
                                         class="w-10 h-10 rounded-lg" />
                                     <div class="flex-1 min-w-0">
                                         <div class="flex justify-between">
                                             <p class="text-xs font-bold text-neutral-title truncate">
-                                                Samuel Eto'o
+                                                {{ message.sender.name }}
                                             </p>
-                                            <span class="text-[9px] text-neutral-muted">14:20</span>
+                                            <span class="text-[9px] text-neutral-muted">{{
+                                                formatDate(message.created_at) }}</span>
                                         </div>
                                         <p class="text-[11px] text-neutral-muted truncate">
-                                            Bonjour, est-ce que le poivre de Penja est disponible en gros ?
+                                            {{ message.body }}
                                         </p>
                                     </div>
                                 </div>
+                            </div>
+                            <div v-else class="flex flex-col items-center justify-center py-10 text-center">
+
                                 <div
-                                    class="flex items-start gap-3 p-2 hover:bg-neutral-bg rounded-xl transition-colors cursor-pointer">
-                                    <img src="https://ui-avatars.com/api/?name=Marie+C&background=random"
-                                        class="w-10 h-10 rounded-lg" />
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex justify-between">
-                                            <p class="text-xs font-bold text-neutral-title truncate">
-                                                Marie Claire
-                                            </p>
-                                            <span class="text-[9px] text-neutral-muted">Hier</span>
-                                        </div>
-                                        <p class="text-[11px] text-neutral-muted truncate">
-                                            Merci pour la livraison, les tomates sont superbes !
-                                        </p>
-                                    </div>
+                                    class="w-16 h-16 rounded-2xl bg-brand-light/10 text-brand-primary flex items-center justify-center mb-4">
+                                    <i class="fas fa-comments text-2xl"></i>
                                 </div>
+
+                                <h4 class="text-sm font-bold text-neutral-title mb-1">
+                                    Aucun message récent
+                                </h4>
+
+                                <p class="text-xs text-neutral-muted max-w-[220px] leading-relaxed">
+                                    Vos nouvelles conversations et messages apparaîtront ici.
+                                </p>
+
                             </div>
                         </div>
                     </div>
@@ -133,7 +131,8 @@ import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 import { farmerProductsEdit } from "@/routes";
-import type { Auth } from "@/types";
+import type { Auth, User } from "@/types";
+import { formatDate } from "@/utils/formatDate";
 import FarmerNavbar from "./Navbar/FarmerNavbar.vue";
 import ChartRevenus from "./Order/ChartRevenus.vue";
 import OrderTable from "./Order/OrderTable.vue";
@@ -178,8 +177,17 @@ interface StatisticDashboardFarmer {
     productsLow: ProductsLow,
     recentsOrders: RecentsOrders
     revenueChartData: RevenueChartData,
+    lastMessages: {
+        data: Message[]
+    }
 }
 
+interface Message {
+    id: number,
+    sender: User,
+    body: string,
+    created_at: string,
+}
 interface ProductsLow {
     data: {
         id: number,

@@ -6,10 +6,13 @@ use App\enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\form\LoginRequest;
 use App\Http\Requests\form\RegisterRequest;
+use App\Http\Resources\Message\MessageResource;
 use App\Http\Resources\Order\OrderResource;
 use App\Http\Resources\Product\ProductLowResource;
 use App\Models\BuyerProfile;
+use App\Models\Conversation;
 use App\Models\FarmerProfile;
+use App\Models\Message;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -97,6 +100,20 @@ class AuthController extends Controller
             ]);
         }
         if ($user->hasRole('farmer')) {
+            $lastMessages = Message::query()
+                ->with('sender')
+                ->whereIn(
+                    'conversation_id',
+
+                    Conversation::query()
+                        ->where('farmer_id', Auth::id())
+                        ->orWhere('buyer_id', Auth::id())
+                        ->orderByDesc('last_message_at')
+                        ->pluck('id')
+                )
+                ->latest()
+                ->take(3)
+                ->get();
             $countProductsAvaliable = Product::query()
                 ->findByUser($user->id)
                 ->avaliable()
@@ -133,6 +150,7 @@ class AuthController extends Controller
                 'sumAmountOrders' => $sumAmountOrders,
                 'countProductsAvaliable' => $countProductsAvaliable,
                 'countOrdersPending' => $countOrdersPending,
+                'lastMessages' => MessageResource::collection($lastMessages),
                 'farmer_average_rating' => $user->average_rating,
                 'productsLow' => ProductLowResource::collection($productsLow),
                 'recentsOrders' => OrderResource::collection($recentsOrders),

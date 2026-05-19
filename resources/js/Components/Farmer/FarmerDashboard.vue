@@ -95,7 +95,7 @@
                                                 formatDate(message.created_at) }}</span>
                                         </div>
                                         <p class="text-[11px] text-neutral-muted truncate">
-                                            {{ message.body }}
+                                            {{ message.body.substring(0, 100) }}...
                                         </p>
                                     </div>
                                 </div>

@@ -132,8 +132,8 @@
     </div>
 </template>
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import { buyerOrderShow, buyerOrderTracking, catalog } from '@/routes';
-
 interface Farmer {
     id: number,
     name: string,

@@ -119,7 +119,7 @@
             <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2">
                 <!-- Product Card -->
                 <ProductCard v-for="product in products.data" :key="product.id" :product="product"
-                    :display-mode="'grid'" />
+                    :display-mode="'grid'" :favorites="favorites" />
             </div>
         </section>
 
@@ -165,7 +165,14 @@ interface Product {
 interface ProductsLatest {
     products: {
         data: Product[];
+    },
+    favorites: {
+        data: Favorite[]
     }
+}
+
+interface Favorite{
+    product_id: number
 }
 
 defineProps<ProductsLatest>();

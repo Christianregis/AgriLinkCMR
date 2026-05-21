@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'farmer_id');
     }
 
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class, 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

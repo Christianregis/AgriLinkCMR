@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\Buyer\Favorite\FavoriteController;
 use App\Http\Controllers\User\Buyer\Order\BuyerOrderController;
 use App\Http\Controllers\User\Buyer\Order\CheckoutController;
 use App\Http\Controllers\User\Buyer\Profile\ProfileBuyerController;
@@ -40,6 +41,8 @@ Route::prefix('profile')->middleware(['role:farmer', 'auth'])->group(function ()
 Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () {
     // Routes ici
     Route::get('/buyer', [ProfileBuyerController::class, 'show'])->name('buyerProfile');
+
+    Route::post('/buyer/favorite', [FavoriteController::class, 'toggleFavorite'])->name('buyerFavoriteToogle');
 
     Route::get('/buyer/edit', [ProfileBuyerController::class, 'edit'])->name('buyerProfileEdit');
 

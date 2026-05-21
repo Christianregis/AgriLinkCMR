@@ -9,15 +9,29 @@
             'relative overflow-hidden shrink-0',
             displayMode === 'list' ? ' w-52 h-full min-h-48' : 'h-48 w-full'
         ]">
+
             <img :src="product.primary_image_url"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 alt="Product Image">
+
             <div class="absolute inset-0 bg-black/15 group-hover:bg-black/0 transition-all duration-500"></div>
+
+            <!-- FAVORITE BUTTON -->
+            <button v-if="user && user.role == 'buyer'" @click.prevent.stop="toggleFavorite(product.id)"
+                class="absolute top-3 right-3 w-11 h-11 rounded-2xl bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white">
+                <i :class="[
+                    isFavorite ? 'fas fa-heart text-red-500' : 'far fa-heart text-neutral-muted',
+                    'text-lg transition-all duration-300'
+                ]"></i>
+            </button>
+
             <!-- Region badge -->
             <div
                 class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-brand-dark shadow-sm uppercase tracking-wider">
-                <i class="fas fa-location-dot text-brand-primary mr-1"></i> {{ product.region.name }}
+                <i class="fas fa-location-dot text-brand-primary mr-1"></i>
+                {{ product.region.name }}
             </div>
+
         </div>
 
         <!-- CONTENT -->
@@ -66,10 +80,10 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue';
 import { useCartStore } from '@/Pages/store/cartStore';
-import { productInfo } from '@/routes';
+import { buyerFavoriteToogle, productInfo } from '@/routes';
 
 const cartStore = useCartStore();
 
@@ -93,12 +107,48 @@ interface Product {
 
 interface Props {
     product: Product,
+    favorites: {
+        data: Favorite[]
+    },
     displayMode: 'grid' | 'list'
+}
+
+interface FavoriteForm {
+    isFavorite: boolean,
+    product_id: number
+}
+
+interface Favorite {
+    product_id: number,
 }
 
 const props = defineProps<Props>();
 const localQuantity = ref<number>(props.product.min_order_qty > 0 ? props.product.min_order_qty : 1);
 
+const isFavorite = ref(
+    props.favorites?.data?.some(
+        (favorite) => favorite.product_id === props.product.id
+    ) ?? false
+);
+
+const toggleFavorite = (productId: number) => {
+
+    const form = useForm<FavoriteForm>({
+        isFavorite: false,
+        product_id: productId
+    });
+    form.isFavorite = isFavorite.value
+    form.product_id = productId
+
+    // Envoie de la requete ici
+    form.post(buyerFavoriteToogle.url(), {
+        preserveState: true,
+        preserveScroll: true,
+    })
+    isFavorite.value = !isFavorite.value;
+
+
+};
 
 const addToCart = () => {
     const productToAdd = {
@@ -114,4 +164,8 @@ const addToCart = () => {
 
     cartStore.addItem(productToAdd, localQuantity.value)
 }
+
+const page = usePage();
+const user = page.props.auth?.user?.data;
+
 </script>

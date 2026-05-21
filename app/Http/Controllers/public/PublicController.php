@@ -10,18 +10,24 @@ use App\Models\Region;
 use App\Http\Resources\region\RegionResource;
 use App\Models\Category;
 use App\Http\Resources\category\CategoryResource;
+use App\Http\Resources\Favorite\FavoriteResource;
 use App\Http\Resources\Product\ProductInformationsResource;
 use App\Http\Resources\user\FarmerResource;
 use App\Models\FarmerProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PublicController extends Controller
 {
     public function home()
     {
         $products = Product::with(['productImages', 'category', 'region'])->limit(5)->latest()->get();
+        $user = Auth::user();
+
         return Inertia::render('Home', [
-            'products' => CatalogProductResource::collection($products)
+            'products' => CatalogProductResource::collection($products),
+            'favorites' => $user ? FavoriteResource::collection($user->favorites) : null,
+
         ]);
     }
     public function showCatalog(Request $request)
@@ -36,6 +42,8 @@ class PublicController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $user = Auth::user();
+
         return Inertia::render('Products/Index', [
             'products' => CatalogProductResource::collection($products),
             'filters' => $request->only([
@@ -47,12 +55,13 @@ class PublicController extends Controller
             ]),
             'categories' => CategoryResource::collection(Category::all()),
             'regions' => RegionResource::collection(Region::all()),
+            'favorites' => $user ? FavoriteResource::collection($user->favorites) : null,
         ]);
     }
 
     public function showProductInfo(mixed $product_id)
     {
-        $product = Product::with(['category', 'user', 'region', 'productImages','media'])->where('id', $product_id)->firstOrFail();
+        $product = Product::with(['category', 'user', 'region', 'productImages', 'media'])->where('id', $product_id)->firstOrFail();
         return Inertia::render('Products/Show', [
             'product' => ProductInformationsResource::make($product),
         ]);
@@ -70,16 +79,16 @@ class PublicController extends Controller
 
     public function about()
     {
-        return Inertia::render('About',[]);
+        return Inertia::render('About', []);
     }
 
     public function farmerImpact()
     {
-        return Inertia::render('FarmerImpact',[]);
+        return Inertia::render('FarmerImpact', []);
     }
 
     public function policies()
     {
-        return Inertia::render('Policies',[]);
+        return Inertia::render('Policies', []);
     }
 }

@@ -371,7 +371,6 @@ const isProfileMenuOpen = ref<boolean>(false)
 
 const toggleProfileMenu = (): void => {
     isProfileMenuOpen.value = !isProfileMenuOpen.value
-    console.log("Profile menu toggled:", isProfileMenuOpen.value);
 
 }
 

@@ -31,7 +31,7 @@
                 <span class="font-medium">Mes Commandes</span>
                 <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
-            <Link href="#"
+            <Link :href="buyerFavoriteShow()"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-heart w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Favoris</span>
@@ -107,7 +107,7 @@
                 <span class="font-medium">Mes Commandes</span>
                 <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
-            <Link href="#" @click="closeSidebar"
+            <Link :href="buyerFavoriteShow()" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-heart w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Mes Favoris</span>
@@ -145,7 +145,7 @@
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { buyerOrderShow, catalog, dashboard, logout, buyerProfile, userMessageShow } from '@/routes'
+import { buyerOrderShow, catalog, dashboard, logout, buyerProfile, userMessageShow, buyerFavoriteShow } from '@/routes'
 
 /**
  * Reactive state

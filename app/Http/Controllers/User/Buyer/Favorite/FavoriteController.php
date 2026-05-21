@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User\Buyer\Favorite;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Favorite\FavoriteResource;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class FavoriteController extends Controller
 {
@@ -38,5 +40,33 @@ class FavoriteController extends Controller
 
             ]);
         }
+        return back();
+    }
+
+    public function showFavorites()
+    {
+
+        $buyer = Auth::user();
+
+        $favorites = $buyer
+            ->favorites()
+            ->with(['product', 'product.user', 'product.productImages'])
+            ->latest()
+            ->paginate(15);
+            
+        return Inertia::render('Buyer/Favorite/Index', [
+            'favorites' => FavoriteResource::collection($favorites),
+        ]);
+    }
+
+    public function deleteFavorite(Request $request)
+    {
+        $request->validate([
+            'favorite_id' => ['integer', 'exists:favorites,id', 'required'],
+        ]);
+
+        $favorite = Favorite::where('id', '=', $request->input('favorite_id'))->firstOrFail();
+        $favorite->delete();
+        return redirect()->back()->with('success', 'Favorie enleve !');
     }
 }

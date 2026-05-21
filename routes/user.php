@@ -44,6 +44,11 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 
     Route::post('/buyer/favorite', [FavoriteController::class, 'toggleFavorite'])->name('buyerFavoriteToogle');
 
+    Route::get('/buyer/favorite', [FavoriteController::class, 'showFavorites'])->name('buyerFavoriteShow');
+
+    Route::delete('/buyer/favorite/delete/', [FavoriteController::class, 'deleteFavorite'])->name('buyerFavoriteDelete');
+
+
     Route::get('/buyer/edit', [ProfileBuyerController::class, 'edit'])->name('buyerProfileEdit');
 
     Route::put('/buyer/edit', [ProfileBuyerController::class, 'updateProfileBuyer'])->name('buyerProfileUpdate');
@@ -77,7 +82,7 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 });
 
 
-Route::prefix('user')->middleware('auth')->group(function (){
+Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('/messages', [UserController::class, 'showMessageForm'])->name('userMessageShow');
     Route::post('/conversations/{conversation_id}/messages/add', [UserController::class, 'sendMessage'])->name('userMessageAddNew');
 });

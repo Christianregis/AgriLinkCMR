@@ -42,6 +42,12 @@
                                 <p class="text-xs text-neutral-muted mt-1">Producteur Certifié</p>
                             </div>
                             <nav class="py-2">
+                                <Link :href="home()"
+                                    class="flex items-center px-4 py-2.5 text-sm text-neutral-body hover:bg-gray-50 hover:text-brand-primary border-b border-gray-100 transition-colors group">
+                                    <i
+                                        class="fas fa-home text-neutral-muted group-hover:text-brand-primary mr-3 w-4"></i>
+                                    Accueil
+                                </Link>
                                 <Link :href="dashboard()"
                                     class="flex items-center px-4 py-2.5 text-sm text-neutral-body hover:bg-gray-50 hover:text-brand-primary transition-colors group">
                                     <i
@@ -88,7 +94,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile } from '@/routes';
+import { dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile, home } from '@/routes';
 
 interface User {
     name: string

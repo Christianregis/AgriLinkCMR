@@ -60,7 +60,8 @@
                         <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10A8 8 0 11..."></path>
                         </svg>
-                        <span>{{ form.errors.name || form.errors.email || form.errors.password || form.errors.phone }}</span>
+                        <span>{{ form.errors.name || form.errors.email || form.errors.password || form.errors.phone
+                            }}</span>
                     </div>
                 </div>
                 <form @submit.prevent="handleSubmit" class="p-8 pt-2 space-y-6">
@@ -223,7 +224,7 @@
                                     <i class="mb-2 text-3xl text-gray-400 fas fa-cloud-arrow-up"></i>
                                     <div class="flex text-sm text-gray-600">
                                         <input type="file" accept="image/*" @change="handleFileChange"
-                                            class="font-semibold text-brand-primary"/>
+                                            class="font-semibold text-brand-primary" />
                                     </div>
                                     <p class="text-xs text-gray-500">PNG, JPG, JPEG jusqu'à 2MB</p>
                                 </div>
@@ -258,9 +259,32 @@
                             class="ml-auto py-3 px-6 font-bold text-white bg-brand-primary rounded-xl hover:bg-brand-hover transition-all">
                             Suivant
                         </button>
-                        <button v-if="currentStep === 3" type="submit"
-                            class="ml-auto px-3 py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg">
-                            Créer mon compte
+                        <button v-if="currentStep === 3" type="submit" :disabled="form.processing"
+                            class="ml-auto px-6 py-4 font-bold text-white transition-all shadow-md bg-brand-primary rounded-xl hover:bg-brand-hover hover:shadow-lg flex items-center justify-center gap-3 disabled:opacity-80 disabled:cursor-not-allowed min-w-55">
+
+                            <!-- LOADING -->
+                            <template v-if="form.processing">
+
+                                <svg class="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+
+                                    <path class="opacity-90" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+
+                                <span>Création du compte...</span>
+
+                            </template>
+
+                            <!-- DEFAULT -->
+                            <template v-else>
+
+                                <span>Créer mon compte</span>
+
+                            </template>
+
                         </button>
                     </div>
                 </form>

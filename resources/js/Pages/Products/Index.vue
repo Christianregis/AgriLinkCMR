@@ -53,6 +53,8 @@
                 </div>
             </div>
         </main>
+
+        <FooterLayout />
     </div>
     <CartSidebar ref="cartSidebarRef" />
 </template>
@@ -65,6 +67,7 @@ import FilterSidebar from '@/Components/FilterSidebar.vue';
 import Pagination from '@/Components/Pagination.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import AuthLayout from '@/Layouts/AuthLayout.vue';
+import FooterLayout from '@/Layouts/FooterLayout.vue';
 import { catalog } from '@/routes';
 
 // Types

@@ -47,6 +47,12 @@
                                 <p class="text-xs text-neutral-muted mt-1">Acheteur Premium</p>
                             </div>
                             <nav class="py-2">
+                                <Link :href="home()"
+                                    class="flex items-center px-4 py-2.5 text-sm text-neutral-body hover:bg-gray-50 hover:text-brand-primary border-b border-gray-100 transition-colors group">
+                                    <i
+                                        class="fas fa-home text-neutral-muted group-hover:text-brand-primary mr-3 w-4"></i>
+                                    Accueil
+                                </Link>
                                 <Link :href="dashboard()"
                                     class="flex items-center px-4 py-2.5 text-sm text-neutral-body hover:bg-gray-50 hover:text-brand-primary transition-colors group">
                                     <i
@@ -90,7 +96,7 @@ import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import CartSidebar from '@/Components/CartSidebar.vue'
 import { useCartStore } from '@/Pages/store/cartStore'
-import { buyerOrderShow, buyerProfile, dashboard, logout } from '@/routes'
+import { buyerOrderShow, buyerProfile, dashboard, home, logout } from '@/routes'
 
 interface User {
     name: string

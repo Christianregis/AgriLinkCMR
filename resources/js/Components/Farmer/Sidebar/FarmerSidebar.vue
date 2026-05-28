@@ -134,13 +134,6 @@
                 <span class="font-medium">Paramètres</span>
             </a>
         </nav>
-
-        <div class="p-6 border-t border-gray-50">
-            <Link :href="logout()" @click="closeSidebar"
-                class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-semibold">
-                <i class="fas fa-sign-out-alt w-5 text-center"></i> <span>Déconnexion</span>
-            </Link>
-        </div>
     </aside>
 </template>
 

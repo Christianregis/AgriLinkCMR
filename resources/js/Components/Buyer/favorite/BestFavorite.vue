@@ -5,29 +5,61 @@
             <h3 class="text-md font-bold text-neutral-title mb-6 flex items-center gap-2">
                 <i class="fas fa-heart text-red-500"></i> Agriculteurs Favoris
             </h3>
-            <div class="space-y-5">
+
+            <!-- FAVORITE FARMERS LIST -->
+            <div v-if="bestsFarmerFavorite.data.length > 0" class="space-y-5">
                 <div v-for="favoriteFarmer in bestsFarmerFavorite.data" :key="favoriteFarmer.product.farmer_profile.id"
                     class="flex items-center justify-between group cursor-pointer">
+
                     <div class="flex items-center gap-3">
                         <img :src="favoriteFarmer.product.farmer_profile.profile_photo"
-                            class="w-11 h-11 rounded-xl shadow-sm" />
+                            class="w-11 h-11 rounded-xl shadow-sm object-cover" />
+
                         <div>
                             <Link :href="showFarmerInfo(favoriteFarmer.product.id)"
                                 class="text-sm font-bold text-neutral-title group-hover:text-brand-primary transition-colors">
                                 {{ favoriteFarmer.product.farmer_profile.name }}
                             </Link>
+
                             <p class="text-[10px] text-neutral-muted">
-                                {{ favoriteFarmer.product.farmer_profile.village }} • {{
-                                    favoriteFarmer.product.farmer_profile.reviews_count }} <i
-                                    class="fas fa-star text-accent-star"></i>
+                                {{ favoriteFarmer.product.farmer_profile.village }} •
+                                {{ favoriteFarmer.product.farmer_profile.reviews_count }}
+                                <i class="fas fa-star text-accent-star"></i>
                             </p>
                         </div>
                     </div>
+
                     <i
                         class="fas fa-chevron-right text-gray-300 group-hover:text-brand-primary transition-all text-xs"></i>
                 </div>
             </div>
-            <button @click="router.visit(buyerFavoriteShow.url())"
+
+            <!-- EMPTY STATE -->
+            <div v-else
+                class="flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-gray-100 rounded-2xl bg-neutral-bg/40">
+
+                <div class="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center mb-4 shadow-sm">
+                    <i class="fas fa-heart-broken text-2xl text-red-400"></i>
+                </div>
+
+                <h4 class="text-sm font-bold text-neutral-title mb-2">
+                    Aucun agriculteur favori
+                </h4>
+
+                <p class="text-xs text-neutral-muted max-w-60 leading-relaxed">
+                    Explorez les produits disponibles et ajoutez vos agriculteurs préférés
+                    pour les retrouver rapidement ici.
+                </p>
+
+                <button @click="router.visit(catalog.url())"
+                    class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 bg-brand-primary text-white text-xs font-bold rounded-xl hover:bg-brand-hover transition-all shadow-sm">
+                    <i class="fas fa-store"></i>
+                    Découvrir les produits
+                </button>
+            </div>
+
+            <!-- BUTTON -->
+            <button v-if="bestsFarmerFavorite.data.length > 0" @click="router.visit(buyerFavoriteShow.url())"
                 class="w-full mt-6 py-3 border-2 border-brand-bg text-brand-primary font-bold rounded-xl text-xs hover:bg-brand-primary hover:text-white transition-all">
                 Voir tous mes produits favoris
             </button>
@@ -36,7 +68,7 @@
 </template>
 <script lang="ts" setup>
 import { Link, router } from '@inertiajs/vue3'
-import { buyerFavoriteShow, showFarmerInfo } from '@/routes'
+import { buyerFavoriteShow, catalog, showFarmerInfo } from '@/routes'
 // interface Props {
 //     bestsFarmerFavorite: {
 //         product: {
@@ -55,7 +87,7 @@ interface Props {
     bestsFarmerFavorite: {
         data: {
             product: {
-                id:string,
+                id: string,
                 farmer_profile: {
                     id: number,
                     reviews_count: number,

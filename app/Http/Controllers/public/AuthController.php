@@ -6,12 +6,14 @@ use App\enum\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\form\LoginRequest;
 use App\Http\Requests\form\RegisterRequest;
+use App\Http\Resources\Favorite\FavoriteResource;
 use App\Http\Resources\Message\MessageResource;
 use App\Http\Resources\Order\OrderResource;
 use App\Http\Resources\Product\ProductLowResource;
 use App\Models\BuyerProfile;
 use App\Models\Conversation;
 use App\Models\FarmerProfile;
+use App\Models\Favorite;
 use App\Models\Message;
 use App\Models\Order;
 use App\Models\Product;
@@ -84,6 +86,13 @@ class AuthController extends Controller
         $user = Auth::user();
         if ($user->hasRole('buyer')) {
             $buyer = Auth::user();
+            $bestsFarmerFavorite = Favorite::with(['product', 'product.user'])
+                ->get()
+                ->unique(function ($favorite) {
+                    return $favorite->product->user->id;
+                })
+                ->take(3);
+
             return Inertia::render('Dashboard/IndexBuyer', [
                 'stats' => [
                     'countOrdersPending' => Order::query()->withBuyer($buyer->id)->withStatusPending()->count('*'),
@@ -96,7 +105,8 @@ class AuthController extends Controller
                         ->withBuyer($buyer->id)
                         ->latest()
                         ->limit(5)->get()
-                )
+                ),
+                'bestsFarmerFavorite' => FavoriteResource::collection($bestsFarmerFavorite)
             ]);
         }
         if ($user->hasRole('farmer')) {

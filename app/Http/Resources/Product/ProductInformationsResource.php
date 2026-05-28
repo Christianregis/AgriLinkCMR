@@ -49,6 +49,7 @@ class ProductInformationsResource extends JsonResource
                 'name' => $this->user->name,
                 'profile_photo' => $this->user->profile_photo ? asset('storage/' . $this->user->profile_photo) : null,
                 'average_rating' => $this->user->farmerProfile->average_rating,
+                'village' => $this->user->farmerProfile->village,
             ]),
 
 

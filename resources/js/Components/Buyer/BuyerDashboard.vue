@@ -76,8 +76,11 @@
                         </p>
                     </div>
                 </div>
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    <RecentsOrder :recent-orders="props.recentOrders" />
+                    <BestFavorite :bests-farmer-favorite="bestsFarmerFavorite" />
 
-                <RecentsOrder :recent-orders="props.recentOrders" />
+                </div>
             </div>
         </main>
     </main>
@@ -87,6 +90,7 @@ import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { catalog } from "@/routes";
 import type { Auth } from "@/types";
+import BestFavorite from "./favorite/BestFavorite.vue";
 import BuyerNavbar from "./Navbar/BuyerNavbar.vue";
 import RecentsOrder from "./Order/RecentsOrder.vue";
 import BuyerSidebar from "./Sidebar/BuyerSidebar.vue";
@@ -115,6 +119,23 @@ interface StatisticBuyerDashboard {
             created_at: Date,
             updated_at: Date,
             farmer: Farmer
+        }[]
+    },
+    bestsFarmerFavorite: {
+        data: {
+            product: {
+                id: string,
+
+                farmer_profile: {
+                    id: number,
+                    reviews_count: number,
+                    name: string,
+                    village: string,
+
+                    profile_photo: string,
+                    average_rating: number,
+                }
+            }
         }[]
     }
 }

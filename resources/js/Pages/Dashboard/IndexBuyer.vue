@@ -1,7 +1,7 @@
 <template>
     <FlashMessage />
     <div>
-        <BuyerDashboard :user="page.props.auth.user" :stats="props.stats" :recent-orders="props.recentOrders" />
+        <BuyerDashboard :user="page.props.auth.user" :stats="props.stats" :recent-orders="props.recentOrders" :bests-farmer-favorite="bestsFarmerFavorite"/>
     </div>
 </template>
 <script setup lang="ts">
@@ -18,7 +18,7 @@ interface Farmer {
 interface StatisticBuyerDashboard {
     stats: {
         countOrdersPending: number | string,
-        countOrdersSuccess: number |string,
+        countOrdersSuccess: number | string,
         totalExpenses: number | string,
     },
     recentOrders: {
@@ -34,6 +34,21 @@ interface StatisticBuyerDashboard {
             created_at: Date,
             updated_at: Date,
             farmer: Farmer
+        }[]
+    },
+    bestsFarmerFavorite: {
+        data: {
+            product: {
+                id:string,
+                farmer_profile: {
+                    id: number,
+                    reviews_count: number,
+                    name: string,
+                    village: string,
+                    profile_photo: string,
+                    average_rating: number,
+                }
+            }
         }[]
     }
 }

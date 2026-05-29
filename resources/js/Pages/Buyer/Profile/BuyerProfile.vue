@@ -1,12 +1,12 @@
 <template>
     <FlashMessage />
     <div class="min-h-screen bg-neutral-bg flex">
-        <BuyerSidebar ref="buyerSidebarRef"/>
+        <BuyerSidebar ref="buyerSidebarRef" />
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- NAVBAR -->
-            <BuyerNavbar :name="user.name" :profile_photo="user.profile_photo_url" @openbuyer-sidebar="openSidebar"/>
+            <BuyerNavbar :name="user.name" :profile_photo="user.profile_photo_url" @openbuyer-sidebar="openSidebar" />
 
             <!-- PROFILE CONTENT -->
             <div class="flex-1 overflow-y-auto p-8">
@@ -26,8 +26,9 @@
                         <div class="text-center md:text-left flex-1">
                             <div class="flex flex-col md:flex-row items-center gap-3 mb-2">
                                 <h2 class="text-3xl font-bold text-neutral-title">{{ user.name }}</h2>
+
                                 <span
-                                    class="px-3 py-1 bg-accent-warning/20 text-accent-warning text-[10px] font-bold rounded-full uppercase tracking-wider">
+                                    class="px-3 py-1 bg-accent-light text-accent-cta text-[10px] font-bold rounded-full uppercase tracking-wider">
                                     {{ getBuyerTypeLabel(user.buyer_type) }}
                                 </span>
                             </div>
@@ -57,7 +58,8 @@
                                         <i class="fas fa-envelope"></i>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-neutral-muted uppercase tracking-wider">Email
+                                        <p class="text-[10px] font-bold text-neutral-muted uppercase tracking-wider">
+                                            Email
                                             Principal</p>
                                         <p class="text-sm font-semibold text-neutral-title">{{ user.email }}</p>
                                     </div>
@@ -68,7 +70,8 @@
                                         <i class="fas fa-phone"></i>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-neutral-muted uppercase tracking-wider">Numéro
+                                        <p class="text-[10px] font-bold text-neutral-muted uppercase tracking-wider">
+                                            Numéro
                                             de Téléphone</p>
                                         <p class="text-sm font-semibold text-neutral-title">{{ user.phone }}</p>
                                     </div>
@@ -86,12 +89,14 @@
                                 <div v-if="props.buyer.data.delivery_address">
                                     <p class="text-sm text-neutral-body leading-relaxed font-medium">{{
                                         user.delivery_address }}</p>
-                                    <p class="text-[10px] text-brand-primary font-bold uppercase mt-2 italic">Adresse par
+                                    <p class="text-[10px] text-brand-primary font-bold uppercase mt-2 italic">Adresse
+                                        par
                                         défaut</p>
                                 </div>
                                 <div v-else class="text-center">
                                     <p class="text-xs text-neutral-muted italic mb-4">Aucune adresse enregistrée</p>
-                                    <Link :href="buyerAddressShow()" class="text-brand-primary text-xs font-bold hover:underline">+ Ajouter une
+                                    <Link :href="buyerAddressShow()"
+                                        class="text-brand-primary text-xs font-bold hover:underline">+ Ajouter une
                                         adresse</Link>
                                 </div>
                             </div>

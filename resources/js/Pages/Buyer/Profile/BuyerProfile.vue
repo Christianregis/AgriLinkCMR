@@ -91,8 +91,8 @@
                                 </div>
                                 <div v-else class="text-center">
                                     <p class="text-xs text-[#4B5563] italic mb-4">Aucune adresse enregistrée</p>
-                                    <button class="text-[#2D6A4F] text-xs font-bold hover:underline">+ Ajouter une
-                                        adresse</button>
+                                    <Link :href="buyerAddressShow()" class="text-[#2D6A4F] text-xs font-bold hover:underline">+ Ajouter une
+                                        adresse</Link>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +128,8 @@ import { ref } from 'vue';
 import BuyerNavbar from '@/Components/Buyer/Navbar/BuyerNavbar.vue';
 import BuyerSidebar from '@/Components/Buyer/Sidebar/BuyerSidebar.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import { buyerProfileEdit } from '@/routes';
+import { buyerAddressShow, buyerProfileEdit } from '@/routes';
+
 interface BuyerProfile {
     id: number;
     name: string;
@@ -166,6 +167,7 @@ const openSidebar = () => {
 
     buyerSidebarRef.value?.toggleSidebar()
 }
+
 </script>
 
 <style scoped></style>

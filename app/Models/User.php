@@ -57,7 +57,8 @@ class User extends Authenticatable
     }
 
 
-    public function  buyerOrders(): HasMany {
+    public function  buyerOrders(): HasMany
+    {
         return $this->hasMany(Order::class, 'buyer_id');
     }
 
@@ -69,6 +70,11 @@ class User extends Authenticatable
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class, 'user_id');
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id');
     }
 
     /**

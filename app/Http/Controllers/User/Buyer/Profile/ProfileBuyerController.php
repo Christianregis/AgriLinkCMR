@@ -28,7 +28,7 @@ class ProfileBuyerController extends Controller
     public function show()
     {
         $user = Auth::user();
-        $buyer = BuyerProfile::where('user_id', $user->id)->firstOrFail();
+        $buyer = BuyerProfile::with(['user','user.addresses'])->where('user_id', $user->id)->firstOrFail();
 
         return Inertia::render('Buyer/Profile/BuyerProfile', [
             'buyer' => BuyerResource::make($buyer),

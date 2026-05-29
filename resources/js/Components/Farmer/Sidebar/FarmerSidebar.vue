@@ -35,7 +35,7 @@
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-comment-dots w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Messages</span>
-                <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">2</span>
+                <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
             <Link href="#"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
@@ -105,7 +105,7 @@
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">
                 <i class="fas fa-comment-dots w-5 text-center text-neutral-muted group-hover:text-brand-primary"></i>
                 <span class="font-medium">Messages</span>
-                <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">2</span>
+                <span class="ml-auto bg-brand-primary text-white text-[10px] px-2 py-0.5 rounded-full">*</span>
             </Link>
             <Link href="#" @click="closeSidebar"
                 class="flex items-center space-x-3 px-4 py-3 rounded-xl text-neutral-body hover:bg-brand-bg hover:text-brand-primary transition-all group">

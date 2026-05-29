@@ -57,13 +57,6 @@
                 <span class="font-medium">Paramètres</span>
             </a>
         </nav>
-
-        <div class="p-6 border-t border-gray-50">
-            <Link :href="logout()"
-                class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-semibold">
-                <i class="fas fa-sign-out-alt w-5 text-center"></i> <span>Déconnexion</span>
-            </Link>
-        </div>
     </aside>
 
     <!-- MOBILE SIDEBAR OVERLAY -->
@@ -140,7 +133,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { dashboard, farmerOrdersShow, farmerProductsShow, logout, farmerProfile, userMessageShow } from '@/routes'
+import { dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile, userMessageShow } from '@/routes'
 
 /**
  * Reactive state

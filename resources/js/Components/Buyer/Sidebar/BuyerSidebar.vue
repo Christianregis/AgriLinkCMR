@@ -125,20 +125,13 @@
                 <span class="font-medium">Adresses</span>
             </Link>
         </nav>
-
-        <div class="p-6 border-t border-gray-50">
-            <Link :href="logout()" @click="closeSidebar"
-                class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-semibold">
-                <i class="fas fa-sign-out-alt w-5 text-center"></i> <span>Déconnexion</span>
-            </Link>
-        </div>
     </aside>
 </template>
 
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { buyerOrderShow, catalog, dashboard, logout, buyerProfile, userMessageShow, buyerFavoriteShow, buyerAddressShow } from '@/routes'
+import { buyerOrderShow, catalog, dashboard, buyerProfile, userMessageShow, buyerFavoriteShow, buyerAddressShow } from '@/routes'
 
 /**
  * Reactive state

@@ -74,7 +74,7 @@
                                 </Link>
                             </nav>
                             <div class="border-t border-gray-50 py-2">
-                                <Link href="#"
+                                <Link :href="logout()"
                                     class="flex items-center px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors group">
                                     <i class="fas fa-sign-out-alt mr-3 w-4"></i>
                                     Déconnexion
@@ -94,7 +94,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile, home } from '@/routes';
+import { dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile, home, logout } from '@/routes';
 
 interface User {
     name: string

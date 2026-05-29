@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\Buyer\Address\AddressController;
 use App\Http\Controllers\User\Buyer\Favorite\FavoriteController;
 use App\Http\Controllers\User\Buyer\Order\BuyerOrderController;
 use App\Http\Controllers\User\Buyer\Order\CheckoutController;
@@ -48,6 +49,13 @@ Route::prefix('profile')->middleware(['role:buyer', 'auth'])->group(function () 
 
     Route::delete('/buyer/favorite/delete/', [FavoriteController::class, 'deleteFavorite'])->name('buyerFavoriteDelete');
 
+    Route::get("/buyer/addresses/show", [AddressController::class, 'index'])->name("buyerAddressShow");
+
+    Route::put('/buyer/address/{address_id}/update',[AddressController::class, 'update'])->name('buyerAddressUpdate');
+
+    Route::delete('/buyer/address/{address_id}/delete',[AddressController::class, 'destroy'])->name('buyerAddressDestroy');
+
+    Route::post('/buyer/address/store',[AddressController::class, 'store'])->name('buyerAddressStore');
 
     Route::get('/buyer/edit', [ProfileBuyerController::class, 'edit'])->name('buyerProfileEdit');
 

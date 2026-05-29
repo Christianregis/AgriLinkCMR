@@ -16,7 +16,9 @@
                 </p>
 
                 <!-- ATTACHMENT -->
-                <a v-if="message.attachment_path" :href="message.attachment_path" target="_blank"
+                <a v-if="message.attachment_path" :href="message.attachment_path.startsWith('http')
+                    ? message.attachment_path
+                    : `/storage/${message.attachment_path}`" target="_blank"
                     class="mt-4 flex items-center gap-3 bg-black/5 rounded-2xl px-4 py-3 text-sm font-medium">
                     <i class="fas fa-paperclip"></i>
                     Pièce jointe

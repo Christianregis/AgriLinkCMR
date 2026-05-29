@@ -2,7 +2,7 @@
     <FlashMessage />
     <main class="bg-neutral-bg flex min-h-screen antialiased">
         <!-- SIDEBAR -->
-        <FarmerSidebar ref="farmerSidebarRef"/>
+        <FarmerSidebar ref="farmerSidebarRef" />
 
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -74,6 +74,32 @@
                                 n'est possible.</p>
                         </div>
                     </div>
+                    <div v-if="order.data.comment"
+                        class="mt-8 p-5 bg-amber-50 border-2 border-amber-200 rounded-2xl flex items-start gap-4 shadow-sm">
+
+                        <!-- ICON -->
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                            <i class="fas fa-star text-amber-500 text-lg"></i>
+                        </div>
+
+                        <!-- CONTENT -->
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-bold text-amber-700">
+                                    Avis de l’acheteur
+                                </h4>
+
+                                <span
+                                    class="px-2 py-1 text-[10px] font-bold uppercase rounded-full bg-amber-100 text-amber-600 tracking-wider">
+                                    Feedback
+                                </span>
+                            </div>
+
+                            <p class="text-sm text-amber-700 leading-relaxed">
+                                "{{ order.data.comment }}"
+                            </p>
+                        </div>
+                    </div>
 
                     <!-- Action Buttons -->
                     <div v-if="order.data.status !== 'cancel' && order.data.status !== 'dispute' && order.data.status !== 'success'"
@@ -131,7 +157,7 @@
                                 <div>
                                     <p class="text-xs text-neutral-muted uppercase font-bold mb-2">Date de Commande</p>
                                     <p class="text-lg font-bold text-neutral-title">{{ formatDate(order.data.created_at)
-                                        }}</p>
+                                    }}</p>
                                 </div>
 
                                 <!-- Payment Method -->
@@ -266,7 +292,7 @@
                                 <div class="flex justify-between items-center">
                                     <p class="text-neutral-muted">Frais de Livraison</p>
                                     <p class="font-bold text-neutral-title">{{ formatAmount(shippingFee) ?? shippingFee
-                                    }} FCFA</p>
+                                        }} FCFA</p>
                                 </div>
 
                                 <!-- Total -->
@@ -366,6 +392,7 @@ interface Order {
     payment_method: string
     delivery_address: string
     total_amount: number
+    comment?: string
     notes?: string
     created_at: string
     updated_at: string

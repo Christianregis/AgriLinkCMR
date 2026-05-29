@@ -24,7 +24,7 @@
                 </div>
                 <div class="relative">
                     <button @click="toggleProfileMenu"
-                        class="w-11 h-11 rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                        class="w-11 h-11 rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
                         <img :src="props.profile_photo ? props.profile_photo : `https://ui-avatars.com/api/?name=` + props.name + `&background=2D6A4F&color=fff`"
                             class="w-full h-full object-cover" />
                     </button>

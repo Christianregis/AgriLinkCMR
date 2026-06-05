@@ -32,13 +32,13 @@ class CheckoutController extends Controller
 
                 'price_data' => [
 
-                    'currency' => 'usd',
+                    'currency' => 'xaf',
 
                     'product_data' => [
                         'name' => $item['product_title'],
                     ],
 
-                    'unit_amount' => $item['price'] * 100,
+                    'unit_amount' => $item['price']*1,
                 ],
 
                 'quantity' => $item['quantity'],
@@ -49,11 +49,11 @@ class CheckoutController extends Controller
         if ($data['delivery_method'] === 'delivery') {
             $lineItems[] = [
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => 'xaf',
                     'product_data' => [
                         'name' => 'Frais de Livraison',
                     ],
-                    'unit_amount' => 2000, // 20.00 USD en cents
+                    'unit_amount' => 2000, // 20.00 XAF en cents
                 ],
                 'quantity' => 1,
             ];

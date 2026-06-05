@@ -270,7 +270,7 @@
                                 </div>
                             </div>
 
-                            <button
+                            <button @click="contactBuyer"
                                 class="w-full px-4 py-2 border-2 border-brand-primary text-brand-primary font-bold rounded-xl hover:bg-brand-bg transition-all">
                                 <i class="fas fa-envelope mr-2"></i>
                                 Contacter l'Acheteur
@@ -598,7 +598,9 @@ const farmerSidebarRef = ref<InstanceType<typeof FarmerSidebar> | null>(null)
 const handleToogleSidebar = () => {
     farmerSidebarRef.value?.toggleSidebar();
 }
-
+const contactBuyer = ()=>{
+    window.location.href = `mailto:${props.order.data.buyer.email}?subject=Concernant votre commande #${props.order.data.order_number}&body=Bonjour ${props.order.data.buyer.name},%0D%0A%0D%0AJe vous contacte au sujet de votre commande #${props.order.data.order_number}.%0D%0A%0D%0A[Votre message ici]%0D%0A%0D%0ACordialement,%0D%0A[Votre nom]`
+}
 const page = usePage();
 const user = page.props.auth.user;
 

@@ -166,7 +166,7 @@ interface ProductsLatest {
     products: {
         data: Product[];
     },
-    favorites: {
+    favorites?: {
         data: Favorite[]
     }
 }

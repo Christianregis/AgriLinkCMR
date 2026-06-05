@@ -125,7 +125,7 @@ interface ProductCatalogBuyerProps {
     regions: {
         data: Region[]
     };
-    favorites: {
+    favorites?: {
         data: Favorite[]
     },
 }

@@ -17,7 +17,7 @@
             <div class="absolute inset-0 bg-black/15 group-hover:bg-black/0 transition-all duration-500"></div>
 
             <!-- FAVORITE BUTTON -->
-            <button v-if="user && user.role == 'buyer'" @click.prevent.stop="toggleFavorite(product.id)"
+            <button v-if="user && user.role == 'buyer' && favorites" @click.prevent.stop="toggleFavorite(product.id)"
                 class="absolute top-3 right-3 w-11 h-11 rounded-2xl bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white">
                 <i :class="[
                     isFavorite ? 'fas fa-heart text-red-500' : 'far fa-heart text-neutral-muted',
@@ -107,7 +107,7 @@ interface Product {
 
 interface Props {
     product: Product,
-    favorites: {
+    favorites?: {
         data: Favorite[]
     },
     displayMode: 'grid' | 'list'

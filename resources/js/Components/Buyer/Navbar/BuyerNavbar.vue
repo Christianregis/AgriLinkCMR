@@ -89,12 +89,14 @@
         </div>
     </header>
     <CartSidebar ref="cartSidebarRef" />
+    <GlobalLoader />
 </template>
 
 <script lang="ts" setup>
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import CartSidebar from '@/Components/CartSidebar.vue'
+import GlobalLoader from '@/Components/GlobalLoader.vue'
 import { useCartStore } from '@/Pages/store/cartStore'
 import { buyerOrderShow, buyerProfile, dashboard, home, logout } from '@/routes'
 

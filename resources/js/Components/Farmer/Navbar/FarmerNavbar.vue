@@ -89,11 +89,13 @@
             </div>
         </div>
     </header>
+    <GlobalLoader />
 </template>
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import GlobalLoader from '@/Components/GlobalLoader.vue';
 import { dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile, home, logout } from '@/routes';
 
 interface User {

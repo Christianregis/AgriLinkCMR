@@ -342,18 +342,19 @@
     </nav>
     <CartSidebar ref="cartSidebarRef" />
     <slot />
+    <GlobalLoader />
 </template>
 
 <script setup lang="ts">
 import { Link, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import CartSidebar from "@/Components/CartSidebar.vue";
+import GlobalLoader from "@/Components/GlobalLoader.vue";
 import { useCartStore } from "@/Pages/store/cartStore";
 import { about, buyerOrderShow, buyerProfile, catalog, connexion, dashboard, farmerOrdersShow, farmerProductsShow, farmerProfile, logout } from "@/routes";
 import { inscription } from "@/routes";
 import { home } from "@/routes";
 import { farmersImpact } from "@/routes";
-
 const store = useCartStore();
 const cartSidebarRef = ref<InstanceType<typeof CartSidebar> | null>(null);
 

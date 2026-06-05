@@ -39,6 +39,8 @@ class PublicController extends Controller
             ->filterMaxPrice($request->maxPrice)
             ->filterMinRating($request->minRating)
             ->sortBy($request->sortBy)
+            ->availableForOrder()
+            ->avaliable()
             ->paginate(12)
             ->withQueryString();
 

@@ -152,4 +152,9 @@ class Product extends Model implements HasMedia
     {
         $query->where('quantity', '<=', 4);
     }
+
+    public function scopeAvailableForOrder($query)
+    {
+        $query->where('quantity', '>', 0);
+    }
 }

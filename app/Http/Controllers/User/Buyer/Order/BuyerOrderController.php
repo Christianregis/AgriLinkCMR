@@ -10,6 +10,7 @@ use App\Http\Resources\Order\OrderResource;
 use App\Models\Conversation;
 use App\Models\Order;
 use App\Models\Product;
+use App\Notifications\Order\OrderPlacedNotification;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,9 +36,11 @@ class BuyerOrderController extends Controller
 
     public function store(OrderStoreRequest $request)
     {
-        $this->orderService->create(
+        $order = $this->orderService->create(
             $request->validated()
         );
+        // Notifier l'agriculteur de la nouvelle commande
+        $order->farmer->notify(new OrderPlacedNotification($order));
 
         return redirect()->back()->with('success', 'Votre commande a été passée avec succès !');
     }

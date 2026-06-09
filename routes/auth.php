@@ -25,6 +25,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 // Route pour s'inscire
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
+// Route pour activer votre compte
+Route::get('/activate-account?email={email}', [AuthController::class, 'activateAccount'])->name('activateAccount');
+
 // Route pour afficher le formulaire de mot de passe oublie
 Route::get('/forgot-password', function () {
     return Inertia::render('Auth/ForgotPassword');

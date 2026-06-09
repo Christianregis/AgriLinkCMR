@@ -18,6 +18,8 @@ use App\Models\Message;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\User\ActivateAccountNotification;
+use App\Notifications\User\ActivatedAccountNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +40,8 @@ class AuthController extends Controller
             'bio' => $request->input('bio'),
             'profile_photo' => $request->hasFile('profile_photo') ? $request->file('profile_photo')->store('profile_image', 'public') : null,
             'password' => Hash::make($request->input('password')),
-            'role' => $request->input('account_type')
+            'role' => $request->input('account_type'),
+            'is_active' => false,
         ]);
 
         if ($user->role === UserRole::BUYER) {
@@ -48,7 +51,7 @@ class AuthController extends Controller
                 'buyer_type' => $request->input('buyer_type')
             ]);
             $user->assignRole('buyer');
-
+            $user->notify(new ActivateAccountNotification($user));
             return  back()->with('success', 'Nouvel Acheteur ajoute !');
         } else if ($user->role === UserRole::FARMER) {
             FarmerProfile::create([
@@ -59,8 +62,20 @@ class AuthController extends Controller
                 'certification' => $request->input('certifications'),
             ]);
             $user->assignRole('farmer');
+            $user->notify(new ActivateAccountNotification($user));
             return  back()->with('success', 'Nouveau Vendeur ajoute !');
         }
+    }
+
+    public function activateAccount(mixed $email)
+    {
+        $user = User::where('email', '=', $email)->firstOrFail();
+        if ($user->is_active) {
+            return redirect()->route('connexion')->with('info', 'Votre compte est déjà activé. Veuillez vous connecter.');
+        }
+        $user->update(['is_active' => true]);
+        $user->notify(new ActivatedAccountNotification());
+        return redirect()->route('connexion')->with('success', 'Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.');
     }
 
     public function login(LoginRequest $request)

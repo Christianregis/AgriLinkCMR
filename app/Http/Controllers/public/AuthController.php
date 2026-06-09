@@ -82,7 +82,10 @@ class AuthController extends Controller
     {
         $credentials = $request->validated();
         $user = User::where('email', '=', $credentials['email'])->first();
-        if (!$user || !$user->is_active) {
+        if (!$user) {
+            return back()->with('error', 'Email ou mot de passe incorrect.');
+        }
+        if (!$user->is_active) {
             return back()->with('error', 'Compte desactive: Veuillez l\'activer en consultant vos mails');
         }
         if (!Auth::attempt($credentials)) {

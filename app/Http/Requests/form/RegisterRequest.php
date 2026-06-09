@@ -31,7 +31,7 @@ class RegisterRequest extends FormRequest
             'region_id' => ['exists:regions,id', 'nullable'],
             'village' => ['string', 'max:255', 'nullable'],
             'cultures' => ['string', 'nullable'],
-            'bio' => ['string', "max:255", 'nullable'],
+            'bio' => ['string', "max:2550", 'nullable'],
             'profile_photo' => ['image', 'mimes:png,jpg,jpeg', 'max:2048', 'nullable'],
             'company_name' => ['string', 'max:255', 'nullable'],
             'certifications' => ['string', 'url', 'nullable'],

@@ -39,8 +39,9 @@ class BuyerOrderController extends Controller
         $order = $this->orderService->create(
             $request->validated()
         );
-        // Notifier l'agriculteur de la nouvelle commande
+        // Notifier l'agriculteur et l'acheteur de la nouvelle commande
         $order->farmer->notify(new OrderPlacedNotification($order));
+        $order->buyer->notify(new OrderPlacedNotification($order));
 
         return redirect()->back()->with('success', 'Votre commande a été passée avec succès !');
     }

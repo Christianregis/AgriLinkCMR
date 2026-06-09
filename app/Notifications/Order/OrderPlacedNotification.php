@@ -36,21 +36,31 @@ class OrderPlacedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        if ($this->order->farmer->role === UserRole::FARMER->value) {
+        if ($notifiable->role === UserRole::FARMER->value) {
             return (new MailMessage)
                 ->subject('Nouvelle commande reçue')
                 ->greeting('Bonjour ' . $notifiable->name . ',')
-                ->line('Vous avez reçu une nouvelle commande de la part de ' . $this->order->buyer->user->name . '.')
-                ->line('Prix total : ' . $this->order->total_amount . ' FCFA')
-                ->action('Voir la commande', url(route('farmerOrderView', ['order_id' => $this->order->id])))
+                ->line('Vous avez reçu une nouvelle commande de la part de ' . $this->order->buyer->name . '.')
+                ->line('Commande N° : ' . $this->order->order_number)
+                ->line(
+                    'Prix total : ' .
+                        number_format($this->order->total_amount, 0, ',', ' ') .
+                        ' FCFA'
+                )
+                ->action('Voir la commande', route('farmerOrderView', ['order_id' => $this->order->id]))
                 ->line('Merci d\'utiliser notre application !')
                 ->line('L\'équipe AgriLinkCMR');
         } else {
             return (new MailMessage)
                 ->subject('Votre commande a été passée avec succès !')
                 ->greeting('Bonjour ' . $notifiable->name . ',')
-                ->line('Prix total : ' . $this->order->total_amount . ' FCFA')
-                ->action('Voir la commande', url(route('buyerOrderTracking', ['order_id' => $this->order->id])))
+                ->line('Commande N° : ' . $this->order->order_number)
+                ->line(
+                    'Prix total : ' .
+                        number_format($this->order->total_amount, 0, ',', ' ') .
+                        ' FCFA'
+                )
+                ->action('Voir la commande', route('buyerOrderTracking', ['order_id' => $this->order->id]))
                 ->line('Merci d\'avoir utilisé notre application !')
                 ->line('L\'équipe AgriLinkCMR');
         }

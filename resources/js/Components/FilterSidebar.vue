@@ -30,6 +30,7 @@
                     <div v-if="filteredCategories.length === 0" class="text-center py-4">
                         <p class="text-neutral-muted text-sm">Aucune catégorie trouvée</p>
                     </div>
+                    
                 </div>
             </div>
 

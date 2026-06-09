@@ -144,7 +144,7 @@
                                             <div class="relative">
                                                 <i
                                                     class="fas fa-map-marker-alt absolute left-4 top-4 text-brand-primary"></i>
-                                                <textarea v-model="form.delivery_address" rows="3"
+                                                <textarea v-model="form.delivery_address" rows="3" :required="form.delivery_method === 'delivery'"
                                                     placeholder="Ex: Rue 123, Quartier Bastos, Yaoundé (Précisez des points de repère)"
                                                     class="w-full pl-12 pr-4 py-3 bg-neutral-bg border-none rounded-2xl focus:ring-2 focus:ring-brand-primary text-neutral-body placeholder:text-neutral-muted resize-none"></textarea>
                                             </div>

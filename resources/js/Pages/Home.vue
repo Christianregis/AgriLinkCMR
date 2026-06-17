@@ -43,9 +43,7 @@
                         <i class="mr-3 text-gray-400 fas fa-location-dot"></i>
                         <select class="w-full bg-transparent appearance-none focus:outline-none text-neutral-body">
                             <option>Toutes les régions</option>
-                            <option>Centre (Yaoundé)</option>
-                            <option>Littoral (Douala)</option>
-                            <option>Ouest (Bafoussam)</option>
+                            <option v-for="region in props.regions.data" :key="region.id">{{ region.name }}({{ region.country }})</option>
                         </select>
                     </div>
                     <button
@@ -183,7 +181,7 @@ interface Favorite {
     product_id: number
 }
 
-defineProps<ProductsLatest>();
+const props = defineProps<ProductsLatest>();
 </script>
 
 <style scoped>

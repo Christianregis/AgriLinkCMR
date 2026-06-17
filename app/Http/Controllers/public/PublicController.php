@@ -25,6 +25,7 @@ class PublicController extends Controller
         $user = Auth::user();
 
         return Inertia::render('Home', [
+            'regions' => RegionResource::collection(Region::all()),
             'products' => CatalogProductResource::collection($products),
             'favorites' => $user ? FavoriteResource::collection($user->favorites) : null,
 

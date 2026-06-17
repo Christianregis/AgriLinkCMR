@@ -162,6 +162,11 @@ interface Product {
     reviews_count: number;
 }
 
+interface Region {
+    name: string,
+    country: string
+}
+
 interface ProductsLatest {
     products: {
         data: Product[];
@@ -169,9 +174,12 @@ interface ProductsLatest {
     favorites?: {
         data: Favorite[]
     }
+    regions: {
+        data: Region[]
+    }
 }
 
-interface Favorite{
+interface Favorite {
     product_id: number
 }
 

@@ -62,7 +62,7 @@ class AuthController extends Controller
                 'certification' => $request->input('certifications'),
             ]);
             $user->assignRole('farmer');
-            $user->notify(new ActivateAccountNotification($user));
+            // $user->notify(new ActivateAccountNotification($user));
             return  back()->with('success', 'Nouveau Vendeur ajoute !');
         }
     }

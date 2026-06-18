@@ -41,7 +41,7 @@ class AuthController extends Controller
             'profile_photo' => $request->hasFile('profile_photo') ? $request->file('profile_photo')->store('profile_image', 'public') : null,
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('account_type'),
-            'is_active' => false,
+            'is_active' => true,
         ]);
 
         if ($user->role === UserRole::BUYER) {
@@ -74,7 +74,7 @@ class AuthController extends Controller
             return redirect()->route('connexion')->with('info', 'Votre compte est déjà activé. Veuillez vous connecter.');
         }
         $user->update(['is_active' => true]);
-        $user->notify(new ActivatedAccountNotification());
+        // $user->notify(new ActivatedAccountNotification());
         return redirect()->route('connexion')->with('success', 'Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.');
     }
 

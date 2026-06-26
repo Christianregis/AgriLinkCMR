@@ -9,7 +9,7 @@ jobs:
   test-code:
     runs-on: ubuntu-latest
     steps:
-      - uses: action/checkout@v4
+      - uses: actions/checkout@v4
       - name: Test Hello 
         run: echo "Build..."
   
